@@ -335,8 +335,8 @@ td{padding:9px 12px;font-size:12px;vertical-align:middle;}
     <div class="hb-title">Pipeline</div>
     <div class="pipeline">
       <div class="pipeline-step"><div class="step-num" id="hb-step-0">AI</div><div class="step-text">Semantic filter generation<small>Claude — natural language to filters</small></div></div>
-      <div class="pipeline-step"><div class="step-num" id="hb-step-1">1</div><div class="step-text">Acquired companies<small>CompanyDB — acquisition_status</small></div></div>
-      <div class="pipeline-step"><div class="step-num" id="hb-step-2">2</div><div class="step-text">Extract founders<small>Company Enrichment — founders</small></div></div>
+      <div class="pipeline-step"><div class="step-num" id="hb-step-1">1</div><div class="step-text">Search companies<small>CompanyDB — filtered search</small></div></div>
+      <div class="pipeline-step"><div class="step-num" id="hb-step-2">2</div><div class="step-text">Extract people<small>Company Enrichment — decision makers</small></div></div>
       <div class="pipeline-step"><div class="step-num" id="hb-step-3">3</div><div class="step-text">Enrich + contact<small>Person Enrichment — email</small></div></div>
       <div class="pipeline-step"><div class="step-num" id="hb-step-4">4</div><div class="step-text">Match to auctions<small>LinkedIn signals + scoring</small></div></div>
     </div>
@@ -359,7 +359,7 @@ td{padding:9px 12px;font-size:12px;vertical-align:middle;}
         <span class="ai-badge">CLAUDE</span>
         <span class="ai-search-label">Describe who you're looking for</span>
       </div>
-      <textarea class="ai-textarea" id="ai-query" placeholder="e.g. wine enthusiasts who sold their fintech startup in Europe&#10;&#10;or: NYC founders who collect watches or art&#10;&#10;or: consumer brand founders interested in jewelry"></textarea>
+      <textarea class="ai-textarea" id="ai-query" placeholder="e.g. wine enthusiasts at luxury companies in Europe&#10;&#10;or: NYC tech executives who collect watches or art&#10;&#10;or: consumer brand leaders interested in jewelry"></textarea>
       <div class="ai-search-footer">
         <button class="ai-gen-btn" id="ai-gen-btn" onclick="generateFilters()">
           <div class="mini-spin"></div>
@@ -484,9 +484,9 @@ td{padding:9px 12px;font-size:12px;vertical-align:middle;}
 
   <!-- Stats -->
   <div class="stats-row">
-    <div class="stat-card"><span class="stat-label">Founders found</span><div class="stat-value" id="stat-founders">—</div><span class="stat-sub">acquired companies</span></div>
+    <div class="stat-card"><span class="stat-label">Prospects found</span><div class="stat-value" id="stat-founders">—</div><span class="stat-sub">from matching companies</span></div>
     <div class="stat-card"><span class="stat-label">Auction matches</span><div class="stat-value" id="stat-matches">—</div><span class="stat-sub" id="sel-label">analyze an auction</span></div>
-    <div class="stat-card"><span class="stat-label">Avg. exit size</span><div class="stat-value" id="stat-exit">—</div><span class="stat-sub">funding raised</span></div>
+    <div class="stat-card"><span class="stat-label">Avg. funding</span><div class="stat-value" id="stat-exit">—</div><span class="stat-sub">total investment</span></div>
     <div class="stat-card"><span class="stat-label">High-fit (≥75)</span><div class="stat-value" id="stat-highfit">—</div><span class="stat-sub">top prospects</span></div>
   </div>
 
@@ -504,8 +504,8 @@ td{padding:9px 12px;font-size:12px;vertical-align:middle;}
     <div class="results-wrap">
       <div class="results-header">
         <div>
-          <div class="results-title" id="results-title">Founder Prospects</div>
-          <div class="results-subtitle" id="results-subtitle">Run the pipeline to surface acquisition-exit founders matched to upcoming sales</div>
+          <div class="results-title" id="results-title">Prospects</div>
+          <div class="results-subtitle" id="results-subtitle">Run the pipeline to surface high-value prospects matched to upcoming sales</div>
         </div>
         <div class="results-actions">
           <button class="action-btn" onclick="copyCSV()">Copy CSV</button>
@@ -515,8 +515,8 @@ td{padding:9px 12px;font-size:12px;vertical-align:middle;}
       <div class="table-wrap">
         <table>
           <thead><tr>
-            <th onclick="sortTable('name')">Founder</th>
-            <th onclick="sortTable('company')">Company / Exit</th>
+            <th onclick="sortTable('name')">Name</th>
+            <th onclick="sortTable('company')">Company</th>
             <th onclick="sortTable('funding')">Funding</th>
             <th>Contact</th>
             <th>Auction Match + Why</th>
@@ -563,7 +563,7 @@ td{padding:9px 12px;font-size:12px;vertical-align:middle;}
   </div>
   <div class="drawer-body">
     <div class="score-bar-card">
-      <div class="score-bar-top"><span class="score-bar-title">Art Market Fit Score</span><span class="score-bar-num" id="d-score">—</span></div>
+      <div class="score-bar-top"><span class="score-bar-title">Prospect Fit Score</span><span class="score-bar-num" id="d-score">—</span></div>
       <div class="score-track"><div class="score-fill" id="d-score-fill" style="width:0%"></div></div>
       <div class="score-factors" id="d-score-factors"></div>
     </div>
@@ -706,7 +706,7 @@ async function generateFilters(){
 }
 
 async function claudeFilterGen(query, apiKey){
-  var systemPrompt='You are a B2B data expert converting natural language prospect descriptions into Crustdata API filter objects.\n\nCrustdata CompanyDB filter fields (use EXACTLY these names):\n- acquisition_status: "Acquired" (always include this)\n- crunchbase_total_investment_usd: numeric, use operators => (gte) or =< (lte)\n- hq_country: ISO 3-alpha codes (USA, GBR, FRA, DEU, ITA, CHN, etc.)\n- linkedin_industries: string, use fuzzy operator (.)\n- employee_metrics.latest_count: numeric headcount\n- last_funding_round_type: "series_a", "series_b", "series_c", "seed", etc.\n- year_founded: numeric\n- largest_headcount_country: ISO 3-alpha\n\nOperators: = (exact), => (gte), =< (lte), (.) (fuzzy text), in (list), !=\n\nAlso return:\n- linkedin_post_keywords: keywords to search in LinkedIn posts for interest signals\n- prospect_reasoning: 2-3 sentences explaining the prospect logic\n\nRespond ONLY with valid JSON, no markdown:\n{\n  "filters": [{"filter_type":"...","type":"...","value":"...","label":"Human readable description"}],\n  "linkedin_post_keywords": ["wine","cellar","bordeaux"],\n  "reasoning": "..."\n}';
+  var systemPrompt='You are a B2B data expert converting natural language prospect descriptions into Crustdata API filter objects.\n\nCrustdata CompanyDB filter fields (use EXACTLY these names):\n- acquisition_status: "Acquired" or other values (only include if user specifically wants acquired companies)\n- crunchbase_total_investment_usd: numeric, use operators => (gte) or =< (lte)\n- hq_country: ISO 3-alpha codes (USA, GBR, FRA, DEU, ITA, CHN, etc.)\n- linkedin_industries: string, use fuzzy operator (.)\n- employee_metrics.latest_count: numeric headcount\n- last_funding_round_type: "series_a", "series_b", "series_c", "seed", etc.\n- year_founded: numeric\n- largest_headcount_country: ISO 3-alpha\n\nOperators: = (exact), => (gte), =< (lte), (.) (fuzzy text), in (list), !=\n\nIMPORTANT: Generate filters that find the RIGHT people for the description. Do NOT always restrict to acquired companies — only add acquisition_status filter if the user specifically mentions exits, acquisitions, or post-exit wealth. For general prospect searches, focus on industry, location, funding, and company size filters.\n\nAlso return:\n- linkedin_post_keywords: keywords to search in LinkedIn posts for interest signals\n- prospect_reasoning: 2-3 sentences explaining the prospect logic\n\nRespond ONLY with valid JSON, no markdown:\n{\n  "filters": [{"filter_type":"...","type":"...","value":"...","label":"Human readable description"}],\n  "linkedin_post_keywords": ["wine","cellar","bordeaux"],\n  "reasoning": "..."\n}';
 
   var userContent='Convert this prospect description to Crustdata filters:\n\n'+query;
   if(auctionContext){
@@ -808,19 +808,14 @@ async function liveRun(crustKey){
   var B='https://api.crustdata.com';
   var H={'Authorization':'Token '+crustKey,'Content-Type':'application/json','Accept':'application/json'};
 
-  // Build conditions from AI-generated filters + always include Acquired
+  // Build conditions from AI-generated filters
   setStep(0,'done');
   setStep(1,'active');
-  setStatus('running','Step 1: Searching CompanyDB for acquired companies…');
+  setStatus('running','Step 1: Searching CompanyDB for matching companies…');
 
   var conditions=generatedFilters.length
     ? generatedFilters.map(function(f){return {filter_type:f.filter_type,type:f.type,value:f.value};})
-    : [{filter_type:'acquisition_status',type:'=',value:'Acquired'},{filter_type:'crunchbase_total_investment_usd',type:'=>',value:5000000}];
-
-  // Ensure acquisition_status is always present
-  if(!conditions.find(function(c){return c.filter_type==='acquisition_status';})){
-    conditions.unshift({filter_type:'acquisition_status',type:'=',value:'Acquired'});
-  }
+    : [{filter_type:'crunchbase_total_investment_usd',type:'=>',value:5000000}];
 
   var r1=await fetch(B+'/screener/companydb/search/',{method:'POST',headers:H,body:JSON.stringify({
     filters:{op:'and',conditions:conditions},
@@ -838,19 +833,29 @@ async function liveRun(crustKey){
   }
 
   setStep(2,'active');
-  setStatus('running','Step 2: Enriching '+companies.length+' companies for founder data…');
+  setStatus('running','Step 2: Enriching '+companies.length+' companies for people data…');
   var domains=companies.slice(0,50).map(function(c){return c.company_website_domain;}).filter(Boolean).join(',');
-  var r2=await fetch(B+'/screener/company?company_domain='+encodeURIComponent(domains)+'&fields=founders',{headers:H});
+  var r2=await fetch(B+'/screener/company?company_domain='+encodeURIComponent(domains)+'&fields=founders,decision_makers',{headers:H});
   var enriched=r2.ok?await r2.json():[];
   setStep(2,'done');
 
   setStep(3,'active');
-  setStatus('running','Step 3: Extracting and enriching founders…');
+  setStatus('running','Step 3: Extracting and enriching people…');
   var fUrls=[],fMeta={};
   enriched.forEach(function(co){
     var comp=companies.find(function(c){return c.company_website_domain===co.company_website_domain;});
-    (co.founders&&co.founders.profiles||[]).slice(0,3).forEach(function(f){
-      if(f.linkedin_profile_url){ fUrls.push(f.linkedin_profile_url); fMeta[f.linkedin_profile_url]={co:co,comp:comp}; }
+    // Collect people from founders and decision_makers
+    var people=[];
+    if(co.founders&&co.founders.profiles) people=people.concat(co.founders.profiles);
+    if(co.decision_makers&&co.decision_makers.profiles) people=people.concat(co.decision_makers.profiles);
+    // Deduplicate by LinkedIn URL and take up to 5 per company
+    var seen={};
+    people.forEach(function(f){
+      if(f.linkedin_profile_url && !seen[f.linkedin_profile_url] && Object.keys(seen).length<5){
+        seen[f.linkedin_profile_url]=true;
+        fUrls.push(f.linkedin_profile_url);
+        fMeta[f.linkedin_profile_url]={co:co,comp:comp};
+      }
     });
   });
 
@@ -874,7 +879,7 @@ async function liveRun(crustKey){
           industry:(comp.linkedin_industries||[])[0]||'—',
           hq_country:comp.hq_country||'—',
           funding:comp.crunchbase_total_investment_usd||0,
-          acquired_by:comp.acquisition_status||'Acquired',
+          acquired_by:comp.acquisition_status||'—',
           linkedin_url:batch[pi],
           email:(p.business_email||[])[0]||null,
           email_verified:!!(p.business_email&&p.business_email.length),
@@ -883,7 +888,7 @@ async function liveRun(crustKey){
           score:calcScore(p,comp),
           score_factors:buildFactors(p,comp),
           pitch:buildPitch(p,comp),
-          signals:[{type:'activity',text:(comp.company_name||'Company')+' acquired — post-exit liquidity event',date:'Exit signal'}],
+          signals:[{type:'activity',text:(comp.company_name||'Company')+(comp.acquisition_status==='Acquired'?' — acquired (liquidity event)':' — '+((comp.linkedin_industries||[])[0]||'company')),date:'Signal'}],
           auction_match:auctionMatches,
           primary_auction:auctionContext?auctionContext.name:null,
           match_why:(comp.linkedin_industries||[])[0]||'' + ' background matched to upcoming sale categories'
@@ -893,7 +898,7 @@ async function liveRun(crustKey){
   }
   setStep(3,'done');
   setStep(4,'active'); await sleep(250); setStep(4,'done');
-  setStatus('done','Found '+results.length+' founder prospects.');
+  setStatus('done','Found '+results.length+' prospects.');
   allResults=results;
   filterAndRender();
   updateCode();
@@ -938,7 +943,8 @@ function calcScore(p,comp){
 
 function buildFactors(p,comp){
   var factors=[],f=comp.crunchbase_total_investment_usd||0;
-  factors.push({label:'Exit size ($'+fmtM(f)+')',val:f>5e7?'+35':'+15',pos:true});
+  factors.push({label:'Funding ($'+fmtM(f)+')',val:f>5e7?'+35':'+15',pos:true});
+  if(comp.acquisition_status==='Acquired') factors.push({label:'Acquired (liquidity event)',val:'+10',pos:true});
   if(comp.hq_country==='USA') factors.push({label:'US location',val:'+15',pos:true});
   if((p.num_of_connections||0)>5000) factors.push({label:'High LinkedIn visibility',val:'+12',pos:true});
   if(auctionContext){
@@ -953,7 +959,13 @@ function buildFactors(p,comp){
 }
 
 function buildPitch(p,comp){
-  return (p.name||'This founder')+"'s exit from "+(comp.company_name||'their company')+" ($"+fmtM(comp.crunchbase_total_investment_usd||0)+" raised) is a significant liquidity event. Consider a specialist-led private viewing as an introduction.";
+  var name=p.name||'This prospect';
+  var company=comp.company_name||'their company';
+  var funding=comp.crunchbase_total_investment_usd||0;
+  if(comp.acquisition_status==='Acquired'){
+    return name+"'s exit from "+company+" ($"+fmtM(funding)+" raised) is a significant liquidity event. Consider a specialist-led private viewing as an introduction.";
+  }
+  return name+" at "+company+" ($"+fmtM(funding)+" in funding) is a high-value prospect. Their "+((comp.linkedin_industries||[])[0]||'industry')+" background and seniority make them an ideal candidate for a specialist introduction.";
 }
 
 /* ═══════════════════════════════════════════
@@ -980,7 +992,7 @@ function renderTable(data){
     var hasAuction=auctionContext&&r.auction_match;
     return '<tr onclick="openDrawer('+i+')" class="fade-in" style="animation-delay:'+(i*20)+'ms">'+
       '<td><div class="founder-name">'+r.name+'</div><div class="founder-title">'+r.title+'</div></td>'+
-      '<td><div class="company-name">'+r.company+'</div><div class="company-acq"> '+(r.acquired_by!=='Acquired'?'Acq. by '+r.acquired_by:'Acquired')+'</div></td>'+
+      '<td><div class="company-name">'+r.company+'</div><div class="company-acq">'+(r.acquired_by==='Acquired'?' Acquired':(r.industry||''))+'</div></td>'+
       '<td><span class="money-tag '+(r.funding>5e7?'large':'')+'">$'+fmtM(r.funding)+'</span></td>'+
       '<td>'+(r.email?'<div class="email-chip '+(r.email_verified?'verified':'')+'" title="'+r.email+'">'+r.email+'</div>':'<span style="color:var(--secondary);font-size:10px">—</span>')+(r.linkedin_url?'<br><a class="li-link" href="'+r.linkedin_url+'" target="_blank" onclick="event.stopPropagation()">↗ LinkedIn</a>':'')+'</td>'+
       '<td><div class="match-cell">'+(hasAuction?'<div class="match-auction"><span class="hdot '+(auctionContext.house||'')+'"></span><span>'+auctionContext.name+'</span></div><div class="match-why">'+(r.match_why||'').substring(0,70)+'…</div>':'<span style="color:var(--secondary);font-size:10px">Analyze an auction to match</span>')+'</div></td>'+
@@ -1001,10 +1013,10 @@ function updateStats(data){
   var t=document.getElementById('results-title'),s=document.getElementById('results-subtitle');
   if(auctionContext){
     t.textContent='Matched to: '+auctionContext.name;
-    s.textContent=data.length+' founder'+(data.length!==1?'s':'')+' matched via LinkedIn signals and industry fit';
+    s.textContent=data.length+' prospect'+(data.length!==1?'s':'')+' matched via LinkedIn signals and industry fit';
   } else {
-    t.textContent='Founder Prospects';
-    s.textContent=allResults.length+' founders across all categories';
+    t.textContent='Prospects';
+    s.textContent=allResults.length+' prospects across all categories';
   }
 }
 
@@ -1032,7 +1044,7 @@ function openDrawer(i){
     return '<div class="signal-item"><span class="signal-type '+s.type+'">'+s.type.toUpperCase()+'</span><span class="signal-text">'+s.text+'</span><span class="signal-date">'+s.date+'</span></div>';
   }).join('')||'<p style="font-size:11px;color:var(--secondary)">No signals found.</p>';
   document.getElementById('d-profile-kv').innerHTML=kv([['Location',r.location],['Connections',(r.connections||0).toLocaleString()],['LinkedIn',r.linkedin_url?'<a href="'+r.linkedin_url+'" target="_blank">View ↗</a>':'—']]);
-  document.getElementById('d-company-kv').innerHTML=kv([['Company',r.company],['Industry',r.industry],['HQ',r.hq_country],['Funding','$'+fmtFull(r.funding)],['Acquired by',r.acquired_by!=='Acquired'?r.acquired_by:'—']]);
+  document.getElementById('d-company-kv').innerHTML=kv([['Company',r.company],['Industry',r.industry],['HQ',r.hq_country],['Funding','$'+fmtFull(r.funding)],['Status',r.acquired_by==='Acquired'?'Acquired':'Active']]);
   document.getElementById('d-contact-kv').innerHTML=kv([['Email',r.email?'<span class="email-chip '+(r.email_verified?'verified':'')+' ">'+r.email+'</span>':'—'],['Verified',r.email_verified?'<span style="color:var(--success);font-weight:600">Yes</span>':'No']]);
   document.getElementById('d-pitch').textContent=r.pitch||'—';
   document.getElementById('drawer').classList.add('open');
@@ -1053,21 +1065,21 @@ function updateCode(){
   var query=document.getElementById('ai-query')&&document.getElementById('ai-query').value||'';
   var conditions=generatedFilters.length?
     generatedFilters.map(function(f){return JSON.stringify({filter_type:f.filter_type,type:f.type,value:f.value});}).join(',\n    '):
-    '{"filter_type": "acquisition_status", "type": "=", "value": "Acquired"},\n    {"filter_type": "crunchbase_total_investment_usd", "type": "=>", "value": 5000000}';
+    '{"filter_type": "crunchbase_total_investment_usd", "type": "=>", "value": 5000000}';
   var auctionName=auctionContext?auctionContext.name:'None';
   document.getElementById('code-content').innerHTML=
     '<span class="comment"># Prospect Pipeline\n# Query: "'+query+'"\n# Auction: '+auctionName+'</span>\n\n'+
     '<span class="kw">import</span> requests\n'+
     'H = {<span class="str">"Authorization"</span>: <span class="str">"Token YOUR_CRUSTDATA_KEY"</span>}\nB = <span class="str">"https://api.crustdata.com"</span>\n\n'+
-    '<span class="comment"># Step 1: Search acquired companies (filters from Claude)</span>\n'+
+    '<span class="comment"># Step 1: Search companies (filters from Claude)</span>\n'+
     'r = requests.post(f<span class="str">"{B}/screener/companydb/search/"</span>, headers=H, json={\n'+
     '  <span class="str">"filters"</span>: {<span class="str">"op"</span>: <span class="str">"and"</span>, <span class="str">"conditions"</span>: [\n    '+conditions+'\n  ]},\n'+
     '  <span class="str">"limit"</span>: <span class="num">50</span>, <span class="str">"sorts"</span>: [{<span class="str">"column"</span>: <span class="str">"crunchbase_total_investment_usd"</span>, <span class="str">"order"</span>: <span class="str">"desc"</span>}]\n})\ncompanies = r.json()[<span class="str">"companies"</span>]\n\n'+
-    '<span class="comment"># Step 2: Enrich for founders</span>\n'+
+    '<span class="comment"># Step 2: Enrich for people</span>\n'+
     'domains = <span class="str">","</span>.join(c[<span class="str">"company_website_domain"</span>] <span class="kw">for</span> c <span class="kw">in</span> companies[:50])\n'+
-    'enriched = requests.get(f<span class="str">"{B}/screener/company"</span>, headers=H,\n  params={<span class="str">"company_domain"</span>: domains, <span class="str">"fields"</span>: <span class="str">"founders"</span>}).json()\n\n'+
-    '<span class="comment"># Step 3: Collect + enrich founder profiles</span>\n'+
-    'urls = [f[<span class="str">"linkedin_profile_url"</span>] <span class="kw">for</span> co <span class="kw">in</span> enriched\n        <span class="kw">for</span> f <span class="kw">in</span> co.get(<span class="str">"founders"</span>,{}).get(<span class="str">"profiles"</span>,[])[:3]\n        <span class="kw">if</span> f.get(<span class="str">"linkedin_profile_url"</span>)]\n<span class="kw">for</span> i <span class="kw">in</span> range(<span class="num">0</span>, len(urls), <span class="num">25</span>):\n'+
+    'enriched = requests.get(f<span class="str">"{B}/screener/company"</span>, headers=H,\n  params={<span class="str">"company_domain"</span>: domains, <span class="str">"fields"</span>: <span class="str">"founders,decision_makers"</span>}).json()\n\n'+
+    '<span class="comment"># Step 3: Collect + enrich people profiles</span>\n'+
+    'urls = [f[<span class="str">"linkedin_profile_url"</span>] <span class="kw">for</span> co <span class="kw">in</span> enriched\n        <span class="kw">for</span> src <span class="kw">in</span> [<span class="str">"founders"</span>,<span class="str">"decision_makers"</span>]\n        <span class="kw">for</span> f <span class="kw">in</span> co.get(src,{}).get(<span class="str">"profiles"</span>,[])[:5]\n        <span class="kw">if</span> f.get(<span class="str">"linkedin_profile_url"</span>)]\n<span class="kw">for</span> i <span class="kw">in</span> range(<span class="num">0</span>, len(urls), <span class="num">25</span>):\n'+
     '  people = requests.get(f<span class="str">"{B}/screener/person/enrich"</span>, headers=H,\n    params={<span class="str">"linkedin_profile_url"</span>: <span class="str">","</span>.join(urls[i:i+<span class="num">25</span>]),\n            <span class="str">"fields"</span>: <span class="str">"name,title,location,business_email,current_employers"</span>}).json()\n  <span class="comment"># → filter by auction interest signals here</span>';
 }
 
@@ -1083,7 +1095,7 @@ function downloadCSV(){
   allResults.forEach(function(r){rows.push([r.name,r.title,r.company,r.industry,r.hq_country,r.funding,r.email||'',r.score,auctionContext&&r.auction_match?auctionContext.name:'',r.match_why||'']);});
   var blob=new Blob([rows.map(function(r){return r.map(function(v){return '"'+v+'"';}).join(',');}).join('\n')],{type:'text/csv'});
   var el=document.createElement('a');
-  el.href=URL.createObjectURL(blob); el.download='prospect-founders.csv'; el.click();
+  el.href=URL.createObjectURL(blob); el.download='prospects.csv'; el.click();
 }
 
 /* ═══════════════════════════════════════════
@@ -1140,9 +1152,8 @@ function runPipelineManual(){
   var industry = document.getElementById('industry-filter').value;
   var sortBy = document.getElementById('sort-by').value;
 
-  // Start fresh with acquisition status + funding floor
+  // Start fresh with funding floor
   var manualFilters = [
-    {filter_type:'acquisition_status',type:'=',value:'Acquired',label:'Status = Acquired'},
     {filter_type:'crunchbase_total_investment_usd',type:'=>',value:minF,label:'Funding >= $'+fmtM(minF)}
   ];
   if(maxF) manualFilters.push({filter_type:'crunchbase_total_investment_usd',type:'=<',value:maxF,label:'Funding <= $'+fmtM(maxF)});
