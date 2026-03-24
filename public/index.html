@@ -1,0 +1,1532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prospect</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f9f9f9;--surface:#fff;--surface-alt:#f3f3f3;--surface-dim:#faf9f5;--border:#e2e2e2;--border-strong:#c8c8c8;--on-surface:#1a1c1c;--secondary:#5e5e5e;--accent:#004ec5;--accent-light:rgba(0,78,197,0.08);--danger:#b10000;--success:#1a6b3c;--tag-bg:#efefef;--shadow-card:0 25px 50px -12px rgba(0,0,0,.10);--shadow-sm:0 2px 8px rgba(0,0,0,.06);--r:16px;--rs:8px;--rx:6px;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--on-surface);font-family:'Inter',sans-serif;font-size:14px;line-height:1.5;min-height:100vh;}
+.app{display:grid;grid-template-columns:300px 1fr;grid-template-rows:56px 1fr;height:100vh;overflow:hidden;}
+
+/* TOPBAR */
+.topbar{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;padding:0 22px;border-bottom:1px solid var(--border);background:var(--surface);gap:14px;}
+.topbar-title{font-family:'Epilogue',sans-serif;font-weight:900;font-size:16px;letter-spacing:-.5px;flex-shrink:0;}
+/* Hamburger next to Prospect */
+.topbar-hamburger{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;gap:4px;padding:5px 4px;flex-shrink:0;border-radius:var(--rx);transition:background .15s;}
+.topbar-hamburger:hover{background:var(--surface-alt);}
+.topbar-hamburger span{display:block;width:16px;height:1.5px;background:var(--on-surface);border-radius:2px;transition:transform .2s,opacity .2s;}
+.topbar-hamburger.open span:nth-child(1){transform:translateY(5.5px) rotate(45deg);}
+.topbar-hamburger.open span:nth-child(2){opacity:0;}
+.topbar-hamburger.open span:nth-child(3){transform:translateY(-5.5px) rotate(-45deg);}
+
+/* Hamburger dropdown — top-left panel */
+.hb-dropdown{display:none;position:fixed;top:56px;left:0;width:300px;background:var(--surface);border-right:1px solid var(--border);border-bottom:1px solid var(--border);z-index:200;flex-direction:column;box-shadow:6px 6px 24px rgba(0,0,0,.08);}
+.hb-dropdown.open{display:flex;}
+.hb-section{padding:14px 16px;display:flex;flex-direction:column;gap:8px;}
+.hb-section+.hb-section{border-top:1px solid var(--border);}
+.hb-title{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--secondary);}
+.hb-group{display:flex;flex-direction:column;gap:4px;}
+.hb-label{font-size:11px;color:var(--secondary);}
+.hb-input{background:var(--bg);border:1px solid var(--border);border-radius:var(--rx);padding:6px 9px;font-family:'Inter',sans-serif;font-size:11px;color:var(--on-surface);outline:none;width:100%;transition:border-color .15s;}
+.hb-input:focus{border-color:var(--accent);}
+.topbar-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.credit-badge{background:var(--surface-alt);border:1px solid var(--border);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:500;}
+
+/* SIDEBAR — permanent left column */
+.sidebar{border-right:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column;height:100%;overflow:hidden;}
+
+/* Sidebar mode pills row */
+.sb-header{display:flex;align-items:center;padding:0 14px;border-bottom:1px solid var(--border);height:38px;flex-shrink:0;gap:6px;}
+
+/* Panes */
+.sb-pane{display:none;flex-direction:column;gap:13px;padding:16px 14px;overflow-y:auto;flex:1;}
+.sb-pane.active{display:flex;}
+.sb-pane-sales{display:none;flex-direction:column;gap:10px;padding:14px;overflow-y:auto;flex:1;}
+.sb-pane-sales.active{display:flex;}
+
+.sb-mode-pills{display:flex;gap:2px;}
+.sb-pill{font-size:10px;font-weight:600;color:var(--secondary);padding:3px 9px;border-radius:10px;cursor:pointer;transition:all .15s;border:none;background:none;letter-spacing:.01em;}
+.sb-pill:hover{color:var(--on-surface);}
+.sb-pill.active{background:var(--on-surface);color:white;}
+.section-label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--secondary);margin-bottom:5px;}
+
+/* AI SEARCH BOX — the hero new feature */
+.ai-search-box{background:var(--bg);border:1.5px solid var(--border);border-radius:var(--rs);overflow:hidden;transition:border-color .15s,box-shadow .15s;}
+.ai-search-box:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-light);}
+.ai-search-header{display:flex;align-items:center;gap:7px;padding:8px 10px 6px;border-bottom:1px solid var(--border);}
+.ai-badge{background:var(--on-surface);color:white;font-size:9px;font-weight:700;letter-spacing:.05em;padding:2px 6px;border-radius:3px;flex-shrink:0;}
+.ai-search-label{font-size:11px;font-weight:500;color:var(--on-surface);}
+.ai-textarea{width:100%;background:transparent;border:none;outline:none;resize:none;font-family:'Inter',sans-serif;font-size:12px;color:var(--on-surface);padding:8px 10px;line-height:1.5;min-height:70px;}
+.ai-textarea::placeholder{color:#bbb;}
+.ai-search-footer{display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border-top:1px solid var(--border);}
+.ai-gen-btn{background:var(--on-surface);color:white;border:none;border-radius:var(--rx);padding:5px 11px;font-family:'Epilogue',sans-serif;font-weight:700;font-size:11px;cursor:pointer;display:flex;align-items:center;gap:5px;transition:background .15s;flex-shrink:0;}
+.ai-gen-btn:hover{background:#2a2c2c;}
+.ai-gen-btn:disabled{background:#ccc;cursor:not-allowed;}
+.ai-gen-btn .mini-spin{width:10px;height:10px;border:1.5px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .6s linear infinite;display:none;}
+.ai-gen-btn.spinning .mini-spin{display:block;}
+.ai-gen-btn.spinning .btn-label{opacity:.6;}
+
+/* Generated filters panel */
+.filters-panel{display:none;flex-direction:column;gap:6px;}
+.filters-panel.visible{display:flex;}
+.filters-panel-head{display:flex;align-items:center;justify-content:space-between;}
+.filters-panel-title{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--secondary);}
+.filters-panel-edit{font-size:10px;color:var(--accent);cursor:pointer;text-decoration:none;}
+.filters-panel-edit:hover{text-decoration:underline;}
+.filter-chip-list{display:flex;flex-direction:column;gap:4px;}
+.filter-chip{background:var(--surface-alt);border:1px solid var(--border);border-radius:var(--rx);padding:6px 9px;display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
+.filter-chip-left{display:flex;flex-direction:column;gap:2px;}
+.filter-chip-field{font-size:10px;color:var(--secondary);font-weight:600;letter-spacing:.04em;text-transform:uppercase;}
+.filter-chip-val{font-size:11px;font-weight:500;color:var(--on-surface);}
+.filter-chip-remove{background:none;border:none;cursor:pointer;color:var(--secondary);font-size:13px;line-height:1;padding:0;flex-shrink:0;transition:color .1s;}
+.filter-chip-remove:hover{color:var(--danger);}
+.reasoning-box{background:rgba(0,78,197,.04);border:1px solid rgba(0,78,197,.15);border-radius:var(--rx);padding:8px 10px;font-size:11px;line-height:1.5;color:var(--secondary);font-style:italic;}
+
+/* Auction strip — now vertical list in sales panel */
+.auction-strip-label{display:none;}
+.auction-strip{display:flex;flex-direction:column;gap:6px;}
+.auction-card{background:var(--surface-alt);border:1px solid var(--border);border-radius:var(--rs);padding:10px 12px;cursor:pointer;transition:all .15s;position:relative;overflow:hidden;border-left:3px solid transparent;}
+.auction-card:hover{background:var(--surface);border-color:var(--border-strong);}
+.auction-card.selected{background:var(--surface);border-left-color:var(--accent);border-color:var(--border-strong);box-shadow:var(--shadow-sm);}
+.auction-card.chr.selected{border-left-color:var(--danger);}
+.acard-house{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;}
+.acard-house.christies{color:var(--danger);}
+.acard-house.sothebys{color:var(--accent);}
+.acard-name{font-family:'Epilogue',sans-serif;font-weight:700;font-size:12px;letter-spacing:-.2px;line-height:1.2;margin-bottom:4px;}
+.acard-row{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.acard-date{font-size:10px;color:var(--secondary);}
+.acard-est{font-size:10px;font-weight:600;color:var(--success);}
+.acard-cats{display:flex;flex-wrap:wrap;gap:2px;margin-top:4px;}
+.acard-cat{font-size:8px;background:var(--tag-bg);border-radius:10px;padding:1px 5px;color:var(--secondary);}
+.acard-count{font-size:9px;font-weight:700;color:var(--accent);margin-top:4px;display:none;}
+.auction-card.selected .acard-count{display:block;}
+/* Auction house toggle */
+.house-toggle{display:grid;grid-template-columns:1fr 1fr;gap:5px;}
+.house-btn{border:1.5px solid var(--border);border-radius:var(--rx);padding:7px 5px;cursor:pointer;background:var(--surface);display:flex;flex-direction:column;align-items:center;gap:2px;transition:all .15s;}
+.house-btn.active.christies{border-color:var(--danger);background:rgba(177,0,0,.05);}
+.house-btn.active.sothebys{border-color:var(--accent);background:var(--accent-light);}
+.house-btn-name{font-family:'Epilogue',sans-serif;font-weight:900;font-size:11px;letter-spacing:-.2px;}
+.house-btn-name.christies{color:var(--danger);}
+.house-btn-name.sothebys{color:var(--accent);}
+.house-btn-sub{font-size:9px;color:var(--secondary);}
+
+/* Category grid */
+.category-grid{display:flex;flex-direction:column;gap:3px;}
+.cat-row{display:flex;align-items:center;justify-content:space-between;padding:6px 8px;border-radius:var(--rx);border:1px solid var(--border);cursor:pointer;background:var(--bg);transition:all .15s;}
+.cat-row:hover{border-color:var(--border-strong);background:var(--surface);}
+.cat-row.selected{border-color:var(--accent);background:var(--accent-light);}
+.cat-left{display:flex;align-items:center;gap:7px;}
+.cat-icon{display:none;}
+.cat-name{font-size:11px;font-weight:500;}
+.cat-date{font-size:9px;font-weight:600;color:var(--accent);}
+
+/* API keys */
+.key-group{display:flex;flex-direction:column;gap:4px;}
+.key-label{font-size:10px;font-weight:500;color:var(--secondary);}
+.key-input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--rx);padding:6px 9px;font-family:'Inter',sans-serif;font-size:11px;color:var(--on-surface);outline:none;transition:border-color .15s;}
+.key-input:focus{border-color:var(--accent);}
+
+.run-btn{width:100%;background:var(--on-surface);color:white;border:none;border-radius:var(--rs);padding:10px;font-family:'Epilogue',sans-serif;font-weight:700;font-size:13px;cursor:pointer;transition:background .15s,transform .1s;display:flex;align-items:center;justify-content:center;gap:6px;}
+.run-btn:hover{background:#2a2c2c;}
+.run-btn:active{transform:scale(.98);}
+.run-btn:disabled{background:#ccc;cursor:not-allowed;}
+.run-btn .spinner{width:12px;height:12px;border:2px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;display:none;}
+.run-btn.loading .spinner{display:block;}
+.run-btn.loading .btn-text{opacity:.7;}
+
+.divider{height:1px;background:var(--border);margin:2px 0;}
+
+.pipeline{display:flex;flex-direction:column;gap:1px;background:var(--border);border-radius:var(--rx);overflow:hidden;}
+.pipeline-step{background:var(--surface);padding:6px 8px;display:flex;align-items:center;gap:6px;font-size:11px;}
+.step-num{width:16px;height:16px;border-radius:50%;background:var(--surface-alt);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--secondary);flex-shrink:0;transition:all .2s;}
+.step-num.active{background:var(--accent);color:white;border-color:var(--accent);}
+.step-num.done{background:var(--success);color:white;border-color:var(--success);}
+.step-text{color:var(--on-surface);line-height:1.3;}
+.step-text small{color:var(--secondary);display:block;font-size:10px;}
+
+/* MAIN */
+.main{overflow-y:auto;padding:18px 20px;display:flex;flex-direction:column;gap:13px;}
+.thinking-bar{height:3px;background:var(--border);overflow:hidden;opacity:0;transition:opacity .2s;}
+.thinking-bar.active{opacity:1;}
+.thinking-fill{height:100%;background:linear-gradient(90deg,transparent,var(--accent),transparent);width:40%;animation:shimmer 1.4s ease-in-out infinite;}
+@keyframes shimmer{0%{transform:translateX(-200%)}100%{transform:translateX(400%)}}
+
+/* Auction strip */
+.auction-strip-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;}
+.auction-strip-label{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--secondary);}
+.auction-strip{display:grid;gap:8px;}
+.auction-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);padding:10px 12px;cursor:pointer;transition:all .15s;position:relative;overflow:hidden;}
+.auction-card:hover{box-shadow:var(--shadow-sm);}
+.auction-card.selected{border-color:var(--accent);background:var(--accent-light);}
+.auction-card.chr.selected{border-color:var(--danger);background:rgba(177,0,0,.05);}
+.auction-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.auction-card.chr::before{background:var(--danger);}
+.auction-card.sot::before{background:var(--accent);}
+.acard-house{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;}
+.acard-house.christies{color:var(--danger);}
+.acard-house.sothebys{color:var(--accent);}
+.acard-name{font-family:'Epilogue',sans-serif;font-weight:700;font-size:11px;letter-spacing:-.2px;line-height:1.2;margin-bottom:3px;}
+.acard-date{font-size:9px;color:var(--secondary);}
+.acard-est{font-size:9px;font-weight:600;color:var(--success);}
+.acard-cats{display:flex;flex-wrap:wrap;gap:2px;margin-top:4px;}
+.acard-cat{font-size:8px;background:var(--tag-bg);border-radius:10px;padding:1px 5px;color:var(--secondary);}
+
+/* Stats */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);padding:10px 12px;}
+.stat-label{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--secondary);}
+.stat-value{font-family:'Epilogue',sans-serif;font-weight:900;font-size:22px;line-height:1;letter-spacing:-1px;color:var(--on-surface);margin:3px 0 2px;}
+.stat-sub{font-size:10px;color:var(--secondary);}
+
+/* Status row */
+.status-row{display:flex;align-items:center;justify-content:space-between;}
+.status-msg{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--secondary);}
+.status-dot{width:6px;height:6px;border-radius:50%;background:var(--border-strong);flex-shrink:0;}
+.status-dot.running{background:var(--accent);animation:pulse 1s ease infinite;}
+.status-dot.done{background:var(--success);}
+.status-dot.error{background:var(--danger);}
+.tab-bar{display:flex;gap:2px;background:var(--surface-alt);border-radius:var(--rx);padding:3px;}
+.tab-btn{background:none;border:none;border-radius:4px;padding:4px 9px;font-family:'Inter',sans-serif;font-size:11px;font-weight:500;color:var(--secondary);cursor:pointer;transition:all .1s;}
+.tab-btn.active{background:var(--surface);color:var(--on-surface);box-shadow:var(--shadow-sm);}
+
+/* Results */
+.results-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-card);}
+.results-header{display:flex;align-items:flex-start;justify-content:space-between;padding:11px 16px;border-bottom:1px solid var(--border);}
+.results-title{font-family:'Epilogue',sans-serif;font-weight:900;font-size:14px;letter-spacing:-.3px;}
+.results-subtitle{font-size:10px;color:var(--secondary);margin-top:2px;}
+.results-actions{display:flex;gap:5px;flex-shrink:0;}
+.action-btn{background:var(--surface-alt);border:1px solid var(--border);border-radius:var(--rx);padding:4px 9px;font-family:'Inter',sans-serif;font-size:11px;font-weight:500;color:var(--on-surface);cursor:pointer;transition:background .15s;}
+.action-btn:hover{background:var(--border);}
+.table-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;}
+thead{background:var(--surface-alt);position:sticky;top:0;z-index:2;}
+th{text-align:left;padding:7px 12px;font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--secondary);border-bottom:1px solid var(--border);white-space:nowrap;cursor:pointer;user-select:none;}
+th:hover{color:var(--on-surface);}
+tbody tr{border-bottom:1px solid var(--border);transition:background .1s;cursor:pointer;}
+tbody tr:last-child{border-bottom:none;}
+tbody tr:hover{background:var(--surface-dim);}
+td{padding:9px 12px;font-size:12px;vertical-align:middle;}
+.founder-name{font-weight:600;font-size:13px;}
+.founder-title{font-size:10px;color:var(--secondary);margin-top:1px;}
+.company-name{font-weight:500;}
+.company-acq{font-size:9px;color:var(--success);font-weight:700;letter-spacing:.04em;margin-top:2px;}
+.money-tag{font-family:'Epilogue',sans-serif;font-weight:700;font-size:12px;letter-spacing:-.3px;}
+.money-tag.large{color:var(--accent);}
+.match-cell{display:flex;flex-direction:column;gap:3px;min-width:150px;}
+.match-auction{font-size:10px;font-weight:600;display:flex;align-items:center;gap:3px;}
+.hdot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
+.hdot.christies{background:var(--danger);}
+.hdot.sothebys{background:var(--accent);}
+.match-why{font-size:10px;color:var(--secondary);line-height:1.3;}
+.match-lot{font-size:10px;font-weight:600;font-style:italic;margin-top:1px;}
+.email-chip{display:inline-flex;align-items:center;gap:3px;background:var(--surface-alt);border:1px solid var(--border);border-radius:4px;padding:2px 6px;font-size:10px;cursor:pointer;}
+.email-chip:hover{background:var(--border);}
+.email-chip.verified::before{content:'';color:var(--success);font-size:9px;font-weight:700;}
+.li-link{color:var(--accent);text-decoration:none;font-size:10px;}
+.li-link:hover{text-decoration:underline;}
+.score-cell{display:flex;align-items:center;gap:5px;}
+.score-dots{display:flex;gap:2px;}
+.score-dot{width:5px;height:5px;border-radius:50%;background:var(--border);}
+.score-dot.filled{background:var(--accent);}
+.score-num{font-family:'Epilogue',sans-serif;font-weight:700;font-size:12px;}
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:48px 20px;color:var(--secondary);text-align:center;}
+.empty-icon{width:42px;height:42px;background:var(--surface-alt);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:19px;}
+.empty-title{font-family:'Epilogue',sans-serif;font-weight:900;font-size:15px;color:var(--on-surface);letter-spacing:-.3px;}
+.empty-sub{font-size:11px;max-width:240px;}
+.code-block{background:var(--on-surface);color:#e2e2e2;border-radius:var(--rs);padding:13px 15px;font-family:'SF Mono','Fira Code',monospace;font-size:11px;line-height:1.7;overflow-x:auto;position:relative;white-space:pre;}
+.code-block .kw{color:#79b8ff;}.code-block .str{color:#9ecbff;}.code-block .comment{color:#6a9955;}.code-block .num{color:#f8c555;}
+.code-copy{position:absolute;top:8px;right:8px;background:rgba(255,255,255,.1);border:none;border-radius:4px;color:#aaa;font-size:10px;padding:3px 7px;cursor:pointer;}
+.code-copy:hover{background:rgba(255,255,255,.2);color:white;}
+
+/* DRAWER */
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;opacity:0;pointer-events:none;transition:opacity .2s;}
+.drawer-overlay.open{opacity:1;pointer-events:all;}
+.drawer{position:fixed;top:0;right:0;width:490px;height:100vh;background:var(--surface);box-shadow:-20px 0 60px rgba(0,0,0,.15);z-index:101;transform:translateX(100%);transition:transform .25s cubic-bezier(.4,0,.2,1);overflow-y:auto;display:flex;flex-direction:column;}
+.drawer.open{transform:translateX(0);}
+.drawer-head{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:10px;position:sticky;top:0;background:var(--surface);z-index:2;}
+.drawer-name{font-family:'Epilogue',sans-serif;font-weight:900;font-size:19px;letter-spacing:-.5px;}
+.drawer-role{font-size:11px;color:var(--secondary);margin-top:2px;}
+.drawer-close{background:var(--surface-alt);border:1px solid var(--border);border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;color:var(--secondary);transition:background .1s;flex-shrink:0;}
+.drawer-close:hover{background:var(--border);}
+.drawer-body{padding:16px 20px;display:flex;flex-direction:column;gap:15px;}
+.d-section{display:flex;flex-direction:column;gap:7px;}
+.d-section-title{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--secondary);}
+.d-kv{display:grid;grid-template-columns:90px 1fr;gap:5px 10px;align-items:start;}
+.d-k{font-size:11px;color:var(--secondary);padding-top:1px;}
+.d-v{font-size:12px;font-weight:500;word-break:break-word;}
+.d-v a{color:var(--accent);text-decoration:none;}
+.d-v a:hover{text-decoration:underline;}
+.score-bar-card{background:var(--surface-alt);border:1px solid var(--border);border-radius:var(--rs);padding:11px 13px;display:flex;flex-direction:column;gap:7px;}
+.score-bar-top{display:flex;justify-content:space-between;align-items:center;}
+.score-bar-title{font-size:12px;font-weight:600;}
+.score-bar-num{font-family:'Epilogue',sans-serif;font-weight:900;font-size:17px;letter-spacing:-.5px;color:var(--accent);}
+.score-track{background:var(--border);border-radius:2px;height:3px;overflow:hidden;}
+.score-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .5s ease;}
+.score-factors{display:flex;flex-direction:column;gap:4px;}
+.score-factor{display:flex;align-items:center;justify-content:space-between;font-size:11px;}
+.score-factor-label{color:var(--secondary);}
+.sfv{font-weight:600;}.sfv.pos{color:var(--success);}.sfv.neg{color:var(--danger);}
+.auction-match-card{background:var(--surface-alt);border:1px solid var(--border);border-radius:var(--rs);overflow:hidden;}
+.amatch-head{padding:8px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);}
+.amatch-house{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;}
+.amatch-house.christies{color:var(--danger);}.amatch-house.sothebys{color:var(--accent);}
+.amatch-sale{font-family:'Epilogue',sans-serif;font-weight:700;font-size:12px;letter-spacing:-.2px;}
+.amatch-body{padding:10px 12px;display:flex;flex-direction:column;gap:8px;}
+.amatch-meta{display:flex;gap:12px;flex-wrap:wrap;}
+.amatch-meta-item{display:flex;flex-direction:column;gap:1px;}
+.amatch-meta-label{font-size:9px;color:var(--secondary);font-weight:600;text-transform:uppercase;letter-spacing:.05em;}
+.amatch-meta-val{font-size:12px;font-weight:600;}
+.lot-rec{background:var(--surface);border:1px solid var(--border);border-radius:var(--rx);padding:9px 11px;display:flex;flex-direction:column;gap:3px;}
+.lot-rec-label{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);}
+.lot-rec-title{font-size:12px;font-weight:600;line-height:1.3;}
+.lot-rec-est{font-size:11px;color:var(--success);font-weight:600;}
+.lot-rec-why{font-size:11px;color:var(--secondary);line-height:1.4;margin-top:2px;}
+.signals-list{display:flex;flex-direction:column;gap:5px;}
+.signal-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--rx);padding:7px 9px;display:flex;flex-direction:column;gap:2px;}
+.signal-type{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;}
+.signal-type.post{color:var(--accent);}.signal-type.activity{color:var(--success);}.signal-type.travel{color:#7c4dff;}
+.signal-text{font-size:11px;line-height:1.4;}
+.signal-date{font-size:10px;color:var(--secondary);}
+.pitch-box{background:var(--surface-dim);border:1px solid var(--border);border-radius:var(--rs);padding:11px 13px;font-size:12px;line-height:1.6;font-style:italic;}
+
+/* AI filter response box inside drawer */
+.ai-explain-box{background:rgba(0,78,197,.04);border:1px solid rgba(0,78,197,.15);border-radius:var(--rx);padding:9px 11px;font-size:11px;line-height:1.5;color:var(--secondary);}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.fade-in{animation:fadeIn .2s ease forwards;}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <!-- Hamburger + Prospect — hamburger opens the dropdown panel -->
+  <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+    <button class="topbar-hamburger" id="topbar-hamburger" onclick="toggleHbMenu()" title="Settings">
+      <span></span><span></span><span></span>
+    </button>
+    <span class="topbar-title">Prospect</span>
+  </div>
+
+
+  <div class="topbar-right">
+    <span id="credit-display" class="credit-badge">Demo mode</span>
+  </div>
+</header>
+
+<!-- Hamburger dropdown — top-left, under topbar -->
+<div class="hb-dropdown" id="hb-dropdown">
+  <div class="hb-section">
+    <div class="hb-title">API Keys</div>
+    <div id="hb-key-status" style="font-size:11px;color:var(--secondary);line-height:1.6;">Set via Vercel environment variables:<br><code style="font-size:10px;background:var(--surface-alt);padding:1px 5px;border-radius:3px;">CLAUDE_KEY</code> &nbsp;<code style="font-size:10px;background:var(--surface-alt);padding:1px 5px;border-radius:3px;">CRUSTDATA_KEY</code></div>
+    <div id="hb-key-indicators" style="display:flex;gap:8px;margin-top:4px;">
+      <span id="hb-claude-status" style="font-size:10px;font-weight:600;"></span>
+      <span id="hb-crustdata-status" style="font-size:10px;font-weight:600;"></span>
+    </div>
+  </div>
+  <div class="hb-section">
+    <div class="hb-title">Pipeline</div>
+    <div class="pipeline">
+      <div class="pipeline-step"><div class="step-num" id="hb-step-0">AI</div><div class="step-text">Semantic filter generation<small>Claude — natural language to filters</small></div></div>
+      <div class="pipeline-step"><div class="step-num" id="hb-step-1">1</div><div class="step-text">Acquired companies<small>CompanyDB — acquisition_status</small></div></div>
+      <div class="pipeline-step"><div class="step-num" id="hb-step-2">2</div><div class="step-text">Extract founders<small>Company Enrichment — founders</small></div></div>
+      <div class="pipeline-step"><div class="step-num" id="hb-step-3">3</div><div class="step-text">Enrich + contact<small>Person Enrichment — email</small></div></div>
+      <div class="pipeline-step"><div class="step-num" id="hb-step-4">4</div><div class="step-text">Match to auctions<small>LinkedIn signals + scoring</small></div></div>
+    </div>
+  </div>
+</div>
+
+<aside class="sidebar">
+
+  <!-- Sidebar mode pills -->
+  <div class="sb-header">
+    <div class="sb-mode-pills">
+      <button class="sb-pill active" id="sbpill-search" onclick="setSbMode('search')">Search</button>
+      <button class="sb-pill" id="sbpill-sales" onclick="setSbMode('sales')">Sales</button>
+    </div>
+  </div>
+
+  <!-- PANE: SEARCH + MANUAL combined -->
+  <div class="sb-pane active" id="sbpane-search">
+
+    <!-- AI search box -->
+    <div class="ai-search-box">
+      <div class="ai-search-header">
+        <span class="ai-badge">CLAUDE</span>
+        <span class="ai-search-label">Describe who you're looking for</span>
+      </div>
+      <textarea class="ai-textarea" id="ai-query" placeholder="e.g. wine enthusiasts who sold their fintech startup in Europe&#10;&#10;or: NYC founders who collect watches or art&#10;&#10;or: consumer brand founders interested in jewelry"></textarea>
+      <div class="ai-search-footer">
+        <button class="ai-gen-btn" id="ai-gen-btn" onclick="generateFilters()">
+          <div class="mini-spin"></div>
+          <span class="btn-label">Generate Filters</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Generated filter chips -->
+    <div class="filters-panel" id="filters-panel">
+      <div class="filters-panel-head">
+        <span class="filters-panel-title">Generated Filters</span>
+        <span class="filters-panel-edit" onclick="clearFilters()">Clear</span>
+      </div>
+      <div class="reasoning-box" id="reasoning-box" style="display:none"></div>
+      <div class="filter-chip-list" id="filter-chip-list"></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Manual filters — always visible below AI search -->
+    <div>
+      <p class="section-label">Manual Filters</p>
+      <div class="key-group">
+        <label class="key-label">Min. funding (USD)</label>
+        <input class="key-input" type="number" id="min-funding" value="5000000" placeholder="5000000">
+      </div>
+      <div class="key-group" style="margin-top:6px">
+        <label class="key-label">Max. funding (USD)</label>
+        <input class="key-input" type="number" id="max-funding" placeholder="No limit">
+      </div>
+    </div>
+
+    <div class="key-group">
+      <label class="key-label">HQ Country</label>
+      <select class="key-input" id="country-filter">
+        <option value="">All countries</option>
+        <option value="USA">United States</option>
+        <option value="GBR">United Kingdom</option>
+        <option value="FRA">France</option>
+        <option value="DEU">Germany</option>
+        <option value="ITA">Italy</option>
+        <option value="CHE">Switzerland</option>
+        <option value="CAN">Canada</option>
+        <option value="AUS">Australia</option>
+        <option value="SGP">Singapore</option>
+        <option value="HKG">Hong Kong</option>
+        <option value="CHN">China</option>
+        <option value="JPN">Japan</option>
+      </select>
+    </div>
+
+    <div class="key-group">
+      <label class="key-label">Industry</label>
+      <select class="key-input" id="industry-filter">
+        <option value="">All industries</option>
+        <option value="Software Development">Software Development</option>
+        <option value="Financial Services">Financial Services</option>
+        <option value="Food & Beverages">Food & Beverages</option>
+        <option value="Consumer Goods">Consumer Goods</option>
+        <option value="Health Care">Healthcare</option>
+        <option value="Retail">Retail / Fashion</option>
+        <option value="Media">Media & Entertainment</option>
+        <option value="Real Estate">Real Estate</option>
+        <option value="Hospitality">Hospitality</option>
+      </select>
+    </div>
+
+    <div class="key-group">
+      <label class="key-label">Sort by</label>
+      <select class="key-input" id="sort-by">
+        <option value="score">Fit score</option>
+        <option value="funding">Funding (high to low)</option>
+        <option value="name">Name A–Z</option>
+        <option value="company">Company A–Z</option>
+      </select>
+    </div>
+
+    <div class="key-group">
+      <label class="key-label">Search results</label>
+      <div style="position:relative;">
+        <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--secondary);pointer-events:none;" width="12" height="12" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <input class="key-input" style="padding-left:30px;" type="text" placeholder="Filter by name or company…" id="local-search" oninput="filterResults()">
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <button class="run-btn" id="run-btn" onclick="runPipelineManual()">
+      <div class="spinner"></div>
+      <span class="btn-text">Find Prospects</span>
+    </button>
+
+  </div>
+
+  <!-- PANE: SALES -->
+  <div class="sb-pane-sales" id="sbpane-sales">
+    <div>
+      <p class="section-label">Auction House</p>
+      <div class="house-toggle">
+        <div class="house-btn active christies" id="btn-christies" onclick="toggleHouse('christies')">
+          <span class="house-btn-name christies">Christie's</span>
+          <span class="house-btn-sub">Est. 1766</span>
+        </div>
+        <div class="house-btn active sothebys" id="btn-sothebys" onclick="toggleHouse('sothebys')">
+          <span class="house-btn-name sothebys">Sotheby's</span>
+          <span class="house-btn-sub">Est. 1744</span>
+        </div>
+      </div>
+    </div>
+    <div>
+      <p class="section-label">Upcoming Sales</p>
+      <div class="auction-strip" id="auction-strip"></div>
+    </div>
+    <div>
+      <p class="section-label">By Category</p>
+      <div class="category-grid" id="category-grid"></div>
+    </div>
+  </div>
+
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="thinking-bar" id="thinking-bar"><div class="thinking-fill"></div></div>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-card"><span class="stat-label">Founders found</span><div class="stat-value" id="stat-founders">—</div><span class="stat-sub">acquired companies</span></div>
+    <div class="stat-card"><span class="stat-label">Sale matches</span><div class="stat-value" id="stat-matches">—</div><span class="stat-sub" id="sel-label">select a sale</span></div>
+    <div class="stat-card"><span class="stat-label">Avg. exit size</span><div class="stat-value" id="stat-exit">—</div><span class="stat-sub">funding raised</span></div>
+    <div class="stat-card"><span class="stat-label">High-fit (≥75)</span><div class="stat-value" id="stat-highfit">—</div><span class="stat-sub">top prospects</span></div>
+  </div>
+
+  <!-- Auction context panel — shown when a sale is selected -->
+  <div id="auction-context-panel" style="display:none;">
+    <div class="results-wrap" style="box-shadow:none;">
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;">
+        <div>
+          <div style="font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--secondary);margin-bottom:3px;" id="ctx-house-label"></div>
+          <div style="font-family:'Epilogue',sans-serif;font-weight:900;font-size:15px;letter-spacing:-.3px;" id="ctx-sale-name"></div>
+        </div>
+        <div style="display:flex;gap:16px;flex-shrink:0;">
+          <div><div style="font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--secondary);">Date</div><div style="font-size:12px;font-weight:600;" id="ctx-date"></div></div>
+          <div><div style="font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--secondary);">Est. total</div><div style="font-size:12px;font-weight:600;color:var(--success);" id="ctx-est"></div></div>
+          <div><div style="font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--secondary);">Prospects matched</div><div style="font-size:12px;font-weight:600;" id="ctx-count">—</div></div>
+        </div>
+      </div>
+      <!-- Filter explanation from Claude -->
+      <div id="ctx-filter-explain" style="display:none;padding:10px 16px;border-bottom:1px solid var(--border);background:rgba(0,78,197,.03);">
+        <div style="font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);margin-bottom:5px;">Why these prospects match this sale</div>
+        <div style="font-size:12px;line-height:1.6;color:var(--on-surface);" id="ctx-explain-text"></div>
+        <div id="ctx-filter-chips" style="display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;"></div>
+      </div>
+      <!-- Lots -->
+      <div style="padding:10px 16px;display:flex;gap:8px;overflow-x:auto;" id="ctx-lots"></div>
+    </div>
+  </div>
+
+  <!-- Status + tabs -->
+  <div class="status-row">
+    <div class="status-msg"><div class="status-dot" id="status-dot"></div><span id="status-text">Describe who you're looking for, then run the pipeline.</span></div>
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab('table',this)">Prospects</button>
+      <button class="tab-btn" onclick="switchTab('code',this)">API Code</button>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div id="view-table">
+    <div class="results-wrap">
+      <div class="results-header">
+        <div>
+          <div class="results-title" id="results-title">Founder Prospects</div>
+          <div class="results-subtitle" id="results-subtitle">Run the pipeline to surface acquisition-exit founders matched to upcoming sales</div>
+        </div>
+        <div class="results-actions">
+          <button class="action-btn" onclick="copyCSV()">Copy CSV</button>
+          <button class="action-btn" onclick="downloadCSV()">Export</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th onclick="sortTable('name')">Founder</th>
+            <th onclick="sortTable('company')">Company / Exit</th>
+            <th onclick="sortTable('funding')">Funding</th>
+            <th>Contact</th>
+            <th>Auction Match + Why</th>
+            <th onclick="sortTable('score')">Score</th>
+            <th></th>
+          </tr></thead>
+          <tbody id="results-body">
+            <tr><td colspan="7"><div class="empty-state">
+              <div class="empty-icon"></div>
+              <div class="empty-title">Start with a description</div>
+              <div class="empty-sub">Type what you're looking for above — Claude will generate the exact filters. Or click an example.</div>
+            </div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Code view -->
+  <div id="view-code" style="display:none;">
+    <div class="results-wrap">
+      <div class="results-header">
+        <div class="results-title">Generated Pipeline Code</div>
+        <div class="results-actions"><button class="action-btn" onclick="copyCode()">Copy</button></div>
+      </div>
+      <div style="padding:14px 16px;display:flex;flex-direction:column;gap:10px;">
+        <p style="font-size:12px;color:var(--secondary);line-height:1.6;">Exact Crustdata API calls this tool runs, generated from your Claude-described filters.</p>
+        <div class="code-block"><button class="code-copy" onclick="copyCode()">copy</button><span id="code-content">Run the pipeline to see generated code.</span></div>
+      </div>
+    </div>
+  </div>
+</main>
+</div>
+
+<!-- DRAWER -->
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-head">
+    <div>
+      <div class="drawer-name" id="d-name">—</div>
+      <div class="drawer-role" id="d-role">—</div>
+    </div>
+    <button class="drawer-close" onclick="closeDrawer()"></button>
+  </div>
+  <div class="drawer-body">
+    <div class="score-bar-card">
+      <div class="score-bar-top"><span class="score-bar-title">Art Market Fit Score</span><span class="score-bar-num" id="d-score">—</span></div>
+      <div class="score-track"><div class="score-fill" id="d-score-fill" style="width:0%"></div></div>
+      <div class="score-factors" id="d-score-factors"></div>
+    </div>
+    <div class="d-section"><div class="d-section-title">Auction Match</div><div id="d-auction-match"></div></div>
+    <div class="d-section"><div class="d-section-title">Likely Lots</div><div id="d-lots" style="display:flex;flex-direction:column;gap:6px;"></div></div>
+    <div class="d-section"><div class="d-section-title">Signals</div><div class="signals-list" id="d-signals"></div></div>
+    <div class="d-section"><div class="d-section-title">Profile</div><div class="d-kv" id="d-profile-kv"></div></div>
+    <div class="d-section"><div class="d-section-title">Company & Exit</div><div class="d-kv" id="d-company-kv"></div></div>
+    <div class="d-section"><div class="d-section-title">Contact</div><div class="d-kv" id="d-contact-kv"></div></div>
+    <div class="d-section"><div class="d-section-title">Pitch Approach</div><div class="pitch-box" id="d-pitch">—</div></div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════
+   API KEYS — set as Vercel environment variables:
+     CLAUDE_KEY      → your Anthropic API key
+     CRUSTDATA_KEY   → your Crustdata API key
+   These are injected at build time by next.config.js
+   (see /lib/config.js). Never commit real keys here.
+═══════════════════════════════════════════ */
+var CLAUDE_KEY_HARDCODED    = typeof __CLAUDE_KEY__ !== 'undefined' ? __CLAUDE_KEY__ : '';
+var CRUSTDATA_KEY_HARDCODED = typeof __CRUSTDATA_KEY__ !== 'undefined' ? __CRUSTDATA_KEY__ : '';
+
+/* ═══════════════════════════════════════════
+   DATA
+═══════════════════════════════════════════ */
+var AUCTIONS=[
+  {id:'soths-wine',house:'sothebys',cls:'sot',name:'Finest & Rarest Wines',date:'Mar–Apr 2026 · HK / NY',est:'$5M–15M',categories:['Fine Wine','Spirits','Cellar Collections'],keywords:['wine','winery','vineyard','spirits','cellar','sommelier','bordeaux','burgundy','champagne','whisky','hospitality','food'],lots:[{title:'DRC Romanée-Conti 1990, OWC 12 bottles',est:'$80K–120K',why:'Trophy wine; appeals to founders who entertain or have hospitality investments'},{title:'Pétrus 2000 Case (12 bottles)',est:'$40K–60K',why:'Blue-chip Bordeaux; first cellar acquisition for serious collectors'},{title:'Château Mouton Rothschild 1945 (Magnum)',est:'$25K–45K',why:'Art-label bottles bridge wine and collecting — ideal entry narrative'}],icon:''},
+  {id:'soths-contemp',house:'sothebys',cls:'sot',name:'Modern & Contemporary Evening',date:'May 2026 · New York',est:'$80M–120M',categories:['Contemporary Art','Post-War','Modern'],keywords:['contemporary','modern','art','painting','sculpture','gallery','museum','collector','creative','design'],lots:[{title:'Jean-Michel Basquiat — Major Canvas',est:'$12M–18M',why:'Blue-chip contemporary; strong with tech/finance founders collecting for cultural cachet'},{title:'Cindy Sherman — Untitled Film Still',est:'$800K–1.2M',why:'Photography-based; accessible entry into major contemporary collecting'},{title:'KAWS — Large-Scale Sculpture',est:'$1.2M–1.8M',why:'Street art crossover; popular with younger tech wealth under 45'}],icon:''},
+  {id:'soths-watches',house:'sothebys',cls:'sot',name:'Important Watches',date:'May 2026 · New York',est:'$15M–25M',categories:['Watches','Timepieces','Luxury'],keywords:['watch','timepiece','patek','rolex','luxury','horology','mechanical','engineering','precision'],lots:[{title:'Patek Philippe Ref. 5711 "Tiffany" Dial',est:'$2M–3M',why:'Cult status among tech collectors; finite supply drives speculation'},{title:'Rolex "Paul Newman" Daytona Ref. 6239',est:'$800K–1.2M',why:'Classic entry for watch-curious HNW buyers; strong provenance story'},{title:'Richard Mille RM 56-01 Sapphire',est:'$1.5M–2.5M',why:'Engineering-forward design resonates with technically-minded founders'}],icon:''},
+  {id:'soths-jewels',house:'sothebys',cls:'sot',name:'Magnificent Jewels',date:'Apr 2026 · New York',est:'$30M–50M',categories:['Jewellery','Gemstones','Diamonds'],keywords:['jewel','diamond','jewelry','gemstone','luxury','sapphire','ruby','emerald','gift','fashion','beauty'],lots:[{title:'D-Flawless Diamond Ring, 25ct+',est:'$3M–5M',why:'Post-exit gift purchasing; jewelry is primary first acquisition for HNW founders'},{title:'Natural Kashmir Sapphire & Diamond Necklace',est:'$1.5M–2.5M',why:'Colored stones trending; rarity over brand recognition'},{title:'Art Deco Cartier Bracelet',est:'$600K–900K',why:'Recognizable entry point for first-time collectors'}],icon:''},
+  {id:'soths-chinese',house:'sothebys',cls:'sot',name:'Chinese Art',date:'25 Mar 2026 · New York',est:'$20M–35M',categories:['Chinese Art','Asian Art','Classical'],keywords:['china','chinese','asian','ceramics','jade','furniture','scholar','imperial','dynasty','culture'],lots:[{title:"Huanghuali Scholar's Cabinet, 17th C.",est:'$800K–1.2M',why:"From 'Scholar's Studio' collection — provenance-rich, culturally prestigious"},{title:'Rare Imperial Famille Rose Vase, Qianlong',est:'$2M–4M',why:'Museum-quality; appeals to founders of East Asian heritage or interest'},{title:'Song Dynasty Ru Ware Brush Washer',est:'$3M–6M',why:'Ultimate rarity — fewer than 100 exist worldwide'}],icon:''},
+  {id:'chr-postwar',house:'christies',cls:'chr',name:'Post-War & Contemporary',date:'May 2026 · New York',est:'$60M–90M',categories:['Post-War','Contemporary Art','20th Century'],keywords:['contemporary','abstract','expressionism','warhol','hirst','koons','art','painting','museum','gallery','collecting'],lots:[{title:'Andy Warhol — Shot Sage Blue Marilyn',est:'$3M–5M',why:'Pop art gateway; brand familiarity and strong resale'},{title:'Cy Twombly — Untitled (Rome)',est:'$8M–12M',why:'Blue-chip abstraction; intellectual cachet for mission-driven founders'},{title:'Yayoi Kusama — Infinity Net Painting',est:'$1.8M–2.8M',why:'Widely recognized; crossover from popular culture to serious collecting'}],icon:''},
+  {id:'chr-watches',house:'christies',cls:'chr',name:'Important Watches — Geneva',date:'May 2026 · Geneva',est:'$20M–35M',categories:['Watches','Collector Timepieces'],keywords:['watch','timepiece','rolex','patek','audemars','horology','mechanical','engineering','luxury','collector'],lots:[{title:'Patek Philippe Ref. 2526 Black Enamel (unique)',est:'$250K–450K',why:'Historical rarity; appeals to technically-minded founders'},{title:'A. Lange & Söhne Tourbograph',est:'$500K–800K',why:'German engineering story; fintech/deeptech founders'},{title:'Audemars Piguet Royal Oak "Jumbo" Ref. 5402',est:'$150K–250K',why:'Entry-level grail; first watch for serious collectors'}],icon:''},
+  {id:'chr-jewels',house:'christies',cls:'chr',name:'Magnificent Jewels',date:'Apr 2026 · New York',est:'$40M–60M',categories:['Jewellery','High Jewellery','Colored Diamonds'],keywords:['jewel','diamond','jewelry','luxury','colored','sapphire','ruby','emerald','cartier','fashion','beauty','gift'],lots:[{title:'Fancy Vivid Pink Diamond Ring, 8ct',est:'$5M–8M',why:'Post-exit trophy asset; holds value well'},{title:'Burmese Ruby "Pigeon Blood" Necklace',est:'$2M–3.5M',why:'Natural rubies outperforming diamonds'},{title:'Cartier Panther Bracelet (Emerald Eyes)',est:'$900K–1.4M',why:'Iconic, wearable luxury — entry for first-time collectors'}],icon:''},
+  {id:'chr-prints',house:'christies',cls:'chr',name:'Prints & Multiples',date:'Apr 2026 · London',est:'$5M–10M',categories:['Prints','Photography','Multiples'],keywords:['print','edition','photo','photography','multiple','warhol','banksy','design','creative','visual'],lots:[{title:'Banksy — "Girl with Balloon" (signed print)',est:'$200K–350K',why:'Street art crossover; accessible first buy with strong secondary market'},{title:'Hiroshi Sugimoto — Seascape (vintage print)',est:'$80K–120K',why:'Photography with institutional prestige; analytical founders love the concept'},{title:'Ed Ruscha — "OOF" (1962 reprint)',est:'$300K–500K',why:'Blue-chip American; product-minded founders love the simplicity'}],icon:''},
+  {id:'soths-design',house:'sothebys',cls:'sot',name:'Design',date:'Mar 2026 · New York',est:'$3M–8M',categories:['Design','Furniture','Decorative Arts'],keywords:['design','furniture','midcentury','eames','interiors','decorative','craft','material','scandinavian','architecture','minimal'],lots:[{title:'Eileen Gray — "E1027" Side Table (prototype)',est:'$800K–1.2M',why:'Rare; appeals to founders with strong product design backgrounds'},{title:'George Nakashima — Conoid Dining Table',est:'$200K–350K',why:'Craft-forward; material intelligence over brand recognition'},{title:'Warhol x Knoll — "Flowers" Textile (prototype)',est:'$150K–250K',why:'Design-art crossover; low barrier, high cultural value'}],icon:''}
+];
+
+var DEMO=[
+  {name:"Amara Osei",title:"Founder & CEO",company:"InsightIQ",industry:"Software Development",hq_country:"USA",funding:125000000,acquired_by:"Salesforce",linkedin_url:"https://linkedin.com/in/amaraosei",email:"amara.osei@insightiq.co",email_verified:true,location:"New York, NY",connections:14200,score:95,signals:[{type:'post',text:'"Just back from Art Basel Miami. The Basquiat at Gagosian stopped me cold." — LinkedIn, Dec 2025',date:'Dec 2025'},{type:'activity',text:"Follows Sotheby's, Christie's, Pace Gallery, David Zwirner on LinkedIn",date:'Ongoing'},{type:'travel',text:'Tagged at MoMA PS1 opening and Frieze New York preview',date:'Apr 2025'}],auction_matches:['soths-contemp','chr-postwar'],primary_auction:'soths-contemp',match_why:"Active art engagement on LinkedIn; post-Salesforce liquidity; NYC-based with documented Basquiat interest",lots_likely:[0,2],pitch:"Amara's LinkedIn documents genuine art world engagement — unusually explicit for a founder at this level. Nine-figure Salesforce exit. Recommend specialist preview, not a cold call.",score_factors:[{label:'Exit size ($125M, Salesforce)',val:'+40',pos:true},{label:'NYC + documented art activity',val:'+25',pos:true},{label:'LinkedIn posts mentioning art',val:'+18',pos:true},{label:"Follows 4 major galleries/houses",val:'+12',pos:true}]},
+  {name:"Sara Chen",title:"Co-Founder & CEO",company:"NovaPay",industry:"Financial Services",hq_country:"USA",funding:42000000,acquired_by:"Stripe",linkedin_url:"https://linkedin.com/in/sarachen",email:"sara.chen@novapay.com",email_verified:true,location:"San Francisco, CA",connections:4821,score:88,signals:[{type:'post',text:'"Been going deep on vintage watchmaking. The mechanical complexity is what gets me." — Oct 2025',date:'Oct 2025'},{type:'activity',text:"Liked posts from Hodinkee, aBlogtoWatch. Connected to Sotheby's watches specialist.",date:'2025'}],auction_matches:['soths-watches','chr-watches'],primary_auction:'soths-watches',match_why:"Self-declared watch interest; fintech background maps to precision/engineering aesthetic; connected to Sotheby's watches team",lots_likely:[2,1],pitch:"Self-identified watch enthusiast with a LinkedIn connection to Sotheby's watches team — a warm lead. Frame around the Richard Mille RM56 engineering story.",score_factors:[{label:'Documented watch interest (multiple posts)',val:'+35',pos:true},{label:'Stripe exit ($42M)',val:'+25',pos:true},{label:"Connected to Sotheby's specialist",val:'+18',pos:true},{label:'SF (active collector city)',val:'+10',pos:true}]},
+  {name:"Henri Beaumont",title:"Founder & CEO",company:"VinTech",industry:"Food & Beverages",hq_country:"FRA",funding:18000000,acquired_by:"LVMH Moët Hennessy",linkedin_url:"https://linkedin.com/in/henribeaumont",email:"h.beaumont@vintech.fr",email_verified:true,location:"Paris, France",connections:3400,score:86,signals:[{type:'post',text:'"The 2015 Burgundy vintage was transformative — finally completed my vertical of Rousseau Chambertin." — Feb 2026',date:'Feb 2026'},{type:'activity',text:"Member of La Confrérie des Chevaliers du Tastevin; follows Sotheby's Wine on LinkedIn",date:'Ongoing'},{type:'travel',text:'Attended Christie\'s Geneva wine preview and Bordeaux En Primeur, Apr 2025',date:'Apr 2025'}],auction_matches:['soths-wine'],primary_auction:'soths-wine',match_why:"Active wine collector with completed verticals; LVMH acquisition confirms category; follows Sotheby's Wine specifically",lots_likely:[0,1],pitch:"Henri is already a serious collector — he completed a Rousseau vertical. His acquisition by LVMH Moët Hennessy is the perfect provenance signal. Approach with a DRC private preview offer; do not lead with price.",score_factors:[{label:'Completed wine vertical (Rousseau)',val:'+40',pos:true},{label:'LVMH acquisition (category validation)',val:'+30',pos:true},{label:"Follows Sotheby's Wine + attends previews",val:'+16',pos:true}]},
+  {name:"Priya Nair",title:"Co-Founder & CTO",company:"Luminos Health",industry:"Healthcare",hq_country:"USA",funding:88000000,acquired_by:"Optum",linkedin_url:"https://linkedin.com/in/priyanair",email:"priya@luminoshealth.com",email_verified:true,location:"New York, NY",connections:7102,score:84,signals:[{type:'post',text:'"At the Met Gala — Rihanna\'s jewelry reminded me why I fell in love with South Asian craft traditions." — May 2025',date:'May 2025'},{type:'activity',text:"Attends Met Museum Benefit Gala annually; visited Christie's during Asia Week 2025",date:'Annual'}],auction_matches:['soths-jewels','chr-jewels','soths-chinese'],primary_auction:'soths-jewels',match_why:"Explicit jewelry interest; Asia Week attendance; Met Gala regular signals HNW cultural positioning",lots_likely:[1,0],pitch:"Priya's posts reference jewelry specifically, she attends Asia Week viewings, and she's a Met Gala regular. Sotheby's Magnificent Jewels (Kashmir sapphire necklace) maps directly to her stated aesthetic.",score_factors:[{label:'Explicit jewelry interest, Asia Week',val:'+38',pos:true},{label:'$88M Optum exit',val:'+30',pos:true},{label:'Met Gala attendee',val:'+16',pos:true}]},
+  {name:"Marcus Webb",title:"Founder",company:"DataScope AI",industry:"Software Development",hq_country:"GBR",funding:19000000,acquired_by:"Palantir",linkedin_url:"https://linkedin.com/in/marcuswebb",email:"m.webb@datascopeai.io",email_verified:false,location:"London, UK",connections:2103,score:72,signals:[{type:'post',text:'"Saw the Warhol retrospective at the Tate — the repetition as a statement about data, about surfaces." — 2025',date:'2025'},{type:'activity',text:'Follows Frieze, Tate Modern, White Cube London on LinkedIn',date:'Ongoing'}],auction_matches:['chr-postwar','chr-prints'],primary_auction:'chr-prints',match_why:"References Warhol analytically; London-based; Christie's London Prints is ideal entry",lots_likely:[2,1],pitch:"Marcus frames Warhol analytically — concept-first. Prints & Multiples is ideal entry. Ed Ruscha or Banksy at Christie's London. Email unverified — approach via LinkedIn InMail.",score_factors:[{label:'References Warhol (concept collector)',val:'+22',pos:true},{label:'London-based; Frieze/Tate follower',val:'+18',pos:true},{label:'$19M Palantir exit',val:'+15',pos:true},{label:'Email unverified',val:'−8',pos:false}]},
+  {name:"Julian Reyes",title:"Co-Founder",company:"Cartify",industry:"E-commerce",hq_country:"USA",funding:31000000,acquired_by:"Shopify",linkedin_url:"https://linkedin.com/in/julianreyes",email:"julian@cartify.com",email_verified:true,location:"Austin, TX",connections:1890,score:68,signals:[{type:'post',text:'"Into midcentury Scandinavian right now — clean, considered, nothing extra." — 2025',date:'2025'},{type:'activity',text:'Follows Dwell Magazine, Phaidon, Knoll on LinkedIn',date:'Ongoing'}],auction_matches:['soths-design'],primary_auction:'soths-design',match_why:"Midcentury furniture interest; follows Phaidon; Sotheby's Design is warm entry before fine art",lots_likely:[1,2],pitch:"Julian's midcentury interest is textbook pre-art-collector. Sotheby's Design (Nakashima table) is strategic — same ecosystem, lower threshold. Frame as 'completing the house.'",score_factors:[{label:'Design-first (pre-art collector signal)',val:'+20',pos:true},{label:'$31M Shopify exit',val:'+18',pos:true},{label:'Consumer brand DNA',val:'+12',pos:true},{label:'Austin (smaller market)',val:'−8',pos:false}]}
+];
+
+var CATS=[
+  {id:'wine',label:'Fine Wine & Spirits',icon:'',auction:'soths-wine',date:'Mar 2026'},
+  {id:'contemporary',label:'Contemporary / Post-War',icon:'',auction:'soths-contemp',date:'May 2026'},
+  {id:'watches',label:'Watches & Timepieces',icon:'',auction:'soths-watches',date:'May 2026'},
+  {id:'jewels',label:'Jewels & Gemstones',icon:'',auction:'chr-jewels',date:'Apr 2026'},
+  {id:'chinese',label:'Chinese & Asian Art',icon:'',auction:'soths-chinese',date:'Mar 2026'},
+  {id:'prints',label:'Prints & Photography',icon:'',auction:'chr-prints',date:'Apr 2026'},
+  {id:'design',label:'Design & Decorative',icon:'',auction:'soths-design',date:'Mar 2026'}
+];
+
+/* ═══════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════ */
+var selHouses={christies:true,sothebys:true};
+var selAuctions=new Set();
+var selCategories=new Set();
+var allResults=[];
+var filteredResults=[];
+var curSort={col:'score',dir:'desc'};
+var generatedFilters=[];  // [{field, operator, value, label}]
+
+/* ═══════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════ */
+function init(){
+  renderStrip();
+  renderCats();
+  updateCode();
+}
+
+/* ═══════════════════════════════════════════
+   TICKER
+═══════════════════════════════════════════ */
+function renderTicker(){
+  var el=document.getElementById('ticker');
+  var html=AUCTIONS.map(function(a){
+    return '<span class="ticker-item"><span class="ticker-house '+a.house+'">'+(a.house==='christies'?"Christie's":"Sotheby's")+'</span><span class="ticker-name">'+a.name+'</span><span class="ticker-date">'+a.date+'</span></span>';
+  }).join('');
+  el.innerHTML=html+html;
+}
+
+/* ═══════════════════════════════════════════
+   HOUSE TOGGLE
+═══════════════════════════════════════════ */
+function toggleHouse(h){
+  selHouses[h]=!selHouses[h];
+  document.getElementById('btn-'+h).classList.toggle('active',selHouses[h]);
+  renderStrip();
+  renderCats();
+  if(allResults.length) filterAndRender();
+}
+
+/* ═══════════════════════════════════════════
+   AUCTION STRIP
+═══════════════════════════════════════════ */
+function renderStrip(){
+  var vis=AUCTIONS.filter(function(a){return selHouses[a.house];});
+  // No grid columns needed — now a flex column
+  var el=document.getElementById('auction-strip');
+  if(!el) return;
+  el.innerHTML=vis.map(function(a){
+    var sel=selAuctions.has(a.id)?'selected':'';
+    var matched=allResults.length?allResults.filter(function(r){return r.auction_matches&&r.auction_matches.indexOf(a.id)!==-1;}).length:
+                DEMO.filter(function(r){return r.auction_matches&&r.auction_matches.indexOf(a.id)!==-1;}).length;
+    return '<div class="auction-card '+a.cls+' '+sel+'" onclick="toggleAuction(\''+a.id+'\')">'+
+      '<div class="acard-house '+a.house+'">'+(a.house==='christies'?"Christie's":"Sotheby's")+'</div>'+
+      '<div class="acard-name">'+a.name+'</div>'+
+      '<div class="acard-row"><span class="acard-date">'+a.date+'</span><span class="acard-est">'+a.est+'</span></div>'+
+      '<div class="acard-cats">'+a.categories.slice(0,2).map(function(c){return '<span class="acard-cat">'+c+'</span>';}).join('')+'</div>'+
+      '<div class="acard-count" id="acard-count-'+a.id+'">'+matched+' prospect'+(matched!==1?'s':'')+' matched</div>'+
+      '</div>';
+  }).join('');
+}
+
+function toggleAuction(id){
+  if(selAuctions.has(id)){
+    selAuctions.delete(id);
+    // If nothing selected, hide context panel
+    if(selAuctions.size===0) hideAuctionContext();
+    else showAuctionContext([...selAuctions][selAuctions.size-1]);
+  } else {
+    selAuctions.add(id);
+    showAuctionContext(id);
+  }
+  renderStrip();
+  updateSelLabel();
+  if(allResults.length) filterAndRender();
+  else demoRun(); // auto-run demo if no results yet
+}
+
+function updateSelLabel(){
+  var el=document.getElementById('sel-label');
+  if(el) el.textContent=selAuctions.size?(selAuctions.size+' sale'+(selAuctions.size>1?'s':'')+' selected'):'select a sale';
+}
+
+function hideAuctionContext(){
+  document.getElementById('auction-context-panel').style.display='none';
+}
+
+function showAuctionContext(id){
+  var a=AUCTIONS.find(function(x){return x.id===id;});
+  if(!a) return;
+
+  var panel=document.getElementById('auction-context-panel');
+  panel.style.display='block';
+
+  // Fill header
+  document.getElementById('ctx-house-label').textContent=(a.house==='christies'?"Christie's":"Sotheby's")+' — Upcoming Sale';
+  document.getElementById('ctx-sale-name').textContent=a.name;
+  document.getElementById('ctx-date').textContent=a.date;
+  document.getElementById('ctx-est').textContent=a.est;
+
+  // Fill lots
+  document.getElementById('ctx-lots').innerHTML=a.lots.map(function(lot){
+    return '<div style="flex-shrink:0;width:200px;background:var(--surface-alt);border:1px solid var(--border);border-radius:var(--rx);padding:9px 11px;">'+
+      '<div style="font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--secondary);margin-bottom:3px;">Featured Lot</div>'+
+      '<div style="font-size:12px;font-weight:600;line-height:1.3;margin-bottom:3px;">'+lot.title+'</div>'+
+      '<div style="font-size:11px;color:var(--success);font-weight:600;margin-bottom:4px;">'+lot.est+'</div>'+
+      '<div style="font-size:10px;color:var(--secondary);line-height:1.4;">'+lot.why+'</div>'+
+      '</div>';
+  }).join('');
+
+  // Update matched count
+  var matched=(allResults.length?allResults:DEMO).filter(function(r){
+    return r.auction_matches&&r.auction_matches.indexOf(id)!==-1;
+  }).length;
+  document.getElementById('ctx-count').textContent=matched||'—';
+  // Also update the card badge
+  var badge=document.getElementById('acard-count-'+id);
+  if(badge) badge.textContent=matched+' prospect'+(matched!==1?'s':'')+' matched';
+
+  // Build filter explanation
+  buildAuctionFilterExplanation(a);
+}
+
+function buildAuctionFilterExplanation(a){
+  var explainEl=document.getElementById('ctx-filter-explain');
+  var textEl=document.getElementById('ctx-explain-text');
+  var chipsEl=document.getElementById('ctx-filter-chips');
+
+  explainEl.style.display='block';
+
+  // Generate explanation text from auction keywords + current filters
+  var keywordStr=a.keywords.slice(0,6).join(', ');
+  var filterSummary='';
+  if(generatedFilters.length){
+    var fLabels=generatedFilters.map(function(f){return f.label||f.filter_type;});
+    filterSummary=' Your current filters ('+fLabels.join('; ')+') narrow this further.';
+  }
+
+  var explanations={
+    'soths-wine': 'Prospects matched to this sale have backgrounds in food, hospitality, or beverages — or are based in France, Italy, or the UK where wine collecting is culturally embedded. Post-exit liquidity combined with a European HQ is a strong predictor of wine auction engagement.',
+    'soths-contemp': 'Matched founders have documented engagement with art, galleries, or creative industries. NYC-based founders with large exits are the strongest signal — the contemporary evening sale is the flagship entry point for first-time institutional collectors.',
+    'soths-watches': 'Prospects in fintech, engineering, or precision-adjacent industries are matched here. Watch collecting correlates strongly with technical backgrounds — the mechanical complexity of horology resonates with analytically-minded founders.',
+    'soths-jewels': 'Founders with luxury, fashion, or consumer brand backgrounds, or those based in cities with strong jewelry markets (NYC, Geneva, Hong Kong), are matched to this sale. Post-exit gift-purchasing is the primary driver for first-time jewelry buyers.',
+    'soths-chinese': 'Prospects of East Asian heritage or with business exposure to China, Japan, or SE Asia are matched here. Asia Week attendance or connections to Asian art institutions are strong secondary signals.',
+    'chr-postwar': 'Founders who follow cultural institutions, reference artists in their LinkedIn activity, or are based in major art-market cities (NYC, LA, London) are matched to this evening sale. The Post-War & Contemporary Evening is Christie\'s flagship for new collector acquisition.',
+    'chr-watches': 'Geneva-based or European founders in technical industries are the primary match. Christie\'s Geneva watch sales attract a more specialist audience — founders with documented Patek or Rolex interest are highest priority.',
+    'chr-jewels': 'Consumer, fashion, and luxury industry founders are matched here. Christie\'s Magnificent Jewels is the primary venue for colored diamond and high jewellery transactions — prospects who have attended Christie\'s previews are warmest.',
+    'chr-prints': 'London-based founders or those with documented art interest at an entry price level are matched here. Prints & Multiples is the ideal introductory sale — lower price points, high-brand artists, strong secondary market narrative.',
+    'soths-design': 'Founders with architecture, product design, or interior design backgrounds — or those who explicitly identify with midcentury or Scandinavian aesthetics — are matched to this sale. Design collecting bridges into fine art naturally.'
+  };
+
+  textEl.textContent=(explanations[a.id]||'Prospects are matched based on industry, location, LinkedIn signals, and keyword overlap with this sale category.')+filterSummary;
+
+  // Show the Crustdata filter chips that correspond to this auction
+  var relevantFilters=generatedFilters.filter(function(f){
+    return f.filter_type==='acquisition_status'||f.filter_type==='crunchbase_total_investment_usd'||f.filter_type==='hq_country'||f.filter_type==='linkedin_industries';
+  });
+
+  // Also add auto-generated category filters
+  var autoFilters=[
+    {label:'Status = Acquired',filter_type:'acquisition_status'},
+    {label:'Keywords: '+a.keywords.slice(0,4).join(', '),filter_type:'linkedin_signals'}
+  ];
+  var allChips=relevantFilters.concat(autoFilters);
+
+  chipsEl.innerHTML=allChips.map(function(f){
+    return '<span style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:2px 8px;font-size:10px;font-weight:500;color:var(--on-surface);">'+
+      (f.label||f.filter_type)+'</span>';
+  }).join('');
+}
+
+/* ═══════════════════════════════════════════
+   CATEGORY GRID
+═══════════════════════════════════════════ */
+function renderCats(){
+  var visible=CATS.filter(function(c){
+    var a=AUCTIONS.find(function(x){return x.id===c.auction;});
+    return a && selHouses[a.house];
+  });
+  document.getElementById('category-grid').innerHTML=visible.map(function(c){
+    var sel=selCategories.has(c.id)?'selected':'';
+    return '<div class="cat-row '+sel+'" onclick="toggleCat(\''+c.id+'\',\''+c.auction+'\')">'+
+      '<div class="cat-left"><span class="cat-name">'+c.label+'</span></div>'+
+      '<span class="cat-date">'+c.date+'</span></div>';
+  }).join('');
+}
+
+function toggleCat(catId,auctionId){
+  if(selCategories.has(catId)){ selCategories.delete(catId); selAuctions.delete(auctionId); }
+  else { selCategories.add(catId); selAuctions.add(auctionId); }
+  renderCats();
+  renderStrip();
+  updateSelLabel();
+  if(selAuctions.size>0) showAuctionContext([...selAuctions][[...selAuctions].length-1]);
+  else hideAuctionContext();
+  if(allResults.length) filterAndRender();
+  else demoRun();
+}
+
+/* ═══════════════════════════════════════════
+   AI SEMANTIC FILTER GENERATION
+═══════════════════════════════════════════ */
+
+function clearFilters(){
+  generatedFilters=[];
+  document.getElementById('filters-panel').classList.remove('visible');
+  document.getElementById('filter-chip-list').innerHTML='';
+  document.getElementById('reasoning-box').style.display='none';
+}
+
+async function generateFilters(){
+  var query=document.getElementById('ai-query').value.trim();
+  if(!query){ showToast('Enter a description first'); return; }
+
+  var claudeKey=CLAUDE_KEY_HARDCODED;
+  var btn=document.getElementById('ai-gen-btn');
+  btn.classList.add('spinning');
+  btn.disabled=true;
+
+  try {
+    var filters, reasoning;
+
+    if(!claudeKey){
+      // Offline heuristic fallback
+      var result=offlineFilterGen(query);
+      filters=result.filters;
+      reasoning=result.reasoning;
+    } else {
+      var result=await claudeFilterGen(query, claudeKey);
+      filters=result.filters;
+      reasoning=result.reasoning;
+    }
+
+    generatedFilters=filters;
+    renderFilterChips(filters, reasoning);
+
+    // Auto-select matching auction categories
+    autoSelectCategories(query);
+
+  } catch(e) {
+    showToast('Filter generation error: '+e.message);
+  } finally {
+    btn.classList.remove('spinning');
+    btn.disabled=false;
+  }
+}
+
+async function claudeFilterGen(query, apiKey){
+  var systemPrompt=`You are a B2B data expert converting natural language prospect descriptions into Crustdata API filter objects.
+
+Crustdata CompanyDB filter fields (use EXACTLY these names):
+- acquisition_status: "Acquired" (always include this)
+- crunchbase_total_investment_usd: numeric, use operators => (gte) or =< (lte)
+- hq_country: ISO 3-alpha codes (USA, GBR, FRA, DEU, ITA, CHN, etc.)
+- linkedin_industries: string, use fuzzy operator (.)
+- employee_metrics.latest_count: numeric headcount
+- last_funding_round_type: "series_a", "series_b", "series_c", "seed", etc.
+- year_founded: numeric
+- largest_headcount_country: ISO 3-alpha
+
+Operators: = (exact), => (gte), =< (lte), (.) (fuzzy text), in (list), !=
+
+Also return:
+- auction_categories: which of [wine, contemporary, watches, jewels, chinese, prints, design] best match
+- linkedin_post_keywords: keywords to search in LinkedIn posts for interest signals
+- prospect_reasoning: 2-3 sentences explaining the prospect logic
+
+Respond ONLY with valid JSON, no markdown:
+{
+  "filters": [{"filter_type":"...","type":"...","value":"...","label":"Human readable description"}],
+  "auction_categories": ["wine"],
+  "linkedin_post_keywords": ["wine","cellar","bordeaux"],
+  "reasoning": "..."
+}`;
+
+  var response=await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version':'2023-06-01',
+      'anthropic-dangerous-direct-browser-access':'true'
+    },
+    body:JSON.stringify({
+      model:'claude-sonnet-4-6',
+      max_tokens:1000,
+      system: systemPrompt,
+      messages:[{role:'user',content:'Convert this prospect description to Crustdata filters:\n\n'+query}]
+    })
+  });
+
+  if(!response.ok){
+    var err=await response.json().catch(function(){return {};});
+    throw new Error(err.error?.message || 'Claude API error '+response.status);
+  }
+
+  var data=await response.json();
+  var text=data.content[0].text.trim();
+  // Strip any accidental markdown fences
+  text=text.replace(/^```json\s*/,'').replace(/\s*```$/,'').trim();
+  var parsed=JSON.parse(text);
+
+  // Auto-select suggested auction categories
+  if(parsed.auction_categories){
+    parsed.auction_categories.forEach(function(catId){
+      var cat=CATS.find(function(c){return c.id===catId;});
+      if(cat){
+        selCategories.add(catId);
+        selAuctions.add(cat.auction);
+      }
+    });
+    renderCats();
+    renderStrip();
+    updateSelLabel();
+  }
+
+  return {
+    filters: parsed.filters || [],
+    reasoning: parsed.reasoning || ''
+  };
+}
+
+function offlineFilterGen(query){
+  // Heuristic fallback when no Claude key
+  var q=query.toLowerCase();
+  var filters=[{filter_type:'acquisition_status',type:'=',value:'Acquired',label:'Status = Acquired'}];
+  var reasoning='Generated from keyword matching (add Claude API key for precise semantic filters).';
+  var cats=[];
+
+  // Funding
+  var mMatch=q.match(/\$(\d+)m/i)||q.match(/(\d+)\s*million/i)||q.match(/(\d+)m\+/i);
+  if(mMatch){
+    var val=parseInt(mMatch[1])*1000000;
+    filters.push({filter_type:'crunchbase_total_investment_usd',type:'=>',value:val,label:'Funding ≥ $'+fmtM(val)});
+  } else {
+    filters.push({filter_type:'crunchbase_total_investment_usd',type:'=>',value:5000000,label:'Funding ≥ $5M'});
+  }
+
+  // Countries
+  var countryMap={europe:['GBR','FRA','DEU','ITA','ESP','CHE','NLD'],usa:['USA'],france:['FRA'],uk:['GBR'],germany:['DEU'],china:['CHN'],asia:['CHN','JPN','SGP','HKG']};
+  Object.keys(countryMap).forEach(function(k){
+    if(q.includes(k)){
+      filters.push({filter_type:'hq_country',type:'in',value:countryMap[k],label:'Country: '+k.charAt(0).toUpperCase()+k.slice(1)});
+    }
+  });
+
+  // Industry
+  var indMap={fintech:'Financial Services',saas:'Software Development',tech:'Software Development',food:'Food & Beverages',wine:'Food & Beverages',hospitality:'Hospitality',fashion:'Retail',consumer:'Consumer Goods',healthcare:'Health Care',media:'Media'};
+  Object.keys(indMap).forEach(function(k){
+    if(q.includes(k)){
+      filters.push({filter_type:'linkedin_industries',type:'(.)',value:indMap[k],label:'Industry: '+indMap[k]});
+    }
+  });
+
+  // Auction categories
+  if(q.match(/wine|cellar|somm|bordeaux|burgundy|whisky|spirit/)) cats.push('wine');
+  if(q.match(/watch|timepiece|rolex|patek/)) cats.push('watches');
+  if(q.match(/art|paint|sculpt|collect|gallery|museum/)) cats.push('contemporary');
+  if(q.match(/jewel|diamond|sapphire|ruby/)) cats.push('jewels');
+  if(q.match(/design|furniture|midcentury|interior/)) cats.push('design');
+  if(q.match(/photo|print|edition/)) cats.push('prints');
+  if(q.match(/chinese|asian|jade|ceramic/)) cats.push('chinese');
+
+  cats.forEach(function(catId){
+    var cat=CATS.find(function(c){return c.id===catId;});
+    if(cat){ selCategories.add(catId); selAuctions.add(cat.auction); }
+  });
+  renderCats(); renderStrip(); updateSelLabel();
+
+  return {filters:filters, reasoning:reasoning};
+}
+
+function renderFilterChips(filters, reasoning){
+  var panel=document.getElementById('filters-panel');
+  var chipList=document.getElementById('filter-chip-list');
+  var reasonBox=document.getElementById('reasoning-box');
+
+  panel.classList.add('visible');
+
+  if(reasoning){
+    reasonBox.style.display='block';
+    reasonBox.textContent=reasoning;
+  }
+
+  chipList.innerHTML=filters.map(function(f,i){
+    var valDisplay=Array.isArray(f.value)?f.value.join(', '):String(f.value);
+    return '<div class="filter-chip" id="fc-'+i+'">'+
+      '<div class="filter-chip-left">'+
+      '<span class="filter-chip-field">'+f.filter_type+'</span>'+
+      '<span class="filter-chip-val">'+(f.label||f.type+' '+valDisplay)+'</span>'+
+      '</div>'+
+      '<button class="filter-chip-remove" onclick="removeFilter('+i+')"></button>'+
+      '</div>';
+  }).join('');
+
+  updateCode();
+}
+
+function removeFilter(i){
+  generatedFilters.splice(i,1);
+  renderFilterChips(generatedFilters,'');
+}
+
+function autoSelectCategories(query){
+  // Already handled in filter gen, but ensure render
+  renderCats(); renderStrip(); updateSelLabel();
+}
+
+/* ═══════════════════════════════════════════
+   MAIN PIPELINE
+═══════════════════════════════════════════ */
+async function runPipeline(){
+  var btn=document.getElementById('run-btn');
+  var bar=document.getElementById('thinking-bar');
+  btn.classList.add('loading'); btn.disabled=true; bar.classList.add('active');
+  setStatus('running','Running pipeline…');
+  resetSteps();
+
+  var crustKey=CRUSTDATA_KEY_HARDCODED;
+
+  try {
+    if(!crustKey){
+      await demoRun();
+    } else {
+      await liveRun(crustKey);
+    }
+  } catch(e){
+    setStatus('error','Error: '+e.message);
+    console.error(e);
+  } finally {
+    btn.classList.remove('loading'); btn.disabled=false; bar.classList.remove('active');
+  }
+}
+
+async function demoRun(){
+  setStep(0,'done');
+  setStep(1,'active'); await sleep(800); setStep(1,'done');
+  setStatus('running','Enriching companies for founder data…');
+  setStep(2,'active'); await sleep(600); setStep(2,'done');
+  setStatus('running','Enriching founder profiles + contact info…');
+  setStep(3,'active'); await sleep(500); setStep(3,'done');
+  setStatus('running','Matching to auction categories…');
+  setStep(4,'active'); await sleep(350); setStep(4,'done');
+  setStatus('done','Demo mode — add API keys for live results.');
+
+  var res=DEMO.slice();
+
+  // Filter by AI-generated filters (simple demo version)
+  if(generatedFilters.length){
+    var minF=null, countries=null, industry=null;
+    generatedFilters.forEach(function(f){
+      if(f.filter_type==='crunchbase_total_investment_usd' && f.type==='=>') minF=parseInt(f.value);
+      if(f.filter_type==='hq_country') countries=Array.isArray(f.value)?f.value:[f.value];
+      if(f.filter_type==='linkedin_industries') industry=f.value;
+    });
+    if(minF) res=res.filter(function(r){return r.funding>=minF;});
+    if(countries) res=res.filter(function(r){return countries.includes(r.hq_country);});
+    if(industry) res=res.filter(function(r){return r.industry.toLowerCase().includes(industry.toLowerCase());});
+  }
+
+  // Filter by selected auction
+  if(selAuctions.size>0){
+    res=res.filter(function(r){return r.auction_matches.some(function(id){return selAuctions.has(id);});});
+    res.forEach(function(r){
+      var matched=r.auction_matches.filter(function(id){return selAuctions.has(id);});
+      if(matched.length) r.primary_auction=matched[0];
+    });
+  }
+
+  allResults=res;
+  filterAndRender();
+  renderStrip();  // refresh match counts on all cards
+  updateCode();
+  // Refresh context panel count if a sale is selected
+  if(selAuctions.size>0) showAuctionContext([...selAuctions][[...selAuctions].length-1]);
+}
+
+async function liveRun(crustKey){
+  var B='https://api.crustdata.com';
+  var H={'Authorization':'Token '+crustKey,'Content-Type':'application/json','Accept':'application/json'};
+
+  // Build conditions from AI-generated filters + always include Acquired
+  setStep(0,'done');
+  setStep(1,'active');
+  setStatus('running','Step 1: Searching CompanyDB for acquired companies…');
+
+  var conditions=generatedFilters.length
+    ? generatedFilters.map(function(f){return {filter_type:f.filter_type,type:f.type,value:f.value};})
+    : [{filter_type:'acquisition_status',type:'=',value:'Acquired'},{filter_type:'crunchbase_total_investment_usd',type:'=>',value:5000000}];
+
+  // Ensure acquisition_status is always present
+  if(!conditions.find(function(c){return c.filter_type==='acquisition_status';})){
+    conditions.unshift({filter_type:'acquisition_status',type:'=',value:'Acquired'});
+  }
+
+  var r1=await fetch(B+'/screener/companydb/search/',{method:'POST',headers:H,body:JSON.stringify({
+    filters:{op:'and',conditions:conditions},
+    limit:50,
+    sorts:[{column:'crunchbase_total_investment_usd',order:'desc'}]
+  })});
+  if(!r1.ok) throw new Error('CompanyDB: '+r1.status+' '+await r1.text());
+  var d1=await r1.json();
+  var companies=d1.companies||[];
+  setStep(1,'done');
+
+  if(!companies.length){
+    setStatus('done','No companies matched your filters.');
+    allResults=[]; filterAndRender(); return;
+  }
+
+  setStep(2,'active');
+  setStatus('running','Step 2: Enriching '+companies.length+' companies for founder data…');
+  var domains=companies.slice(0,25).map(function(c){return c.company_website_domain;}).filter(Boolean).join(',');
+  var r2=await fetch(B+'/screener/company?company_domain='+encodeURIComponent(domains)+'&fields=founders',{headers:H});
+  var enriched=r2.ok?await r2.json():[];
+  setStep(2,'done');
+
+  setStep(3,'active');
+  setStatus('running','Step 3: Extracting and enriching founders…');
+  var fUrls=[],fMeta={};
+  enriched.forEach(function(co){
+    var comp=companies.find(function(c){return c.company_website_domain===co.company_website_domain;});
+    (co.founders&&co.founders.profiles||[]).slice(0,3).forEach(function(f){
+      if(f.linkedin_profile_url){ fUrls.push(f.linkedin_profile_url); fMeta[f.linkedin_profile_url]={co:co,comp:comp}; }
+    });
+  });
+
+  var results=[];
+  var batches=[];
+  for(var i=0;i<fUrls.length;i+=10) batches.push(fUrls.slice(i,i+10));
+
+  for(var b=0;b<Math.min(batches.length,3);b++){
+    var batch=batches[b];
+    var r3=await fetch(B+'/screener/person/enrich?linkedin_profile_url='+encodeURIComponent(batch.join(','))+'&fields=name,title,location,current_employers,business_email',{headers:H});
+    if(r3.ok){
+      var pd=await r3.json();
+      (Array.isArray(pd)?pd:[pd]).forEach(function(p,pi){
+        if(!p||p.error) return;
+        var meta=fMeta[batch[pi]]||{};
+        var comp=meta.comp||{};
+        results.push({
+          name:p.name||'—',title:p.title||'—',
+          company:comp.company_name||'—',
+          industry:(comp.linkedin_industries||[])[0]||'—',
+          hq_country:comp.hq_country||'—',
+          funding:comp.crunchbase_total_investment_usd||0,
+          acquired_by:comp.acquisition_status||'Acquired',
+          linkedin_url:batch[pi],
+          email:(p.business_email||[])[0]||null,
+          email_verified:!!(p.business_email&&p.business_email.length),
+          location:p.location||'—',
+          connections:p.num_of_connections||0,
+          score:calcScore(p,comp),
+          score_factors:buildFactors(p,comp),
+          pitch:buildPitch(p,comp),
+          signals:[{type:'activity',text:(comp.company_name||'Company')+' acquired — post-exit liquidity event',date:'Exit signal'}],
+          auction_matches:matchAuctions(p,comp),
+          primary_auction:matchAuctions(p,comp)[0]||null,
+          match_why:(comp.linkedin_industries||[])[0]||'' + ' background matched to upcoming sale categories',
+          lots_likely:[0,1]
+        });
+      });
+    }
+  }
+  setStep(3,'done');
+  setStep(4,'active'); await sleep(250); setStep(4,'done');
+  setStatus('done','Found '+results.length+' founder prospects.');
+  allResults=results;
+  filterAndRender();
+  updateCode();
+
+  // Update credits
+  try {
+    var cr=await fetch(B+'/user/credits',{headers:{'Authorization':'Token '+crustKey}});
+    if(cr.ok){var cd=await cr.json(); document.getElementById('credit-display').textContent=(cd.credits||0).toLocaleString()+' credits';}
+  } catch(e){}
+}
+
+/* ═══════════════════════════════════════════
+   MATCHING & SCORING
+═══════════════════════════════════════════ */
+function matchAuctions(p,comp){
+  var txt=[p.title||'',p.headline||'',(comp.linkedin_industries||[]).join(' '),comp.company_name||''].join(' ').toLowerCase();
+  return AUCTIONS.filter(function(a){
+    return selHouses[a.house] && a.keywords.some(function(k){return txt.includes(k);});
+  }).map(function(a){return a.id;});
+}
+
+function calcScore(p,comp){
+  var s=30,f=comp.crunchbase_total_investment_usd||0;
+  if(f>1e8) s+=35; else if(f>5e7) s+=25; else if(f>2e7) s+=18; else s+=10;
+  if(comp.hq_country==='USA') s+=15; else if(['GBR','FRA','DEU'].includes(comp.hq_country)) s+=12; else s+=6;
+  if((p.num_of_connections||0)>5000) s+=12; else if((p.num_of_connections||0)>1000) s+=6;
+  return Math.min(99,s);
+}
+
+function buildFactors(p,comp){
+  var factors=[],f=comp.crunchbase_total_investment_usd||0;
+  factors.push({label:'Exit size ($'+fmtM(f)+')',val:f>5e7?'+35':'+15',pos:true});
+  if(comp.hq_country==='USA') factors.push({label:'US location',val:'+15',pos:true});
+  if((p.num_of_connections||0)>5000) factors.push({label:'High LinkedIn visibility',val:'+12',pos:true});
+  return factors;
+}
+
+function buildPitch(p,comp){
+  return (p.name||'This founder')+"'s exit from "+(comp.company_name||'their company')+" ($"+fmtM(comp.crunchbase_total_investment_usd||0)+" raised) is a significant liquidity event. Consider a specialist-led private viewing as an introduction.";
+}
+
+/* ═══════════════════════════════════════════
+   RENDER
+═══════════════════════════════════════════ */
+function filterResults(){filterAndRender();}
+function filterAndRender(){
+  var q=document.getElementById('local-search')?document.getElementById('local-search').value.toLowerCase():'';
+  var res=allResults.filter(function(r){
+    return !q||r.name.toLowerCase().includes(q)||r.company.toLowerCase().includes(q)||(r.email||'').toLowerCase().includes(q);
+  });
+  if(selAuctions.size>0) res=res.filter(function(r){return r.auction_matches&&r.auction_matches.some(function(id){return selAuctions.has(id);});});
+  filteredResults=sortData(res);
+  renderTable(filteredResults);
+  updateStats(res);
+}
+
+function renderTable(data){
+  var body=document.getElementById('results-body');
+  if(!data.length){
+    body.innerHTML='<tr><td colspan="7"><div class="empty-state"><div class="empty-icon"></div><div class="empty-title">No matches</div><div class="empty-sub">Adjust filters or deselect sale categories.</div></div></td></tr>';
+    return;
+  }
+  body.innerHTML=data.map(function(r,i){
+    var a=AUCTIONS.find(function(x){return x.id===r.primary_auction;}),lot=a&&r.lots_likely?a.lots[r.lots_likely[0]]:null;
+    return '<tr onclick="openDrawer('+i+')" class="fade-in" style="animation-delay:'+(i*20)+'ms">'+
+      '<td><div class="founder-name">'+r.name+'</div><div class="founder-title">'+r.title+'</div></td>'+
+      '<td><div class="company-name">'+r.company+'</div><div class="company-acq"> '+(r.acquired_by!=='Acquired'?'Acq. by '+r.acquired_by:'Acquired')+'</div></td>'+
+      '<td><span class="money-tag '+(r.funding>5e7?'large':'')+'">$'+fmtM(r.funding)+'</span></td>'+
+      '<td>'+(r.email?'<div class="email-chip '+(r.email_verified?'verified':'')+'" title="'+r.email+'">'+r.email+'</div>':'<span style="color:var(--secondary);font-size:10px">—</span>')+(r.linkedin_url?'<br><a class="li-link" href="'+r.linkedin_url+'" target="_blank" onclick="event.stopPropagation()">↗ LinkedIn</a>':'')+'</td>'+
+      '<td><div class="match-cell">'+(a?'<div class="match-auction"><span class="hdot '+a.house+'"></span><span>'+a.name+'</span></div><div class="match-why">'+(r.match_why||'').substring(0,70)+'…</div>'+(lot?'<div class="match-lot">→ '+lot.title.substring(0,40)+'…</div>':''):'<span style="color:var(--secondary);font-size:10px">Select a sale above</span>')+'</div></td>'+
+      '<td><div class="score-cell"><div class="score-dots">'+[1,2,3,4,5].map(function(n){return '<div class="score-dot '+(r.score>=n*20?'filled':'')+'"></div>';}).join('')+'</div><span class="score-num">'+r.score+'</span></div></td>'+
+      '<td style="color:var(--secondary);font-size:14px;text-align:center">›</td></tr>';
+  }).join('');
+}
+
+function updateStats(data){
+  document.getElementById('stat-founders').textContent=allResults.length||'—';
+  document.getElementById('stat-matches').textContent=data.filter(function(r){return r.primary_auction;}).length||'—';
+  var avg=allResults.length?allResults.reduce(function(s,r){return s+(r.funding||0);},0)/allResults.length:0;
+  document.getElementById('stat-exit').textContent=avg?'$'+fmtM(avg):'—';
+  document.getElementById('stat-highfit').textContent=data.filter(function(r){return r.score>=75;}).length||'—';
+  var t=document.getElementById('results-title'),s=document.getElementById('results-subtitle');
+  if(selAuctions.size>0){
+    var names=[...selAuctions].map(function(id){return AUCTIONS.find(function(a){return a.id===id;});}).filter(Boolean).map(function(a){return a.name;});
+    t.textContent='Matched to: '+names.join(', ');
+    s.textContent=data.length+' founder'+(data.length!==1?'s':'')+' matched via LinkedIn signals and industry fit';
+  } else {
+    t.textContent='Founder Prospects';
+    s.textContent=allResults.length+' founders across all auction categories';
+  }
+}
+
+/* ═══════════════════════════════════════════
+   DRAWER
+═══════════════════════════════════════════ */
+function openDrawer(i){
+  var r=filteredResults[i]; if(!r) return;
+  document.getElementById('d-name').textContent=r.name;
+  document.getElementById('d-role').textContent=r.title+' @ '+r.company;
+  document.getElementById('d-score').textContent=r.score;
+  document.getElementById('d-score-fill').style.width=r.score+'%';
+  document.getElementById('d-score-factors').innerHTML=(r.score_factors||[]).map(function(f){
+    return '<div class="score-factor"><span class="score-factor-label">'+f.label+'</span><span class="sfv '+(f.pos?'pos':'neg')+'">'+f.val+'</span></div>';
+  }).join('');
+  var a=AUCTIONS.find(function(x){return x.id===r.primary_auction;});
+  document.getElementById('d-auction-match').innerHTML=a?
+    '<div class="auction-match-card"><div class="amatch-head"><span class="amatch-house '+a.house+'">'+(a.house==='christies'?"Christie's":"Sotheby's")+'</span><span class="amatch-sale">'+a.name+'</span></div>'+
+    '<div class="amatch-body"><div class="amatch-meta">'+
+    '<div class="amatch-meta-item"><span class="amatch-meta-label">Date</span><span class="amatch-meta-val">'+a.date+'</span></div>'+
+    '<div class="amatch-meta-item"><span class="amatch-meta-label">Est. value</span><span class="amatch-meta-val" style="color:var(--success)">'+a.est+'</span></div></div>'+
+    '<p style="font-size:11px;color:var(--secondary);line-height:1.5">'+r.match_why+'</p>'+
+    (r.auction_matches&&r.auction_matches.length>1?'<p style="font-size:10px;color:var(--secondary);margin-top:3px">Also matches: '+r.auction_matches.slice(1).map(function(id){var ax=AUCTIONS.find(function(x){return x.id===id;});return ax?ax.name:'';}).filter(Boolean).join(', ')+'</p>':'')+
+    '</div></div>':
+    '<p style="font-size:12px;color:var(--secondary)">Select a sale to see auction matching.</p>';
+  document.getElementById('d-lots').innerHTML=a&&r.lots_likely?r.lots_likely.map(function(li){
+    var lot=a.lots[li]; if(!lot) return '';
+    return '<div class="lot-rec"><span class="lot-rec-label">Recommended Lot</span><span class="lot-rec-title">'+lot.title+'</span><span class="lot-rec-est">'+lot.est+'</span><span class="lot-rec-why">'+lot.why+'</span></div>';
+  }).join(''):'<p style="font-size:11px;color:var(--secondary)">Select a sale to see lot recommendations.</p>';
+  document.getElementById('d-signals').innerHTML=(r.signals||[]).map(function(s){
+    return '<div class="signal-item"><span class="signal-type '+s.type+'">'+s.type.toUpperCase()+'</span><span class="signal-text">'+s.text+'</span><span class="signal-date">'+s.date+'</span></div>';
+  }).join('')||'<p style="font-size:11px;color:var(--secondary)">No signals found.</p>';
+  document.getElementById('d-profile-kv').innerHTML=kv([['Location',r.location],['Connections',(r.connections||0).toLocaleString()],['LinkedIn',r.linkedin_url?'<a href="'+r.linkedin_url+'" target="_blank">View ↗</a>':'—']]);
+  document.getElementById('d-company-kv').innerHTML=kv([['Company',r.company],['Industry',r.industry],['HQ',r.hq_country],['Funding','$'+fmtFull(r.funding)],['Acquired by',r.acquired_by!=='Acquired'?r.acquired_by:'—']]);
+  document.getElementById('d-contact-kv').innerHTML=kv([['Email',r.email?'<span class="email-chip '+(r.email_verified?'verified':'')+' ">'+r.email+'</span>':'—'],['Verified',r.email_verified?'<span style="color:var(--success);font-weight:600">Yes</span>':'No']]);
+  document.getElementById('d-pitch').textContent=r.pitch||'—';
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawer-overlay').classList.add('open');
+}
+
+function closeDrawer(){
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('drawer-overlay').classList.remove('open');
+}
+
+function kv(pairs){return pairs.map(function(p){return '<div class="d-k">'+p[0]+'</div><div class="d-v">'+(p[1]||'—')+'</div>';}).join('');}
+
+/* ═══════════════════════════════════════════
+   CODE GENERATION
+═══════════════════════════════════════════ */
+function updateCode(){
+  var query=document.getElementById('ai-query')&&document.getElementById('ai-query').value||'';
+  var conditions=generatedFilters.length?
+    generatedFilters.map(function(f){return JSON.stringify({filter_type:f.filter_type,type:f.type,value:f.value});}).join(',\n    '):
+    '{"filter_type": "acquisition_status", "type": "=", "value": "Acquired"},\n    {"filter_type": "crunchbase_total_investment_usd", "type": "=>", "value": 5000000}';
+  var auctions=[...selAuctions].map(function(id){return AUCTIONS.find(function(a){return a.id===id;});}).filter(Boolean).map(function(a){return a.name;});
+  document.getElementById('code-content').innerHTML=
+    '<span class="comment"># Prospect Pipeline\n# Query: "'+query+'"\n# Auctions: '+(auctions.join(', ')||'All')+'</span>\n\n'+
+    '<span class="kw">import</span> requests\n'+
+    'H = {<span class="str">"Authorization"</span>: <span class="str">"Token YOUR_CRUSTDATA_KEY"</span>}\nB = <span class="str">"https://api.crustdata.com"</span>\n\n'+
+    '<span class="comment"># Step 1: Search acquired companies (filters from Claude)</span>\n'+
+    'r = requests.post(f<span class="str">"{B}/screener/companydb/search/"</span>, headers=H, json={\n'+
+    '  <span class="str">"filters"</span>: {<span class="str">"op"</span>: <span class="str">"and"</span>, <span class="str">"conditions"</span>: [\n    '+conditions+'\n  ]},\n'+
+    '  <span class="str">"limit"</span>: <span class="num">50</span>, <span class="str">"sorts"</span>: [{<span class="str">"column"</span>: <span class="str">"crunchbase_total_investment_usd"</span>, <span class="str">"order"</span>: <span class="str">"desc"</span>}]\n})\ncompanies = r.json()[<span class="str">"companies"</span>]\n\n'+
+    '<span class="comment"># Step 2: Enrich for founders</span>\n'+
+    'domains = <span class="str">","</span>.join(c[<span class="str">"company_website_domain"</span>] <span class="kw">for</span> c <span class="kw">in</span> companies[:25])\n'+
+    'enriched = requests.get(f<span class="str">"{B}/screener/company"</span>, headers=H,\n  params={<span class="str">"company_domain"</span>: domains, <span class="str">"fields"</span>: <span class="str">"founders"</span>}).json()\n\n'+
+    '<span class="comment"># Step 3: Collect + enrich founder profiles</span>\n'+
+    'urls = [f[<span class="str">"linkedin_profile_url"</span>] <span class="kw">for</span> co <span class="kw">in</span> enriched\n        <span class="kw">for</span> f <span class="kw">in</span> co.get(<span class="str">"founders"</span>,{}).get(<span class="str">"profiles"</span>,[])[:3]\n        <span class="kw">if</span> f.get(<span class="str">"linkedin_profile_url"</span>)]\n<span class="kw">for</span> i <span class="kw">in</span> range(<span class="num">0</span>, len(urls), <span class="num">25</span>):\n'+
+    '  people = requests.get(f<span class="str">"{B}/screener/person/enrich"</span>, headers=H,\n    params={<span class="str">"linkedin_profile_url"</span>: <span class="str">","</span>.join(urls[i:i+<span class="num">25</span>]),\n            <span class="str">"fields"</span>: <span class="str">"name,title,location,business_email,current_employers"</span>}).json()\n  <span class="comment"># → filter by auction interest signals here</span>';
+}
+
+function copyCode(){navigator.clipboard.writeText(document.getElementById('code-content').textContent).catch(function(){});showToast('Copied!');}
+function copyCSV(){
+  var rows=[['Name','Title','Company','Industry','Country','Funding','Email','Score','Primary Auction','Match Reason']];
+  allResults.forEach(function(r){var a=AUCTIONS.find(function(x){return x.id===r.primary_auction;});rows.push([r.name,r.title,r.company,r.industry,r.hq_country,r.funding,r.email||'',r.score,a?a.name:'',r.match_why||'']);});
+  navigator.clipboard.writeText(rows.map(function(r){return r.map(function(v){return '"'+v+'"';}).join(',');}).join('\n')).catch(function(){});
+  showToast('CSV copied!');
+}
+function downloadCSV(){
+  var rows=[['Name','Title','Company','Industry','Country','Funding','Email','Score','Primary Auction','Match Reason']];
+  allResults.forEach(function(r){var a=AUCTIONS.find(function(x){return x.id===r.primary_auction;});rows.push([r.name,r.title,r.company,r.industry,r.hq_country,r.funding,r.email||'',r.score,a?a.name:'',r.match_why||'']);});
+  var blob=new Blob([rows.map(function(r){return r.map(function(v){return '"'+v+'"';}).join(',');}).join('\n')],{type:'text/csv'});
+  var el=document.createElement('a');
+  el.href=URL.createObjectURL(blob); el.download='prospect-founders.csv'; el.click();
+}
+
+/* ═══════════════════════════════════════════
+   UTILITIES
+═══════════════════════════════════════════ */
+function switchTab(tab,btn){
+  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  document.getElementById('view-table').style.display=tab==='table'?'block':'none';
+  document.getElementById('view-code').style.display=tab==='code'?'block':'none';
+}
+function sortTable(col){
+  if(curSort.col===col) curSort.dir=curSort.dir==='asc'?'desc':'asc';
+  else {curSort.col=col; curSort.dir='desc';}
+  filterAndRender();
+}
+function sortData(data){
+  var c=curSort.col,d=curSort.dir;
+  return data.slice().sort(function(a,b){
+    var av=c==='funding'?a.funding:c==='score'?a.score:c==='name'?a.name:c==='company'?a.company:a.score;
+    var bv=c==='funding'?b.funding:c==='score'?b.score:c==='name'?b.name:c==='company'?b.company:b.score;
+    if(typeof av==='string') return d==='asc'?av.localeCompare(bv):bv.localeCompare(av);
+    return d==='asc'?av-bv:bv-av;
+  });
+}
+function setStatus(s,m){document.getElementById('status-dot').className='status-dot '+s;document.getElementById('status-text').textContent=m;}
+function setStep(n,s){
+  var id=n===0?'step-0':'step-'+n;
+  var el=document.getElementById(id); if(!el) return;
+  el.className='step-num'+(s?' '+s:'');
+  el.textContent=s==='done'?'':(n===0?'AI':String(n));
+}
+function resetSteps(){[0,1,2,3,4].forEach(function(n){setStep(n,'');});}
+function showToast(msg){
+  var t=document.createElement('div'); t.textContent=msg;
+  t.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--on-surface);color:white;padding:8px 16px;border-radius:20px;font-size:12px;font-weight:500;z-index:9999;opacity:0;transition:opacity .2s;pointer-events:none;';
+  document.body.appendChild(t);
+  setTimeout(function(){t.style.opacity='1';},10);
+  setTimeout(function(){t.style.opacity='0';setTimeout(function(){t.remove();},200);},2200);
+}
+function fmtM(n){if(!n)return'0';if(n>=1e9)return(n/1e9).toFixed(1)+'B';if(n>=1e6)return(n/1e6).toFixed(0)+'M';if(n>=1e3)return(n/1e3).toFixed(0)+'K';return String(n);}
+function fmtFull(n){return n?n.toLocaleString('en-US'):'0';}
+function sleep(ms){return new Promise(function(r){setTimeout(r,ms);});}
+
+/* ═══════════════════════════════════════════
+   HAMBURGER TAB SYSTEM
+═══════════════════════════════════════════ */
+
+  if(targetId === 'crustdata-key') { var e2=document.getElementById('crustdata-key-2'); if(e2) e2.value=val; }
+}
+
+// Manual filter pipeline — merges manual UI values with any AI-generated filters
+function runPipelineManual(){
+  var minF = parseInt(document.getElementById('min-funding').value)||5000000;
+  var maxF = parseInt(document.getElementById('max-funding').value)||null;
+  var country = document.getElementById('country-filter').value;
+  var industry = document.getElementById('industry-filter').value;
+  var sortBy = document.getElementById('sort-by').value;
+
+  // Start fresh with acquisition status + funding floor
+  var manualFilters = [
+    {filter_type:'acquisition_status',type:'=',value:'Acquired',label:'Status = Acquired'},
+    {filter_type:'crunchbase_total_investment_usd',type:'=>',value:minF,label:'Funding >= $'+fmtM(minF)}
+  ];
+  if(maxF) manualFilters.push({filter_type:'crunchbase_total_investment_usd',type:'=<',value:maxF,label:'Funding <= $'+fmtM(maxF)});
+  if(country) manualFilters.push({filter_type:'hq_country',type:'=',value:country,label:'Country: '+country});
+  if(industry) manualFilters.push({filter_type:'linkedin_industries',type:'(.)',value:industry,label:'Industry: '+industry});
+
+  // Merge with any Claude-generated filters (avoid duplicates by filter_type)
+  var existingTypes = manualFilters.map(function(f){return f.filter_type;});
+  (generatedFilters||[]).forEach(function(f){
+    if(existingTypes.indexOf(f.filter_type)===-1) manualFilters.push(f);
+  });
+
+  generatedFilters = manualFilters;
+  renderFilterChips(manualFilters, '');
+
+  if(sortBy) curSort={col:sortBy==='funding'?'funding':sortBy==='name'?'name':sortBy==='company'?'company':'score',dir:'desc'};
+
+  runPipeline();
+}
+
+
+/* ═══════════════════════════════════════════
+   SIDEBAR MODE TOGGLE (Search / Sales)
+═══════════════════════════════════════════ */
+var sbMode = 'search'; // 'search' or 'sales'
+
+function setSbMode(mode){
+  sbMode = mode;
+  // Toggle panes
+  document.getElementById('sbpane-search').classList.toggle('active', mode==='search');
+  document.getElementById('sbpane-sales').classList.toggle('active', mode==='sales');
+  // Toggle pills
+  document.getElementById('sbpill-search').classList.toggle('active', mode==='search');
+  document.getElementById('sbpill-sales').classList.toggle('active', mode==='sales');
+  // Label
+}
+
+
+function toggleHbMenu(){
+  var dd=document.getElementById('hb-dropdown');
+  var btn=document.getElementById('topbar-hamburger');
+  var isOpen=dd.classList.toggle('open');
+  btn.classList.toggle('open',isOpen);
+  if(isOpen){
+    setTimeout(function(){
+      document.addEventListener('click',function closeHb(e){
+        if(!dd.contains(e.target)&&!btn.contains(e.target)){
+          dd.classList.remove('open');
+          btn.classList.remove('open');
+          document.removeEventListener('click',closeHb);
+        }
+      });
+    },10);
+  }
+}
+
+
+// Show API key status in hamburger
+(function(){
+  var cs=document.getElementById('hb-claude-status');
+  var ds=document.getElementById('hb-crustdata-status');
+  if(cs) cs.textContent = CLAUDE_KEY_HARDCODED ? 'Claude: connected' : 'Claude: not set';
+  if(cs) cs.style.color = CLAUDE_KEY_HARDCODED ? 'var(--success)' : 'var(--danger)';
+  if(ds) ds.textContent = CRUSTDATA_KEY_HARDCODED ? 'Crustdata: connected' : 'Crustdata: not set';
+  if(ds) ds.style.color = CRUSTDATA_KEY_HARDCODED ? 'var(--success)' : 'var(--danger)';
+})();
+init();
+</script>
+</body>
+</html>
