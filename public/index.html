@@ -43,12 +43,10 @@ body{background:var(--bg);color:var(--on-surface);font-family:'Inter',sans-serif
 .example-chip{font-size:10px;color:var(--accent);background:var(--accent-light);border:1px solid rgba(37,99,235,.12);border-radius:12px;padding:3px 10px;cursor:pointer;transition:background .15s;}
 .example-chip:hover{background:rgba(37,99,235,.15);}
 
-/* AI CHIP (collapsed state) */
-.ai-chip{display:none;align-items:center;gap:8px;padding:8px 12px;background:var(--accent-light);border:1px solid rgba(37,99,235,.15);border-radius:var(--r);margin-bottom:16px;font-size:12px;color:var(--accent);}
-.ai-chip.visible{display:flex;}
-.ai-chip-text{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500;}
-.ai-chip-clear{background:none;border:none;cursor:pointer;color:var(--secondary);font-size:16px;padding:0 2px;line-height:1;flex-shrink:0;}
-.ai-chip-clear:hover{color:var(--danger);}
+/* AI generated badge */
+.ai-generated-badge{display:none;align-items:center;gap:6px;padding:6px 10px;background:var(--accent-light);border:1px solid rgba(37,99,235,.12);border-radius:var(--rs);margin-bottom:10px;font-size:11px;color:var(--accent);font-weight:500;}
+.ai-generated-badge.visible{display:flex;}
+.ai-generated-badge .badge-text{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 
 /* ACCORDION */
 .acc-section{border-bottom:1px solid var(--border);}
@@ -76,6 +74,12 @@ select.acc-input{cursor:pointer;}
 .seniority-pill{font-size:11px;font-weight:500;color:var(--secondary);padding:5px 12px;border-radius:14px;cursor:pointer;transition:all .15s;border:1px solid var(--border);background:var(--bg);}
 .seniority-pill:hover{border-color:var(--border-strong);color:var(--on-surface);}
 .seniority-pill.active{background:var(--accent);color:white;border-color:var(--accent);}
+
+/* Headcount pills */
+.headcount-pills{display:flex;flex-wrap:wrap;gap:4px;}
+.headcount-pill{font-size:10px;font-weight:500;color:var(--secondary);padding:4px 10px;border-radius:14px;cursor:pointer;transition:all .15s;border:1px solid var(--border);background:var(--bg);}
+.headcount-pill:hover{border-color:var(--border-strong);color:var(--on-surface);}
+.headcount-pill.active{background:var(--accent);color:white;border-color:var(--accent);}
 
 /* SIDEBAR STICKY BOTTOM */
 .sidebar-bottom{padding:12px 16px;border-top:1px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0;}
@@ -127,6 +131,7 @@ td.check-col{text-align:center;width:40px;}
 .location-text{font-size:12px;color:var(--secondary);}
 .email-btn{display:inline-flex;align-items:center;gap:4px;background:var(--accent-light);border:1px solid rgba(37,99,235,.15);color:var(--accent);border-radius:4px;padding:3px 8px;font-size:11px;cursor:pointer;font-family:'Inter',sans-serif;transition:background .15s;}
 .email-btn:hover{background:rgba(37,99,235,.15);}
+.email-btn.loading-email{opacity:.6;cursor:wait;}
 .email-text{font-size:11px;color:var(--on-surface);word-break:break-all;}
 
 /* BOTTOM BAR */
@@ -213,16 +218,16 @@ input[type="checkbox"]{width:15px;height:15px;accent-color:var(--accent);cursor:
 <aside class="sidebar">
   <div class="sidebar-scroll">
 
-    <!-- AI Description Box -->
+    <!-- AI Description Box (always visible) -->
     <div class="ai-box" id="ai-box">
       <div class="ai-box-header">
         <span class="ai-badge">AI</span>
         <span class="ai-box-label">Describe who you're looking for</span>
       </div>
-      <textarea class="ai-textarea" id="ai-query" placeholder="e.g. luxury brand executives in Europe with $10M+ funding"></textarea>
+      <textarea class="ai-textarea" id="ai-query" placeholder="e.g. luxury brand executives in Europe with 1000+ employees"></textarea>
       <div class="ai-box-footer">
         <div class="example-chips" style="margin:0;">
-          <span class="example-chip" onclick="setAIQuery(this.textContent)">Tech execs NYC $10M+</span>
+          <span class="example-chip" onclick="setAIQuery(this.textContent)">Tech execs NYC</span>
           <span class="example-chip" onclick="setAIQuery(this.textContent)">SaaS founders USA</span>
           <span class="example-chip" onclick="setAIQuery(this.textContent)">Luxury brand EU</span>
         </div>
@@ -233,11 +238,10 @@ input[type="checkbox"]{width:15px;height:15px;accent-color:var(--accent);cursor:
       </div>
     </div>
 
-    <!-- AI Chip (collapsed state after generation) -->
-    <div class="ai-chip" id="ai-chip">
+    <!-- AI generated indicator badge -->
+    <div class="ai-generated-badge" id="ai-generated-badge">
       <span class="ai-badge">AI</span>
-      <span class="ai-chip-text" id="ai-chip-text"></span>
-      <button class="ai-chip-clear" onclick="clearAIChip()" title="Clear AI filters">&times;</button>
+      <span class="badge-text" id="ai-badge-text">Filters generated from description</span>
     </div>
 
     <!-- ACCORDION FILTERS -->
@@ -251,7 +255,10 @@ input[type="checkbox"]{width:15px;height:15px;accent-color:var(--accent);cursor:
           <span class="acc-chevron">&#9660;</span>
         </div>
         <div class="acc-body">
-          <input class="acc-input" type="text" id="filter-person_name" placeholder="Search by person name" oninput="updateDot('person_name')">
+          <div class="acc-row-label">First Name</div>
+          <input class="acc-input" type="text" id="filter-first_name" placeholder="First name" oninput="updateDot('person_name')">
+          <div class="acc-row-label" style="margin-top:6px">Last Name</div>
+          <input class="acc-input" type="text" id="filter-last_name" placeholder="Last name" oninput="updateDot('person_name')">
         </div>
       </div>
 
@@ -276,11 +283,13 @@ input[type="checkbox"]{width:15px;height:15px;accent-color:var(--accent);cursor:
         </div>
         <div class="acc-body">
           <div class="seniority-pills" id="seniority-pills">
-            <button class="seniority-pill" data-level="csuite" onclick="toggleSeniority(this)">C-Suite</button>
-            <button class="seniority-pill" data-level="vp" onclick="toggleSeniority(this)">VP</button>
-            <button class="seniority-pill" data-level="director" onclick="toggleSeniority(this)">Director</button>
-            <button class="seniority-pill" data-level="manager" onclick="toggleSeniority(this)">Manager</button>
-            <button class="seniority-pill active" data-level="all" onclick="toggleSeniority(this)">All</button>
+            <button class="seniority-pill" data-level="Owner/Partner" onclick="toggleSeniority(this)">Owner</button>
+            <button class="seniority-pill" data-level="CXO" onclick="toggleSeniority(this)">C-Suite</button>
+            <button class="seniority-pill" data-level="VP" onclick="toggleSeniority(this)">VP</button>
+            <button class="seniority-pill" data-level="Director" onclick="toggleSeniority(this)">Director</button>
+            <button class="seniority-pill" data-level="Manager" onclick="toggleSeniority(this)">Manager</button>
+            <button class="seniority-pill" data-level="Senior" onclick="toggleSeniority(this)">Senior</button>
+            <button class="seniority-pill" data-level="Entry Level" onclick="toggleSeniority(this)">Entry</button>
           </div>
         </div>
       </div>
@@ -311,7 +320,7 @@ input[type="checkbox"]{width:15px;height:15px;accent-color:var(--accent);cursor:
           <span class="acc-chevron">&#9660;</span>
         </div>
         <div class="acc-body">
-          <input class="acc-input" type="text" id="filter-company" placeholder="Company name" oninput="updateDot('company')">
+          <input class="acc-input" type="text" id="filter-company" placeholder="Company name (comma-separated)" oninput="updateDot('company')">
         </div>
       </div>
 
@@ -323,33 +332,30 @@ input[type="checkbox"]{width:15px;height:15px;accent-color:var(--accent);cursor:
           <span class="acc-chevron">&#9660;</span>
         </div>
         <div class="acc-body">
-          <input class="acc-input" type="text" id="filter-industry" placeholder="e.g. Software, Finance, Luxury" oninput="updateDot('industry')">
+          <input class="acc-input" type="text" id="filter-industry" placeholder="e.g. Financial Services, Technology" oninput="updateDot('industry')">
         </div>
       </div>
 
-      <div class="acc-section" data-filter="country">
+      <div class="acc-section" data-filter="region">
         <div class="acc-header" onclick="toggleAccordion(this)">
           <span class="acc-icon">&#127758;</span>
-          <span class="acc-label">Location / Country</span>
-          <span class="acc-dot" id="dot-country"></span>
+          <span class="acc-label">Location / Region</span>
+          <span class="acc-dot" id="dot-region"></span>
           <span class="acc-chevron">&#9660;</span>
         </div>
         <div class="acc-body">
-          <select class="acc-input" id="filter-country" onchange="updateDot('country')">
-            <option value="">All countries</option>
-            <option value="USA">United States</option>
-            <option value="GBR">United Kingdom</option>
-            <option value="FRA">France</option>
-            <option value="DEU">Germany</option>
-            <option value="ITA">Italy</option>
-            <option value="CHE">Switzerland</option>
-            <option value="CAN">Canada</option>
-            <option value="AUS">Australia</option>
-            <option value="SGP">Singapore</option>
-            <option value="HKG">Hong Kong</option>
-            <option value="CHN">China</option>
-            <option value="JPN">Japan</option>
-          </select>
+          <input class="acc-input" type="text" id="filter-region" placeholder="e.g. United States, United Kingdom" oninput="updateDot('region')">
+          <div style="margin-top:4px;display:flex;flex-wrap:wrap;gap:3px;">
+            <span class="example-chip" onclick="addRegion('United States')" style="font-size:9px;padding:2px 7px;">US</span>
+            <span class="example-chip" onclick="addRegion('United Kingdom')" style="font-size:9px;padding:2px 7px;">UK</span>
+            <span class="example-chip" onclick="addRegion('France')" style="font-size:9px;padding:2px 7px;">FR</span>
+            <span class="example-chip" onclick="addRegion('Germany')" style="font-size:9px;padding:2px 7px;">DE</span>
+            <span class="example-chip" onclick="addRegion('Switzerland')" style="font-size:9px;padding:2px 7px;">CH</span>
+            <span class="example-chip" onclick="addRegion('Canada')" style="font-size:9px;padding:2px 7px;">CA</span>
+            <span class="example-chip" onclick="addRegion('Australia')" style="font-size:9px;padding:2px 7px;">AU</span>
+            <span class="example-chip" onclick="addRegion('Singapore')" style="font-size:9px;padding:2px 7px;">SG</span>
+            <span class="example-chip" onclick="addRegion('India')" style="font-size:9px;padding:2px 7px;">IN</span>
+          </div>
         </div>
       </div>
 
@@ -361,40 +367,28 @@ input[type="checkbox"]{width:15px;height:15px;accent-color:var(--accent);cursor:
           <span class="acc-chevron">&#9660;</span>
         </div>
         <div class="acc-body">
-          <div class="acc-row">
-            <div style="flex:1"><div class="acc-row-label">Min</div><input class="acc-input" type="number" id="filter-min_employees" placeholder="Min" oninput="updateDot('employees')"></div>
-            <div style="flex:1"><div class="acc-row-label">Max</div><input class="acc-input" type="number" id="filter-max_employees" placeholder="Max" oninput="updateDot('employees')"></div>
+          <div class="headcount-pills" id="headcount-pills">
+            <button class="headcount-pill" data-range="1-10" onclick="toggleHeadcount(this)">1-10</button>
+            <button class="headcount-pill" data-range="11-50" onclick="toggleHeadcount(this)">11-50</button>
+            <button class="headcount-pill" data-range="51-200" onclick="toggleHeadcount(this)">51-200</button>
+            <button class="headcount-pill" data-range="201-500" onclick="toggleHeadcount(this)">201-500</button>
+            <button class="headcount-pill" data-range="501-1,000" onclick="toggleHeadcount(this)">501-1K</button>
+            <button class="headcount-pill" data-range="1,001-5,000" onclick="toggleHeadcount(this)">1K-5K</button>
+            <button class="headcount-pill" data-range="5,001-10,000" onclick="toggleHeadcount(this)">5K-10K</button>
+            <button class="headcount-pill" data-range="10,001+" onclick="toggleHeadcount(this)">10K+</button>
           </div>
         </div>
       </div>
 
-      <div class="acc-section" data-filter="funding">
+      <div class="acc-section" data-filter="function">
         <div class="acc-header" onclick="toggleAccordion(this)">
-          <span class="acc-icon">&#128176;</span>
-          <span class="acc-label">Funding</span>
-          <span class="acc-dot" id="dot-funding"></span>
+          <span class="acc-icon">&#128736;</span>
+          <span class="acc-label">Function / Dept</span>
+          <span class="acc-dot" id="dot-function"></span>
           <span class="acc-chevron">&#9660;</span>
         </div>
         <div class="acc-body">
-          <div class="acc-row">
-            <div style="flex:1"><div class="acc-row-label">Min (USD)</div><input class="acc-input" type="number" id="filter-min_funding" placeholder="e.g. 5000000" oninput="updateDot('funding')"></div>
-            <div style="flex:1"><div class="acc-row-label">Max (USD)</div><input class="acc-input" type="number" id="filter-max_funding" placeholder="No limit" oninput="updateDot('funding')"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="acc-section" data-filter="revenue">
-        <div class="acc-header" onclick="toggleAccordion(this)">
-          <span class="acc-icon">&#128178;</span>
-          <span class="acc-label">Revenue</span>
-          <span class="acc-dot" id="dot-revenue"></span>
-          <span class="acc-chevron">&#9660;</span>
-        </div>
-        <div class="acc-body">
-          <div class="acc-row">
-            <div style="flex:1"><div class="acc-row-label">Min (USD)</div><input class="acc-input" type="number" id="filter-min_revenue" placeholder="Min" oninput="updateDot('revenue')"></div>
-            <div style="flex:1"><div class="acc-row-label">Max (USD)</div><input class="acc-input" type="number" id="filter-max_revenue" placeholder="Max" oninput="updateDot('revenue')"></div>
-          </div>
+          <input class="acc-input" type="text" id="filter-function" placeholder="e.g. Engineering, Sales, Marketing" oninput="updateDot('function')">
         </div>
       </div>
 
@@ -406,22 +400,7 @@ input[type="checkbox"]{width:15px;height:15px;accent-color:var(--accent);cursor:
           <span class="acc-chevron">&#9660;</span>
         </div>
         <div class="acc-body">
-          <input class="acc-input" type="text" id="filter-keywords" placeholder="keyword1, keyword2..." oninput="updateDot('keywords')">
-        </div>
-      </div>
-
-      <div class="acc-section" data-filter="year_founded">
-        <div class="acc-header" onclick="toggleAccordion(this)">
-          <span class="acc-icon">&#128197;</span>
-          <span class="acc-label">Year Founded</span>
-          <span class="acc-dot" id="dot-year_founded"></span>
-          <span class="acc-chevron">&#9660;</span>
-        </div>
-        <div class="acc-body">
-          <div class="acc-row">
-            <div style="flex:1"><div class="acc-row-label">From</div><input class="acc-input" type="number" id="filter-min_year_founded" placeholder="e.g. 2010" oninput="updateDot('year_founded')"></div>
-            <div style="flex:1"><div class="acc-row-label">To</div><input class="acc-input" type="number" id="filter-max_year_founded" placeholder="e.g. 2024" oninput="updateDot('year_founded')"></div>
-          </div>
+          <input class="acc-input" type="text" id="filter-keywords" placeholder="Single keyword (max 1)" oninput="updateDot('keywords')">
         </div>
       </div>
 
@@ -470,7 +449,7 @@ input[type="checkbox"]{width:15px;height:15px;accent-color:var(--accent);cursor:
           <th class="sortable" onclick="sortTable('title')">Job Title</th>
           <th class="sortable" onclick="sortTable('company')">Company</th>
           <th class="sortable" onclick="sortTable('location')">Location</th>
-          <th>Emails</th>
+          <th>Email</th>
         </tr>
       </thead>
       <tbody id="results-body">
@@ -518,8 +497,8 @@ input[type="checkbox"]{width:15px;height:15px;accent-color:var(--accent);cursor:
     <div class="d-section"><div class="d-section-title">Profile</div><div class="d-kv" id="d-profile-kv"></div></div>
     <div class="d-section"><div class="d-section-title">Company</div><div class="d-kv" id="d-company-kv"></div></div>
     <div class="d-section"><div class="d-section-title">Contact</div><div class="d-kv" id="d-contact-kv"></div></div>
-    <div class="d-section"><div class="d-section-title">Signals</div><div class="signals-list" id="d-signals"></div></div>
-    <div class="d-section"><div class="d-section-title">Pitch Approach</div><div class="pitch-box" id="d-pitch">--</div></div>
+    <div class="d-section"><div class="d-section-title">Experience</div><div class="signals-list" id="d-signals"></div></div>
+    <div class="d-section"><div class="d-section-title">Summary</div><div class="pitch-box" id="d-pitch">--</div></div>
   </div>
 </div>
 
@@ -532,15 +511,17 @@ var CRUSTDATA_KEY_HARDCODED = typeof __CRUSTDATA_KEY__ !== 'undefined' ? __CRUST
 var allResults = [];
 var filteredResults = [];
 var selectedSet = {};
-var curSort = { col: 'score', dir: 'desc' };
+var curSort = { col: 'name', dir: 'asc' };
 var currentPage = 0;
 var pageSize = 25;
-var aiGeneratedFilters = null; // JSON from Claude
+var apiCurrentPage = 1;
+var apiTotalCount = 0;
+var lastSearchFilters = null;
 
 /* ===== INIT ===== */
 function init() {
   if (CRUSTDATA_KEY_HARDCODED) {
-    fetch('https://api.crustdata.com/user/credits', { headers: { 'Authorization': 'Token ' + CRUSTDATA_KEY_HARDCODED } })
+    fetch('https://api.crustdata.com/user/credits', { headers: { 'Authorization': 'Bearer ' + CRUSTDATA_KEY_HARDCODED } })
     .then(function(r) { return r.json(); })
     .then(function(d) {
       var el = document.getElementById('credit-display');
@@ -555,13 +536,6 @@ function setAIQuery(text) {
   document.getElementById('ai-query').value = text;
 }
 
-function clearAIChip() {
-  aiGeneratedFilters = null;
-  document.getElementById('ai-chip').classList.remove('visible');
-  document.getElementById('ai-box').style.display = '';
-  clearAllFilterInputs();
-}
-
 async function generateFilters() {
   var query = document.getElementById('ai-query').value.trim();
   if (!query) { showToast('Enter a description first'); return; }
@@ -573,14 +547,12 @@ async function generateFilters() {
 
   try {
     var result = await claudeFilterGen(query, CLAUDE_KEY_HARDCODED);
-    aiGeneratedFilters = result;
     applyAIFiltersToInputs(result);
 
-    // Collapse AI box and show chip
-    document.getElementById('ai-box').style.display = 'none';
-    var chip = document.getElementById('ai-chip');
-    document.getElementById('ai-chip-text').textContent = query;
-    chip.classList.add('visible');
+    // Show the AI generated badge
+    var badge = document.getElementById('ai-generated-badge');
+    document.getElementById('ai-badge-text').textContent = 'Filters generated: "' + query + '"';
+    badge.classList.add('visible');
 
   } catch(e) {
     showToast('Filter generation error: ' + e.message);
@@ -591,7 +563,7 @@ async function generateFilters() {
 }
 
 async function claudeFilterGen(query, apiKey) {
-  var systemPrompt = 'You are a B2B data expert. Convert natural language prospect descriptions into structured filter JSON.\n\nReturn ONLY valid JSON (no markdown) with these fields:\n{\n  "person_name": "",\n  "job_titles": "CEO, CFO, VP Marketing",\n  "seniority": ["csuite", "vp"],\n  "company": "",\n  "industry": "Luxury, Fashion, Consumer Goods",\n  "country": "FRA",\n  "min_employees": null,\n  "max_employees": null,\n  "min_funding": 10000000,\n  "max_funding": null,\n  "min_revenue": null,\n  "max_revenue": null,\n  "keywords": "luxury, fashion, brand",\n  "min_year_founded": null,\n  "max_year_founded": null,\n  "reasoning": "Brief explanation of filter logic"\n}\n\nRules:\n- country uses ISO 3-alpha codes (USA, GBR, FRA, DEU, ITA, CHE, CHN, JPN, etc.)\n- seniority values: "csuite", "vp", "director", "manager", "all"\n- Use null for fields that should not be filtered\n- Be smart about inferring filters from natural language\n- For "tech executives" set seniority to ["csuite","vp","director"]\n- For "$10M+ funding" set min_funding to 10000000';
+  var systemPrompt = 'You are a B2B data expert. Convert natural language prospect descriptions into Crustdata Person Search API filters.\n\nReturn ONLY valid JSON (no markdown) with this structure:\n{\n  "filters": [\n    {"filter_type": "INDUSTRY", "type": "in", "value": ["Financial Services", "Technology"]},\n    {"filter_type": "SENIORITY_LEVEL", "type": "in", "value": ["CXO", "VP"]},\n    {"filter_type": "REGION", "type": "in", "value": ["United States"]},\n    {"filter_type": "COMPANY_HEADCOUNT", "type": "in", "value": ["1,001-5,000", "5,001-10,000", "10,001+"]}\n  ],\n  "sidebar": {\n    "first_name": "",\n    "last_name": "",\n    "job_titles": "",\n    "seniority": [],\n    "company": "",\n    "industry": "",\n    "region": "",\n    "headcount": [],\n    "function": "",\n    "keywords": ""\n  },\n  "reasoning": "Brief explanation"\n}\n\nAvailable filter_types:\n- CURRENT_TITLE: type "in" or "not in", value: array of title strings\n- SENIORITY_LEVEL: type "in", value from ["Owner/Partner","CXO","VP","Director","Manager","Strategic","Senior","Entry Level","In Training"]\n- CURRENT_COMPANY: type "in" or "not in", value: array of company names\n- INDUSTRY: type "in" or "not in", value: array (e.g. "Financial Services", "Technology", "Luxury Goods & Jewelry")\n- REGION: type "in" or "not in", value: array (e.g. "United States", "United Kingdom", "France", "Germany", "Italy", "Switzerland", "Singapore", "Hong Kong SAR", "China", "Japan", "India", "Brazil", "Canada", "Australia")\n- COMPANY_HEADCOUNT: type "in", value from ["Self-employed","1-10","11-50","51-200","201-500","501-1,000","1,001-5,000","5,001-10,000","10,001+"]\n- KEYWORD: type "in", value: array with max 1 item\n- FIRST_NAME: type "in", value: array with max 1 item\n- LAST_NAME: type "in", value: array with max 1 item\n- FUNCTION: type "in", value: array of department names (Accounting, Engineering, Sales, Marketing, Finance, etc.)\n- COMPANY_TYPE: type "in", value from ["Public Company","Privately Held","Non Profit"]\n- YEARS_AT_CURRENT_COMPANY: type "in", value from ["Less than 1 year","1 to 2 years","3 to 5 years","6 to 10 years","More than 10 years"]\n- YEARS_OF_EXPERIENCE: type "in", value same buckets\n\nThe "sidebar" object maps to the UI filter fields. For seniority, use the Crustdata values directly (CXO, VP, Director, Manager, etc.). For headcount, use the exact range strings.\n\nRules:\n- Only include filters that the user description implies\n- For "tech executives" use SENIORITY_LEVEL with CXO/VP/Director\n- For location references, use full region names in REGION filter\n- Map C-Suite/CEO/CFO/CTO to "CXO" seniority\n- Be smart about inferring appropriate filters';
 
   var response = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -603,9 +575,9 @@ async function claudeFilterGen(query, apiKey) {
     },
     body: JSON.stringify({
       model: 'claude-sonnet-4-6',
-      max_tokens: 1000,
+      max_tokens: 1500,
       system: systemPrompt,
-      messages: [{ role: 'user', content: 'Convert this prospect description to filters:\n\n' + query }]
+      messages: [{ role: 'user', content: 'Convert this prospect description to Crustdata Person Search filters:\n\n' + query }]
     })
   });
 
@@ -620,34 +592,40 @@ async function claudeFilterGen(query, apiKey) {
   return JSON.parse(text);
 }
 
-function applyAIFiltersToInputs(f) {
-  if (f.person_name) setVal('filter-person_name', f.person_name);
-  if (f.job_titles) setVal('filter-job_titles', f.job_titles);
-  if (f.company) setVal('filter-company', f.company);
-  if (f.industry) setVal('filter-industry', f.industry);
-  if (f.country) setVal('filter-country', f.country);
-  if (f.min_employees) setVal('filter-min_employees', f.min_employees);
-  if (f.max_employees) setVal('filter-max_employees', f.max_employees);
-  if (f.min_funding) setVal('filter-min_funding', f.min_funding);
-  if (f.max_funding) setVal('filter-max_funding', f.max_funding);
-  if (f.min_revenue) setVal('filter-min_revenue', f.min_revenue);
-  if (f.max_revenue) setVal('filter-max_revenue', f.max_revenue);
-  if (f.keywords) setVal('filter-keywords', f.keywords);
-  if (f.min_year_founded) setVal('filter-min_year_founded', f.min_year_founded);
-  if (f.max_year_founded) setVal('filter-max_year_founded', f.max_year_founded);
+function applyAIFiltersToInputs(result) {
+  // Clear existing first
+  clearAllFilterInputs();
 
-  // Apply seniority
-  if (f.seniority && Array.isArray(f.seniority)) {
+  var sb = result.sidebar || {};
+
+  if (sb.first_name) setVal('filter-first_name', sb.first_name);
+  if (sb.last_name) setVal('filter-last_name', sb.last_name);
+  if (sb.job_titles) setVal('filter-job_titles', sb.job_titles);
+  if (sb.company) setVal('filter-company', sb.company);
+  if (sb.industry) setVal('filter-industry', sb.industry);
+  if (sb.region) setVal('filter-region', sb.region);
+  if (sb.function) setVal('filter-function', sb.function);
+  if (sb.keywords) setVal('filter-keywords', sb.keywords);
+
+  // Apply seniority pills
+  if (sb.seniority && Array.isArray(sb.seniority) && sb.seniority.length) {
     document.querySelectorAll('.seniority-pill').forEach(function(p) { p.classList.remove('active'); });
-    f.seniority.forEach(function(s) {
+    sb.seniority.forEach(function(s) {
       var pill = document.querySelector('.seniority-pill[data-level="' + s + '"]');
       if (pill) pill.classList.add('active');
     });
-    updateDot('seniority');
+  }
+
+  // Apply headcount pills
+  if (sb.headcount && Array.isArray(sb.headcount) && sb.headcount.length) {
+    sb.headcount.forEach(function(h) {
+      var pill = document.querySelector('.headcount-pill[data-range="' + h + '"]');
+      if (pill) pill.classList.add('active');
+    });
   }
 
   // Update all dots
-  ['person_name','job_titles','company','industry','country','employees','funding','revenue','keywords','year_founded'].forEach(function(k) {
+  ['person_name','job_titles','seniority','people_per_company','company','industry','region','employees','function','keywords'].forEach(function(k) {
     updateDot(k);
   });
 }
@@ -655,6 +633,15 @@ function applyAIFiltersToInputs(f) {
 function setVal(id, val) {
   var el = document.getElementById(id);
   if (el) el.value = val;
+}
+
+/* ===== REGION HELPER ===== */
+function addRegion(name) {
+  var el = document.getElementById('filter-region');
+  var current = el.value.trim();
+  if (current && current.indexOf(name) !== -1) return;
+  el.value = current ? current + ', ' + name : name;
+  updateDot('region');
 }
 
 /* ===== ACCORDION ===== */
@@ -668,38 +655,25 @@ function updateDot(filterName) {
   if (!dot) return;
   var hasValue = false;
 
-  if (filterName === 'person_name') hasValue = !!document.getElementById('filter-person_name').value.trim();
+  if (filterName === 'person_name') hasValue = !!(document.getElementById('filter-first_name').value.trim() || document.getElementById('filter-last_name').value.trim());
   else if (filterName === 'job_titles') hasValue = !!document.getElementById('filter-job_titles').value.trim();
   else if (filterName === 'seniority') {
-    var active = getActiveSeniorities();
-    hasValue = active.indexOf('all') === -1 && active.length > 0;
+    hasValue = document.querySelectorAll('.seniority-pill.active').length > 0;
   }
   else if (filterName === 'people_per_company') hasValue = document.getElementById('filter-people_per_company').value !== '3';
   else if (filterName === 'company') hasValue = !!document.getElementById('filter-company').value.trim();
   else if (filterName === 'industry') hasValue = !!document.getElementById('filter-industry').value.trim();
-  else if (filterName === 'country') hasValue = !!document.getElementById('filter-country').value;
-  else if (filterName === 'employees') hasValue = !!document.getElementById('filter-min_employees').value || !!document.getElementById('filter-max_employees').value;
-  else if (filterName === 'funding') hasValue = !!document.getElementById('filter-min_funding').value || !!document.getElementById('filter-max_funding').value;
-  else if (filterName === 'revenue') hasValue = !!document.getElementById('filter-min_revenue').value || !!document.getElementById('filter-max_revenue').value;
+  else if (filterName === 'region') hasValue = !!document.getElementById('filter-region').value.trim();
+  else if (filterName === 'employees') hasValue = document.querySelectorAll('.headcount-pill.active').length > 0;
+  else if (filterName === 'function') hasValue = !!document.getElementById('filter-function').value.trim();
   else if (filterName === 'keywords') hasValue = !!document.getElementById('filter-keywords').value.trim();
-  else if (filterName === 'year_founded') hasValue = !!document.getElementById('filter-min_year_founded').value || !!document.getElementById('filter-max_year_founded').value;
 
   dot.classList.toggle('active', hasValue);
 }
 
 /* ===== SENIORITY ===== */
 function toggleSeniority(btn) {
-  var level = btn.getAttribute('data-level');
-  if (level === 'all') {
-    document.querySelectorAll('.seniority-pill').forEach(function(p) { p.classList.remove('active'); });
-    btn.classList.add('active');
-  } else {
-    document.querySelector('.seniority-pill[data-level="all"]').classList.remove('active');
-    btn.classList.toggle('active');
-    if (!document.querySelectorAll('.seniority-pill.active').length) {
-      document.querySelector('.seniority-pill[data-level="all"]').classList.add('active');
-    }
-  }
+  btn.classList.toggle('active');
   updateDot('seniority');
 }
 
@@ -711,107 +685,127 @@ function getActiveSeniorities() {
   return active;
 }
 
-function matchesSeniority(title) {
-  var levels = getActiveSeniorities();
-  if (levels.indexOf('all') !== -1) return true;
-  var t = (title || '').toLowerCase();
-  for (var i = 0; i < levels.length; i++) {
-    if (levels[i] === 'csuite' && /\b(ceo|cfo|cto|coo|cmo|cio|ciso|chief|founder|co-founder|president)\b/.test(t)) return true;
-    if (levels[i] === 'vp' && /\b(vp|vice president|svp|evp)\b/.test(t)) return true;
-    if (levels[i] === 'director' && /\bdirector\b/.test(t)) return true;
-    if (levels[i] === 'manager' && /\bmanager\b/.test(t)) return true;
-  }
-  return false;
+/* ===== HEADCOUNT ===== */
+function toggleHeadcount(btn) {
+  btn.classList.toggle('active');
+  updateDot('employees');
 }
 
-function matchesTargetRoles(title) {
-  var roles = document.getElementById('filter-job_titles').value.trim();
-  if (!roles) return true;
-  var t = (title || '').toLowerCase();
-  return roles.split(',').some(function(r) { return t.indexOf(r.trim().toLowerCase()) !== -1; });
+function getActiveHeadcounts() {
+  var active = [];
+  document.querySelectorAll('.headcount-pill.active').forEach(function(p) {
+    active.push(p.getAttribute('data-range'));
+  });
+  return active;
 }
 
 /* ===== CLEAR ALL ===== */
 function clearAllFilters() {
   clearAllFilterInputs();
-  clearAIChipSilent();
-  aiGeneratedFilters = null;
+  document.getElementById('ai-generated-badge').classList.remove('visible');
+  document.getElementById('ai-query').value = '';
   allResults = [];
   filteredResults = [];
   selectedSet = {};
   currentPage = 0;
+  apiCurrentPage = 1;
+  apiTotalCount = 0;
+  lastSearchFilters = null;
   renderTable([]);
   updateCounts();
   setStatus('', 'Use filters or AI to find prospects, then click Search.');
 }
 
 function clearAllFilterInputs() {
-  setVal('filter-person_name', '');
+  setVal('filter-first_name', '');
+  setVal('filter-last_name', '');
   setVal('filter-job_titles', '');
   setVal('filter-company', '');
   setVal('filter-industry', '');
-  setVal('filter-country', '');
-  setVal('filter-min_employees', '');
-  setVal('filter-max_employees', '');
-  setVal('filter-min_funding', '');
-  setVal('filter-max_funding', '');
-  setVal('filter-min_revenue', '');
-  setVal('filter-max_revenue', '');
+  setVal('filter-region', '');
+  setVal('filter-function', '');
   setVal('filter-keywords', '');
-  setVal('filter-min_year_founded', '');
-  setVal('filter-max_year_founded', '');
   setVal('filter-people_per_company', '3');
 
   document.querySelectorAll('.seniority-pill').forEach(function(p) { p.classList.remove('active'); });
-  document.querySelector('.seniority-pill[data-level="all"]').classList.add('active');
+  document.querySelectorAll('.headcount-pill').forEach(function(p) { p.classList.remove('active'); });
 
-  ['person_name','job_titles','seniority','people_per_company','company','industry','country','employees','funding','revenue','keywords','year_founded'].forEach(function(k) {
+  ['person_name','job_titles','seniority','people_per_company','company','industry','region','employees','function','keywords'].forEach(function(k) {
     updateDot(k);
   });
 }
 
-function clearAIChipSilent() {
-  document.getElementById('ai-chip').classList.remove('visible');
-  document.getElementById('ai-box').style.display = '';
-  document.getElementById('ai-query').value = '';
-}
+/* ===== BUILD CRUSTDATA PERSON SEARCH FILTERS ===== */
+function buildCrustdataFilters() {
+  var filters = [];
 
-/* ===== BUILD API CONDITIONS ===== */
-function buildConditions() {
-  var conditions = [];
+  // First name
+  var firstName = document.getElementById('filter-first_name').value.trim();
+  if (firstName) {
+    filters.push({ filter_type: 'FIRST_NAME', type: 'in', value: [firstName] });
+  }
 
-  var minFunding = parseInt(document.getElementById('filter-min_funding').value);
-  var maxFunding = parseInt(document.getElementById('filter-max_funding').value);
-  var country = document.getElementById('filter-country').value;
+  // Last name
+  var lastName = document.getElementById('filter-last_name').value.trim();
+  if (lastName) {
+    filters.push({ filter_type: 'LAST_NAME', type: 'in', value: [lastName] });
+  }
+
+  // Job titles
+  var titles = document.getElementById('filter-job_titles').value.trim();
+  if (titles) {
+    var titleArr = titles.split(',').map(function(t) { return t.trim(); }).filter(Boolean);
+    if (titleArr.length) filters.push({ filter_type: 'CURRENT_TITLE', type: 'in', value: titleArr });
+  }
+
+  // Seniority
+  var seniorities = getActiveSeniorities();
+  if (seniorities.length) {
+    filters.push({ filter_type: 'SENIORITY_LEVEL', type: 'in', value: seniorities });
+  }
+
+  // Company
+  var company = document.getElementById('filter-company').value.trim();
+  if (company) {
+    var compArr = company.split(',').map(function(c) { return c.trim(); }).filter(Boolean);
+    if (compArr.length) filters.push({ filter_type: 'CURRENT_COMPANY', type: 'in', value: compArr });
+  }
+
+  // Industry
   var industry = document.getElementById('filter-industry').value.trim();
-  var minEmployees = parseInt(document.getElementById('filter-min_employees').value);
-  var maxEmployees = parseInt(document.getElementById('filter-max_employees').value);
-  var minRevenue = parseInt(document.getElementById('filter-min_revenue').value);
-  var maxRevenue = parseInt(document.getElementById('filter-max_revenue').value);
-  var keywords = document.getElementById('filter-keywords').value.trim();
-  var minYear = parseInt(document.getElementById('filter-min_year_founded').value);
-  var maxYear = parseInt(document.getElementById('filter-max_year_founded').value);
-
-  if (minFunding) conditions.push({ filter_type: 'crunchbase_total_investment_usd', type: '=>', value: minFunding });
-  if (maxFunding) conditions.push({ filter_type: 'crunchbase_total_investment_usd', type: '=<', value: maxFunding });
-  if (country) conditions.push({ filter_type: 'hq_country', type: '=', value: country });
   if (industry) {
-    industry.split(',').forEach(function(ind) {
-      ind = ind.trim();
-      if (ind) conditions.push({ filter_type: 'linkedin_industries', type: '(.)', value: ind });
-    });
-  }
-  if (minEmployees) conditions.push({ filter_type: 'employee_metrics.latest_count', type: '=>', value: minEmployees });
-  if (maxEmployees) conditions.push({ filter_type: 'employee_metrics.latest_count', type: '=<', value: maxEmployees });
-  if (minYear) conditions.push({ filter_type: 'year_founded', type: '=>', value: minYear });
-  if (maxYear) conditions.push({ filter_type: 'year_founded', type: '=<', value: maxYear });
-
-  // Default: at least some funding filter
-  if (!conditions.length) {
-    conditions.push({ filter_type: 'crunchbase_total_investment_usd', type: '=>', value: 5000000 });
+    var indArr = industry.split(',').map(function(i) { return i.trim(); }).filter(Boolean);
+    if (indArr.length) filters.push({ filter_type: 'INDUSTRY', type: 'in', value: indArr });
   }
 
-  return conditions;
+  // Region
+  var region = document.getElementById('filter-region').value.trim();
+  if (region) {
+    var regArr = region.split(',').map(function(r) { return r.trim(); }).filter(Boolean);
+    if (regArr.length) filters.push({ filter_type: 'REGION', type: 'in', value: regArr });
+  }
+
+  // Headcount
+  var headcounts = getActiveHeadcounts();
+  if (headcounts.length) {
+    filters.push({ filter_type: 'COMPANY_HEADCOUNT', type: 'in', value: headcounts });
+  }
+
+  // Function
+  var func = document.getElementById('filter-function').value.trim();
+  if (func) {
+    var funcArr = func.split(',').map(function(f) { return f.trim(); }).filter(Boolean);
+    if (funcArr.length) filters.push({ filter_type: 'FUNCTION', type: 'in', value: funcArr });
+  }
+
+  // Keywords (max 1)
+  var keywords = document.getElementById('filter-keywords').value.trim();
+  if (keywords) {
+    var kw = keywords.split(',')[0].trim();
+    if (kw) filters.push({ filter_type: 'KEYWORD', type: 'in', value: [kw] });
+  }
+
+  return filters;
 }
 
 /* ===== SEARCH / PIPELINE ===== */
@@ -821,7 +815,7 @@ async function runSearch() {
   btn.classList.add('loading');
   btn.disabled = true;
   bar.classList.add('active');
-  setStatus('running', 'Searching for matching companies...');
+  setStatus('running', 'Searching for people...');
 
   var crustKey = CRUSTDATA_KEY_HARDCODED;
   if (!crustKey) {
@@ -834,7 +828,8 @@ async function runSearch() {
   }
 
   try {
-    await liveRun(crustKey);
+    apiCurrentPage = 1;
+    await fetchPeoplePage(crustKey, 1);
   } catch(e) {
     setStatus('error', 'Error: ' + e.message);
     console.error(e);
@@ -845,183 +840,186 @@ async function runSearch() {
   }
 }
 
-async function liveRun(crustKey) {
-  var B = 'https://api.crustdata.com';
-  var H = { 'Authorization': 'Token ' + crustKey, 'Content-Type': 'application/json', 'Accept': 'application/json' };
+async function fetchPeoplePage(crustKey, page) {
+  var filters = buildCrustdataFilters();
 
-  var maxPerCompany = parseInt(document.getElementById('filter-people_per_company').value) || 3;
-  var conditions = buildConditions();
-
-  setStatus('running', 'Step 1: Searching CompanyDB...');
-  var r1 = await fetch(B + '/screener/companydb/search/', {
-    method: 'POST', headers: H,
-    body: JSON.stringify({
-      filters: { op: 'and', conditions: conditions },
-      limit: 50,
-      sorts: [{ column: 'crunchbase_total_investment_usd', order: 'desc' }]
-    })
-  });
-  if (!r1.ok) throw new Error('CompanyDB: ' + r1.status + ' ' + await r1.text());
-  var d1 = await r1.json();
-  var companies = d1.companies || [];
-
-  if (!companies.length) {
-    setStatus('done', 'No companies matched your filters.');
-    allResults = [];
-    filterAndRender();
+  if (!filters.length) {
+    showToast('Add at least one filter before searching');
+    setStatus('', 'Use filters or AI to find prospects, then click Search.');
     return;
   }
 
-  setStatus('running', 'Step 2: Enriching ' + companies.length + ' companies for people...');
-  var domains = companies.slice(0, 50).map(function(c) { return c.company_website_domain; }).filter(Boolean).join(',');
-  var r2 = await fetch(B + '/screener/company?company_domain=' + encodeURIComponent(domains) + '&fields=founders,decision_makers', { headers: H });
-  var enriched = r2.ok ? await r2.json() : [];
+  lastSearchFilters = filters;
+  var maxPerCompany = parseInt(document.getElementById('filter-people_per_company').value) || 3;
 
-  setStatus('running', 'Step 3: Extracting and enriching people...');
-  var fUrls = [], fMeta = {};
-  var jobTitlesFilter = document.getElementById('filter-job_titles').value.trim().toLowerCase();
-  var personNameFilter = document.getElementById('filter-person_name').value.trim().toLowerCase();
+  setStatus('running', 'Searching people (page ' + page + ')...');
 
-  enriched.forEach(function(co) {
-    var comp = companies.find(function(c) { return c.company_website_domain === co.company_website_domain; });
-    var companyFilter = document.getElementById('filter-company').value.trim().toLowerCase();
-    if (companyFilter && comp && comp.company_name && comp.company_name.toLowerCase().indexOf(companyFilter) === -1) return;
-
-    var people = [];
-    if (co.founders && co.founders.profiles) people = people.concat(co.founders.profiles);
-    if (co.decision_makers && co.decision_makers.profiles) people = people.concat(co.decision_makers.profiles);
-
-    // For people-per-company = 1 or 2, score and pick best
-    if (maxPerCompany <= 2 && people.length > maxPerCompany) {
-      people = rankPeopleForCompany(people, jobTitlesFilter);
-    }
-
-    var seen = {};
-    people.forEach(function(f) {
-      if (f.linkedin_profile_url && !seen[f.linkedin_profile_url] && Object.keys(seen).length < maxPerCompany) {
-        seen[f.linkedin_profile_url] = true;
-        fUrls.push(f.linkedin_profile_url);
-        fMeta[f.linkedin_profile_url] = { co: co, comp: comp };
-      }
-    });
+  var response = await fetch('https://api.crustdata.com/screener/person/search', {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer ' + crustKey,
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify({
+      filters: filters,
+      page: page
+    })
   });
 
-  var results = [];
-  var batches = [];
-  for (var i = 0; i < fUrls.length; i += 10) batches.push(fUrls.slice(i, i + 10));
-
-  for (var b = 0; b < Math.min(batches.length, 5); b++) {
-    var batch = batches[b];
-    setStatus('running', 'Enriching batch ' + (b + 1) + '/' + Math.min(batches.length, 5) + '...');
-    var r3 = await fetch(B + '/screener/person/enrich?linkedin_profile_url=' + encodeURIComponent(batch.join(',')) + '&fields=name,title,location,current_employers,business_email', { headers: H });
-    if (r3.ok) {
-      var pd = await r3.json();
-      (Array.isArray(pd) ? pd : [pd]).forEach(function(p, pi) {
-        if (!p || p.error) return;
-        var meta = fMeta[batch[pi]] || {};
-        var comp = meta.comp || {};
-        if (!matchesSeniority(p.title)) return;
-        if (!matchesTargetRoles(p.title)) return;
-        if (personNameFilter && (p.name || '').toLowerCase().indexOf(personNameFilter) === -1) return;
-
-        results.push({
-          name: p.name || '--',
-          title: p.title || '--',
-          company: comp.company_name || '--',
-          industry: (comp.linkedin_industries || [])[0] || '--',
-          hq_country: comp.hq_country || '--',
-          funding: comp.crunchbase_total_investment_usd || 0,
-          acquired_by: comp.acquisition_status || '--',
-          linkedin_url: batch[pi],
-          email: (p.business_email || [])[0] || null,
-          email_verified: !!(p.business_email && p.business_email.length),
-          location: p.location || '--',
-          connections: p.num_of_connections || 0,
-          score: calcScore(p, comp),
-          score_factors: buildFactors(p, comp),
-          pitch: buildPitch(p, comp),
-          signals: [{ type: 'activity', text: (comp.company_name || 'Company') + (comp.acquisition_status === 'Acquired' ? ' -- acquired (liquidity event)' : ' -- ' + ((comp.linkedin_industries || [])[0] || 'company')), date: 'Signal' }]
-        });
-      });
-    }
+  if (!response.ok) {
+    var errText = await response.text();
+    throw new Error('Person Search API: ' + response.status + ' ' + errText);
   }
 
-  setStatus('done', 'Found ' + results.length + ' prospects.');
+  var data = await response.json();
+  var profiles = data.profiles || [];
+  apiTotalCount = data.total_display_count || profiles.length;
+  apiCurrentPage = page;
+
+  // Map profiles to result objects
+  var results = profiles.map(function(p) {
+    return {
+      name: p.name || '--',
+      title: p.current_title || p.headline || '--',
+      company: p.current_company || '--',
+      location: p.location || '--',
+      linkedin_url: p.linkedin_profile_url || '',
+      email: null,
+      email_loading: false,
+      connections: p.num_of_connections || 0,
+      headline: p.headline || '',
+      summary: p.summary || '',
+      skills: p.skills || [],
+      employer_history: p.employer_history || [],
+      education: p.education_background || [],
+      score: calcScore(p),
+      score_factors: buildFactors(p)
+    };
+  });
+
+  // Apply people-per-company limit client-side
+  if (maxPerCompany < 99) {
+    var companyCount = {};
+    results = results.filter(function(r) {
+      var key = r.company.toLowerCase();
+      companyCount[key] = (companyCount[key] || 0) + 1;
+      return companyCount[key] <= maxPerCompany;
+    });
+  }
+
   allResults = results;
   selectedSet = {};
   currentPage = 0;
   filterAndRender();
 
+  var showing = results.length;
+  setStatus('done', 'Found ' + showing + ' people on page ' + page + ' (total: ' + apiTotalCount.toLocaleString() + ')');
+
+  // Background email enrichment
+  enrichEmails(crustKey, results);
+
   // Update credits
   try {
-    var cr = await fetch(B + '/user/credits', { headers: { 'Authorization': 'Token ' + crustKey } });
+    var cr = await fetch('https://api.crustdata.com/user/credits', { headers: { 'Authorization': 'Bearer ' + crustKey } });
     if (cr.ok) { var cd = await cr.json(); var el = document.getElementById('credit-display'); el.textContent = (cd.credits || 0).toLocaleString() + ' credits'; el.style.display = ''; }
   } catch(e) {}
 }
 
-/* ===== PEOPLE PER COMPANY RANKING ===== */
-function rankPeopleForCompany(people, jobTitlesFilter) {
-  var scored = people.map(function(p) {
-    var s = 0;
-    var t = (p.title || '').toLowerCase();
-
-    // Title match bonus
-    if (jobTitlesFilter) {
-      jobTitlesFilter.split(',').forEach(function(role) {
-        if (t.indexOf(role.trim()) !== -1) s += 30;
+/* ===== EMAIL ENRICHMENT ===== */
+async function enrichEmails(crustKey, results) {
+  for (var i = 0; i < results.length; i++) {
+    var r = results[i];
+    if (!r.linkedin_url || r.email) continue;
+    try {
+      var resp = await fetch('https://api.crustdata.com/screener/person/enrich?linkedin_profile_url=' + encodeURIComponent(r.linkedin_url) + '&fields=business_email', {
+        headers: { 'Authorization': 'Bearer ' + crustKey, 'Accept': 'application/json' }
       });
+      if (resp.ok) {
+        var pd = await resp.json();
+        if (pd && pd.business_email && pd.business_email.length) {
+          r.email = pd.business_email[0];
+          // Re-render if still on the page showing this result
+          filterAndRender();
+        }
+      }
+    } catch(e) {
+      // silently continue
     }
+  }
+}
 
-    // Seniority bonus
-    if (/\b(ceo|cfo|cto|coo|cmo|chief|founder|president)\b/.test(t)) s += 25;
-    else if (/\b(vp|vice president|svp|evp)\b/.test(t)) s += 20;
-    else if (/\bdirector\b/.test(t)) s += 15;
-    else if (/\bmanager\b/.test(t)) s += 10;
-
-    // Connections
-    s += Math.min(20, (p.num_of_connections || 0) / 500);
-
-    return { person: p, rank: s };
-  });
-
-  scored.sort(function(a, b) { return b.rank - a.rank; });
-  return scored.slice(0, Math.max(people.length, 10)).map(function(s) { return s.person; });
+/* ===== PAGINATION (API-level) ===== */
+async function changePage(dir) {
+  if (dir === 1 && apiCurrentPage * 25 < apiTotalCount) {
+    var crustKey = CRUSTDATA_KEY_HARDCODED;
+    if (!crustKey) return;
+    var btn = document.getElementById('search-btn');
+    var bar = document.getElementById('thinking-bar');
+    btn.classList.add('loading');
+    btn.disabled = true;
+    bar.classList.add('active');
+    try {
+      await fetchPeoplePage(crustKey, apiCurrentPage + 1);
+    } catch(e) {
+      setStatus('error', 'Error: ' + e.message);
+    } finally {
+      btn.classList.remove('loading');
+      btn.disabled = false;
+      bar.classList.remove('active');
+    }
+  } else if (dir === -1 && apiCurrentPage > 1) {
+    var crustKey2 = CRUSTDATA_KEY_HARDCODED;
+    if (!crustKey2) return;
+    var btn2 = document.getElementById('search-btn');
+    var bar2 = document.getElementById('thinking-bar');
+    btn2.classList.add('loading');
+    btn2.disabled = true;
+    bar2.classList.add('active');
+    try {
+      await fetchPeoplePage(crustKey2, apiCurrentPage - 1);
+    } catch(e) {
+      setStatus('error', 'Error: ' + e.message);
+    } finally {
+      btn2.classList.remove('loading');
+      btn2.disabled = false;
+      bar2.classList.remove('active');
+    }
+  }
 }
 
 /* ===== SCORING ===== */
-function calcScore(p, comp) {
-  var s = 30, f = comp.crunchbase_total_investment_usd || 0;
-  if (f > 1e8) s += 35; else if (f > 5e7) s += 25; else if (f > 2e7) s += 18; else s += 10;
-  if (comp.hq_country === 'USA') s += 15; else if (['GBR', 'FRA', 'DEU'].indexOf(comp.hq_country) !== -1) s += 12; else s += 6;
-  if ((p.num_of_connections || 0) > 5000) s += 12; else if ((p.num_of_connections || 0) > 1000) s += 6;
-  var t = (p.title || '').toLowerCase();
-  if (/\b(ceo|cfo|cto|coo|cmo|cio|ciso|chief|founder|co-founder|president)\b/.test(t)) s += 15;
-  else if (/\b(vp|vice president|svp|evp)\b/.test(t)) s += 10;
-  else if (/\bdirector\b/.test(t)) s += 5;
+function calcScore(p) {
+  var s = 30;
+  var conns = p.num_of_connections || 0;
+  if (conns > 5000) s += 20; else if (conns > 1000) s += 10; else if (conns > 500) s += 5;
+
+  var t = (p.current_title || p.headline || '').toLowerCase();
+  if (/\b(ceo|cfo|cto|coo|cmo|cio|ciso|chief|founder|co-founder|president)\b/.test(t)) s += 25;
+  else if (/\b(vp|vice president|svp|evp)\b/.test(t)) s += 20;
+  else if (/\bdirector\b/.test(t)) s += 12;
+  else if (/\bmanager\b/.test(t)) s += 6;
+
+  if ((p.employer_history || []).length > 3) s += 5;
+  if ((p.skills || []).length > 5) s += 5;
+
   return Math.min(99, s);
 }
 
-function buildFactors(p, comp) {
-  var factors = [], f = comp.crunchbase_total_investment_usd || 0;
-  factors.push({ label: 'Funding ($' + fmtM(f) + ')', val: f > 5e7 ? '+35' : '+15', pos: true });
-  if (comp.acquisition_status === 'Acquired') factors.push({ label: 'Acquired (liquidity event)', val: '+10', pos: true });
-  if (comp.hq_country === 'USA') factors.push({ label: 'US location', val: '+15', pos: true });
-  if ((p.num_of_connections || 0) > 5000) factors.push({ label: 'High LinkedIn visibility', val: '+12', pos: true });
-  var t = (p.title || '').toLowerCase();
-  if (/\b(ceo|cfo|cto|coo|cmo|cio|ciso|chief|founder|co-founder|president)\b/.test(t)) factors.push({ label: 'C-Suite / Founder', val: '+15', pos: true });
-  else if (/\b(vp|vice president|svp|evp)\b/.test(t)) factors.push({ label: 'VP-level seniority', val: '+10', pos: true });
-  else if (/\bdirector\b/.test(t)) factors.push({ label: 'Director-level seniority', val: '+5', pos: true });
-  return factors;
-}
+function buildFactors(p) {
+  var factors = [];
+  var conns = p.num_of_connections || 0;
+  if (conns > 5000) factors.push({ label: 'High visibility (' + conns.toLocaleString() + ' connections)', val: '+20', pos: true });
+  else if (conns > 1000) factors.push({ label: conns.toLocaleString() + ' connections', val: '+10', pos: true });
 
-function buildPitch(p, comp) {
-  var name = p.name || 'This prospect';
-  var company = comp.company_name || 'their company';
-  var funding = comp.crunchbase_total_investment_usd || 0;
-  if (comp.acquisition_status === 'Acquired') {
-    return name + "'s exit from " + company + " ($" + fmtM(funding) + " raised) is a significant liquidity event. Consider a specialist-led private viewing as an introduction.";
-  }
-  return name + " at " + company + " ($" + fmtM(funding) + " in funding) is a high-value prospect. Their " + ((comp.linkedin_industries || [])[0] || 'industry') + " background and seniority make them an ideal candidate for a specialist introduction.";
+  var t = (p.current_title || p.headline || '').toLowerCase();
+  if (/\b(ceo|cfo|cto|coo|cmo|cio|ciso|chief|founder|co-founder|president)\b/.test(t)) factors.push({ label: 'C-Suite / Founder', val: '+25', pos: true });
+  else if (/\b(vp|vice president|svp|evp)\b/.test(t)) factors.push({ label: 'VP-level', val: '+20', pos: true });
+  else if (/\bdirector\b/.test(t)) factors.push({ label: 'Director-level', val: '+12', pos: true });
+
+  if (p.current_company) factors.push({ label: 'Company: ' + p.current_company, val: '+0', pos: true });
+
+  return factors;
 }
 
 /* ===== RENDER ===== */
@@ -1038,9 +1036,7 @@ function filterAndRender() {
 }
 
 function renderPage() {
-  var start = currentPage * pageSize;
-  var end = Math.min(start + pageSize, filteredResults.length);
-  var pageData = filteredResults.slice(start, end);
+  var pageData = filteredResults;
   renderTable(pageData);
   updatePagination();
   updateSelectedCount();
@@ -1053,44 +1049,78 @@ function renderTable(data) {
     return;
   }
   if (!data.length) {
-    body.innerHTML = '<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">&#128269;</div><div class="empty-title">No matches</div><div class="empty-sub">Adjust your search or filters and try again.</div></div></td></tr>';
+    body.innerHTML = '<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">&#128269;</div><div class="empty-title">No matches</div><div class="empty-sub">Adjust your local search and try again.</div></div></td></tr>';
     return;
   }
 
-  var startIdx = currentPage * pageSize;
   body.innerHTML = data.map(function(r, i) {
-    var globalIdx = startIdx + i;
-    var checked = selectedSet[globalIdx] ? 'checked' : '';
+    var checked = selectedSet[i] ? 'checked' : '';
+    var emailCell = '';
+    if (r.email) {
+      emailCell = '<span class="email-text">' + esc(r.email) + '</span>';
+    } else {
+      emailCell = '<button class="email-btn" onclick="event.stopPropagation();enrichSingleEmail(' + i + ',this)">Get email</button>';
+    }
     return '<tr class="fade-in" style="animation-delay:' + (i * 15) + 'ms">' +
-      '<td class="check-col"><input type="checkbox" ' + checked + ' onchange="toggleSelect(' + globalIdx + ',this.checked)" onclick="event.stopPropagation()"></td>' +
-      '<td><span class="person-name" onclick="openDrawer(' + globalIdx + ')">' + esc(r.name) + '</span><div class="person-title">' + esc(r.title) + '</div></td>' +
+      '<td class="check-col"><input type="checkbox" ' + checked + ' onchange="toggleSelect(' + i + ',this.checked)" onclick="event.stopPropagation()"></td>' +
+      '<td><span class="person-name" onclick="openDrawer(' + i + ')">' + esc(r.name) + '</span><div class="person-title">' + esc(r.headline) + '</div></td>' +
       '<td>' + esc(r.title) + '</td>' +
-      '<td><div class="company-name">' + esc(r.company) + '</div><div class="company-industry">' + esc(r.industry) + '</div></td>' +
+      '<td><div class="company-name">' + esc(r.company) + '</div></td>' +
       '<td><span class="location-text">' + esc(r.location) + '</span></td>' +
-      '<td>' + (r.email ? '<span class="email-text">' + esc(r.email) + '</span>' : '<button class="email-btn" onclick="event.stopPropagation();showToast(\'Email not available\')">Access email</button>') + '</td>' +
+      '<td>' + emailCell + '</td>' +
       '</tr>';
   }).join('');
 }
 
+/* ===== SINGLE EMAIL ENRICHMENT ===== */
+async function enrichSingleEmail(idx, btnEl) {
+  var r = filteredResults[idx];
+  if (!r || !r.linkedin_url) { showToast('No LinkedIn URL for enrichment'); return; }
+  if (r.email) { showToast('Email already found'); return; }
+
+  var crustKey = CRUSTDATA_KEY_HARDCODED;
+  if (!crustKey) { showToast('Crustdata API key required'); return; }
+
+  btnEl.classList.add('loading-email');
+  btnEl.textContent = 'Loading...';
+
+  try {
+    var resp = await fetch('https://api.crustdata.com/screener/person/enrich?linkedin_profile_url=' + encodeURIComponent(r.linkedin_url) + '&fields=business_email', {
+      headers: { 'Authorization': 'Bearer ' + crustKey, 'Accept': 'application/json' }
+    });
+    if (resp.ok) {
+      var pd = await resp.json();
+      if (pd && pd.business_email && pd.business_email.length) {
+        r.email = pd.business_email[0];
+        filterAndRender();
+        showToast('Email found');
+      } else {
+        btnEl.textContent = 'Not found';
+        btnEl.classList.remove('loading-email');
+      }
+    } else {
+      btnEl.textContent = 'Error';
+      btnEl.classList.remove('loading-email');
+    }
+  } catch(e) {
+    btnEl.textContent = 'Error';
+    btnEl.classList.remove('loading-email');
+  }
+}
+
 function updateCounts() {
-  document.getElementById('count-total').textContent = allResults.length;
+  document.getElementById('count-total').textContent = apiTotalCount ? apiTotalCount.toLocaleString() : allResults.length;
   document.getElementById('count-netnew').textContent = allResults.length;
 }
 
 function updatePagination() {
-  var total = filteredResults.length;
-  var start = total ? currentPage * pageSize + 1 : 0;
-  var end = Math.min((currentPage + 1) * pageSize, total);
-  document.getElementById('page-info').textContent = total ? (start + ' - ' + end + ' of ' + total) : '0 results';
-  document.getElementById('page-prev').disabled = currentPage === 0;
-  document.getElementById('page-next').disabled = end >= total;
+  var total = apiTotalCount || 0;
+  var start = total ? (apiCurrentPage - 1) * 25 + 1 : 0;
+  var end = Math.min(apiCurrentPage * 25, total);
+  document.getElementById('page-info').textContent = total ? ('Page ' + apiCurrentPage + ' (' + start + '-' + end + ' of ' + total.toLocaleString() + ')') : '0 results';
+  document.getElementById('page-prev').disabled = apiCurrentPage <= 1;
+  document.getElementById('page-next').disabled = apiCurrentPage * 25 >= total;
   document.getElementById('select-all').checked = false;
-}
-
-function changePage(dir) {
-  var maxPage = Math.ceil(filteredResults.length / pageSize) - 1;
-  currentPage = Math.max(0, Math.min(maxPage, currentPage + dir));
-  renderPage();
 }
 
 function switchResultsTab(tab) {
@@ -1099,16 +1129,14 @@ function switchResultsTab(tab) {
 }
 
 /* ===== SELECTION ===== */
-function toggleSelect(globalIdx, checked) {
-  if (checked) selectedSet[globalIdx] = true;
-  else delete selectedSet[globalIdx];
+function toggleSelect(idx, checked) {
+  if (checked) selectedSet[idx] = true;
+  else delete selectedSet[idx];
   updateSelectedCount();
 }
 
 function toggleSelectAll(checked) {
-  var start = currentPage * pageSize;
-  var end = Math.min(start + pageSize, filteredResults.length);
-  for (var i = start; i < end; i++) {
+  for (var i = 0; i < filteredResults.length; i++) {
     if (checked) selectedSet[i] = true;
     else delete selectedSet[i];
   }
@@ -1126,9 +1154,9 @@ function exportCSV() {
   var data = indices.length ? indices.map(function(i) { return filteredResults[i]; }).filter(Boolean) : allResults;
   if (!data.length) { showToast('No data to export'); return; }
 
-  var rows = [['Name', 'Title', 'Company', 'Industry', 'Country', 'Location', 'Funding', 'Email', 'LinkedIn', 'Score']];
+  var rows = [['Name', 'Title', 'Company', 'Location', 'Email', 'LinkedIn', 'Headline', 'Connections']];
   data.forEach(function(r) {
-    rows.push([r.name, r.title, r.company, r.industry, r.hq_country, r.location, r.funding, r.email || '', r.linkedin_url || '', r.score]);
+    rows.push([r.name, r.title, r.company, r.location, r.email || '', r.linkedin_url || '', r.headline, r.connections]);
   });
   var csv = rows.map(function(r) { return r.map(function(v) { return '"' + String(v).replace(/"/g, '""') + '"'; }).join(','); }).join('\n');
   var blob = new Blob([csv], { type: 'text/csv' });
@@ -1154,7 +1182,6 @@ function sortData(data) {
     else if (c === 'title') { av = a.title; bv = b.title; }
     else if (c === 'company') { av = a.company; bv = b.company; }
     else if (c === 'location') { av = a.location; bv = b.location; }
-    else if (c === 'funding') { av = a.funding; bv = b.funding; }
     else { av = a.score; bv = b.score; }
     if (typeof av === 'string') return d === 'asc' ? av.localeCompare(bv) : bv.localeCompare(av);
     return d === 'asc' ? av - bv : bv - av;
@@ -1162,8 +1189,8 @@ function sortData(data) {
 }
 
 /* ===== DRAWER ===== */
-function openDrawer(globalIdx) {
-  var r = filteredResults[globalIdx];
+function openDrawer(idx) {
+  var r = filteredResults[idx];
   if (!r) return;
   document.getElementById('d-name').textContent = r.name;
   document.getElementById('d-role').textContent = r.title + ' @ ' + r.company;
@@ -1172,13 +1199,27 @@ function openDrawer(globalIdx) {
   document.getElementById('d-score-factors').innerHTML = (r.score_factors || []).map(function(f) {
     return '<div class="score-factor"><span class="score-factor-label">' + f.label + '</span><span class="sfv ' + (f.pos ? 'pos' : 'neg') + '">' + f.val + '</span></div>';
   }).join('');
-  document.getElementById('d-signals').innerHTML = (r.signals || []).map(function(s) {
-    return '<div class="signal-item"><span class="signal-type ' + s.type + '">' + s.type.toUpperCase() + '</span><span class="signal-text">' + s.text + '</span><span class="signal-date">' + s.date + '</span></div>';
-  }).join('') || '<p style="font-size:12px;color:var(--secondary)">No signals found.</p>';
-  document.getElementById('d-profile-kv').innerHTML = kvPairs([['Location', r.location], ['Connections', (r.connections || 0).toLocaleString()], ['LinkedIn', r.linkedin_url ? '<a href="' + r.linkedin_url + '" target="_blank">View profile</a>' : '--']]);
-  document.getElementById('d-company-kv').innerHTML = kvPairs([['Company', r.company], ['Industry', r.industry], ['HQ', r.hq_country], ['Funding', '$' + fmtFull(r.funding)], ['Status', r.acquired_by === 'Acquired' ? 'Acquired' : 'Active']]);
-  document.getElementById('d-contact-kv').innerHTML = kvPairs([['Email', r.email || '--'], ['Verified', r.email_verified ? '<span style="color:var(--success);font-weight:600">Yes</span>' : 'No']]);
-  document.getElementById('d-pitch').textContent = r.pitch || '--';
+
+  // Employer history as signals
+  var historyHtml = (r.employer_history || []).slice(0, 5).map(function(eh) {
+    var dates = (eh.start_date || '') + (eh.end_date ? ' - ' + eh.end_date : ' - Present');
+    return '<div class="signal-item"><span class="signal-type activity">ROLE</span><span class="signal-text">' + esc(eh.title || '') + ' at ' + esc(eh.company_name || '') + '</span><span class="signal-date">' + esc(dates) + '</span></div>';
+  }).join('');
+  document.getElementById('d-signals').innerHTML = historyHtml || '<p style="font-size:12px;color:var(--secondary)">No experience data.</p>';
+
+  document.getElementById('d-profile-kv').innerHTML = kvPairs([
+    ['Location', r.location],
+    ['Connections', (r.connections || 0).toLocaleString()],
+    ['LinkedIn', r.linkedin_url ? '<a href="' + r.linkedin_url + '" target="_blank">View profile</a>' : '--'],
+    ['Headline', r.headline]
+  ]);
+  document.getElementById('d-company-kv').innerHTML = kvPairs([
+    ['Company', r.company]
+  ]);
+  document.getElementById('d-contact-kv').innerHTML = kvPairs([
+    ['Email', r.email || 'Not enriched yet']
+  ]);
+  document.getElementById('d-pitch').textContent = r.summary || 'No summary available.';
   document.getElementById('drawer').classList.add('open');
   document.getElementById('drawer-overlay').classList.add('open');
 }
@@ -1212,16 +1253,6 @@ function esc(str) {
   d.textContent = str || '';
   return d.innerHTML;
 }
-
-function fmtM(n) {
-  if (!n) return '0';
-  if (n >= 1e9) return (n / 1e9).toFixed(1) + 'B';
-  if (n >= 1e6) return (n / 1e6).toFixed(0) + 'M';
-  if (n >= 1e3) return (n / 1e3).toFixed(0) + 'K';
-  return String(n);
-}
-
-function fmtFull(n) { return n ? n.toLocaleString('en-US') : '0'; }
 
 /* ===== START ===== */
 init();
