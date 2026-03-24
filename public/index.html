@@ -23,7 +23,7 @@ body{background:var(--bg);color:var(--on-surface);font-family:'Inter',sans-serif
 .topbar-hamburger.open span:nth-child(2){opacity:0;}
 .topbar-hamburger.open span:nth-child(3){transform:translateY(-5.5px) rotate(-45deg);}
 
-/* Hamburger dropdown — top-left panel */
+/* Hamburger dropdown */
 .hb-dropdown{display:none;position:fixed;top:56px;left:0;width:300px;background:var(--surface);border-right:1px solid var(--border);border-bottom:1px solid var(--border);z-index:200;flex-direction:column;box-shadow:6px 6px 24px rgba(0,0,0,.08);}
 .hb-dropdown.open{display:flex;}
 .hb-section{padding:14px 16px;display:flex;flex-direction:column;gap:8px;}
@@ -36,25 +36,18 @@ body{background:var(--bg);color:var(--on-surface);font-family:'Inter',sans-serif
 .topbar-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
 .credit-badge{background:var(--surface-alt);border:1px solid var(--border);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:500;}
 
-/* SIDEBAR — permanent left column */
+/* SIDEBAR */
 .sidebar{border-right:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column;height:100%;overflow:hidden;}
-
-/* Sidebar mode pills row */
 .sb-header{display:flex;align-items:center;padding:0 14px;border-bottom:1px solid var(--border);height:38px;flex-shrink:0;gap:6px;}
-
-/* Panes */
 .sb-pane{display:none;flex-direction:column;gap:13px;padding:16px 14px;overflow-y:auto;flex:1;}
 .sb-pane.active{display:flex;}
-.sb-pane-sales{display:none;flex-direction:column;gap:10px;padding:14px;overflow-y:auto;flex:1;}
-.sb-pane-sales.active{display:flex;}
-
 .sb-mode-pills{display:flex;gap:2px;}
 .sb-pill{font-size:10px;font-weight:600;color:var(--secondary);padding:3px 9px;border-radius:10px;cursor:pointer;transition:all .15s;border:none;background:none;letter-spacing:.01em;}
 .sb-pill:hover{color:var(--on-surface);}
 .sb-pill.active{background:var(--on-surface);color:white;}
 .section-label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--secondary);margin-bottom:5px;}
 
-/* AI SEARCH BOX — the hero new feature */
+/* AI SEARCH BOX */
 .ai-search-box{background:var(--bg);border:1.5px solid var(--border);border-radius:var(--rs);overflow:hidden;transition:border-color .15s,box-shadow .15s;}
 .ai-search-box:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-light);}
 .ai-search-header{display:flex;align-items:center;gap:7px;padding:8px 10px 6px;border-bottom:1px solid var(--border);}
@@ -70,6 +63,11 @@ body{background:var(--bg);color:var(--on-surface);font-family:'Inter',sans-serif
 .ai-gen-btn.spinning .mini-spin{display:block;}
 .ai-gen-btn.spinning .btn-label{opacity:.6;}
 
+/* Example chips */
+.example-chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;}
+.example-chip{font-size:9px;color:var(--accent);background:var(--accent-light);border:1px solid rgba(0,78,197,.15);border-radius:10px;padding:2px 8px;cursor:pointer;transition:all .15s;}
+.example-chip:hover{background:rgba(0,78,197,.15);}
+
 /* Generated filters panel */
 .filters-panel{display:none;flex-direction:column;gap:6px;}
 .filters-panel.visible{display:flex;}
@@ -81,48 +79,20 @@ body{background:var(--bg);color:var(--on-surface);font-family:'Inter',sans-serif
 .filter-chip{background:var(--surface-alt);border:1px solid var(--border);border-radius:var(--rx);padding:6px 9px;display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
 .filter-chip-left{display:flex;flex-direction:column;gap:2px;}
 .filter-chip-field{font-size:10px;color:var(--secondary);font-weight:600;letter-spacing:.04em;text-transform:uppercase;}
-.filter-chip-val{font-size:11px;font-weight:500;color:var(--on-surface);}
+.filter-chip-val{font-size:11px;font-weight:500;color:var(--on-surface);cursor:pointer;transition:background .1s;padding:1px 3px;border-radius:3px;}
+.filter-chip-val:hover{background:var(--accent-light);}
+.filter-chip-edit{background:var(--bg);border:1px solid var(--accent);border-radius:3px;padding:2px 5px;font-family:'Inter',sans-serif;font-size:11px;color:var(--on-surface);outline:none;width:100%;}
 .filter-chip-remove{background:none;border:none;cursor:pointer;color:var(--secondary);font-size:13px;line-height:1;padding:0;flex-shrink:0;transition:color .1s;}
 .filter-chip-remove:hover{color:var(--danger);}
+.filter-add-btn{background:none;border:1px dashed var(--border);border-radius:var(--rx);padding:6px 9px;font-size:10px;color:var(--secondary);cursor:pointer;width:100%;text-align:center;transition:all .15s;}
+.filter-add-btn:hover{border-color:var(--accent);color:var(--accent);}
 .reasoning-box{background:rgba(0,78,197,.04);border:1px solid rgba(0,78,197,.15);border-radius:var(--rx);padding:8px 10px;font-size:11px;line-height:1.5;color:var(--secondary);font-style:italic;}
 
-/* Auction strip — now vertical list in sales panel */
-.auction-strip-label{display:none;}
-.auction-strip{display:flex;flex-direction:column;gap:6px;}
-.auction-card{background:var(--surface-alt);border:1px solid var(--border);border-radius:var(--rs);padding:10px 12px;cursor:pointer;transition:all .15s;position:relative;overflow:hidden;border-left:3px solid transparent;}
-.auction-card:hover{background:var(--surface);border-color:var(--border-strong);}
-.auction-card.selected{background:var(--surface);border-left-color:var(--accent);border-color:var(--border-strong);box-shadow:var(--shadow-sm);}
-.auction-card.chr.selected{border-left-color:var(--danger);}
-.acard-house{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;}
-.acard-house.christies{color:var(--danger);}
-.acard-house.sothebys{color:var(--accent);}
-.acard-name{font-family:'Epilogue',sans-serif;font-weight:700;font-size:12px;letter-spacing:-.2px;line-height:1.2;margin-bottom:4px;}
-.acard-row{display:flex;align-items:center;justify-content:space-between;gap:8px;}
-.acard-date{font-size:10px;color:var(--secondary);}
-.acard-est{font-size:10px;font-weight:600;color:var(--success);}
-.acard-cats{display:flex;flex-wrap:wrap;gap:2px;margin-top:4px;}
-.acard-cat{font-size:8px;background:var(--tag-bg);border-radius:10px;padding:1px 5px;color:var(--secondary);}
-.acard-count{font-size:9px;font-weight:700;color:var(--accent);margin-top:4px;display:none;}
-.auction-card.selected .acard-count{display:block;}
-/* Auction house toggle */
-.house-toggle{display:grid;grid-template-columns:1fr 1fr;gap:5px;}
-.house-btn{border:1.5px solid var(--border);border-radius:var(--rx);padding:7px 5px;cursor:pointer;background:var(--surface);display:flex;flex-direction:column;align-items:center;gap:2px;transition:all .15s;}
-.house-btn.active.christies{border-color:var(--danger);background:rgba(177,0,0,.05);}
-.house-btn.active.sothebys{border-color:var(--accent);background:var(--accent-light);}
-.house-btn-name{font-family:'Epilogue',sans-serif;font-weight:900;font-size:11px;letter-spacing:-.2px;}
-.house-btn-name.christies{color:var(--danger);}
-.house-btn-name.sothebys{color:var(--accent);}
-.house-btn-sub{font-size:9px;color:var(--secondary);}
-
-/* Category grid */
-.category-grid{display:flex;flex-direction:column;gap:3px;}
-.cat-row{display:flex;align-items:center;justify-content:space-between;padding:6px 8px;border-radius:var(--rx);border:1px solid var(--border);cursor:pointer;background:var(--bg);transition:all .15s;}
-.cat-row:hover{border-color:var(--border-strong);background:var(--surface);}
-.cat-row.selected{border-color:var(--accent);background:var(--accent-light);}
-.cat-left{display:flex;align-items:center;gap:7px;}
-.cat-icon{display:none;}
-.cat-name{font-size:11px;font-weight:500;}
-.cat-date{font-size:9px;font-weight:600;color:var(--accent);}
+/* Seniority pills */
+.seniority-pills{display:flex;flex-wrap:wrap;gap:4px;}
+.seniority-pill{font-size:10px;font-weight:600;color:var(--secondary);padding:4px 10px;border-radius:12px;cursor:pointer;transition:all .15s;border:1px solid var(--border);background:var(--bg);letter-spacing:.01em;}
+.seniority-pill:hover{border-color:var(--border-strong);color:var(--on-surface);}
+.seniority-pill.active{background:var(--accent);color:white;border-color:var(--accent);}
 
 /* API keys */
 .key-group{display:flex;flex-direction:column;gap:4px;}
@@ -154,26 +124,6 @@ body{background:var(--bg);color:var(--on-surface);font-family:'Inter',sans-serif
 .thinking-bar.active{opacity:1;}
 .thinking-fill{height:100%;background:linear-gradient(90deg,transparent,var(--accent),transparent);width:40%;animation:shimmer 1.4s ease-in-out infinite;}
 @keyframes shimmer{0%{transform:translateX(-200%)}100%{transform:translateX(400%)}}
-
-/* Auction strip */
-.auction-strip-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;}
-.auction-strip-label{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--secondary);}
-.auction-strip{display:grid;gap:8px;}
-.auction-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);padding:10px 12px;cursor:pointer;transition:all .15s;position:relative;overflow:hidden;}
-.auction-card:hover{box-shadow:var(--shadow-sm);}
-.auction-card.selected{border-color:var(--accent);background:var(--accent-light);}
-.auction-card.chr.selected{border-color:var(--danger);background:rgba(177,0,0,.05);}
-.auction-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
-.auction-card.chr::before{background:var(--danger);}
-.auction-card.sot::before{background:var(--accent);}
-.acard-house{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;}
-.acard-house.christies{color:var(--danger);}
-.acard-house.sothebys{color:var(--accent);}
-.acard-name{font-family:'Epilogue',sans-serif;font-weight:700;font-size:11px;letter-spacing:-.2px;line-height:1.2;margin-bottom:3px;}
-.acard-date{font-size:9px;color:var(--secondary);}
-.acard-est{font-size:9px;font-weight:600;color:var(--success);}
-.acard-cats{display:flex;flex-wrap:wrap;gap:2px;margin-top:4px;}
-.acard-cat{font-size:8px;background:var(--tag-bg);border-radius:10px;padding:1px 5px;color:var(--secondary);}
 
 /* Stats */
 .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
@@ -216,13 +166,6 @@ td{padding:9px 12px;font-size:12px;vertical-align:middle;}
 .company-acq{font-size:9px;color:var(--success);font-weight:700;letter-spacing:.04em;margin-top:2px;}
 .money-tag{font-family:'Epilogue',sans-serif;font-weight:700;font-size:12px;letter-spacing:-.3px;}
 .money-tag.large{color:var(--accent);}
-.match-cell{display:flex;flex-direction:column;gap:3px;min-width:150px;}
-.match-auction{font-size:10px;font-weight:600;display:flex;align-items:center;gap:3px;}
-.hdot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
-.hdot.christies{background:var(--danger);}
-.hdot.sothebys{background:var(--accent);}
-.match-why{font-size:10px;color:var(--secondary);line-height:1.3;}
-.match-lot{font-size:10px;font-weight:600;font-style:italic;margin-top:1px;}
 .email-chip{display:inline-flex;align-items:center;gap:3px;background:var(--surface-alt);border:1px solid var(--border);border-radius:4px;padding:2px 6px;font-size:10px;cursor:pointer;}
 .email-chip:hover{background:var(--border);}
 .email-chip.verified::before{content:'';color:var(--success);font-size:9px;font-weight:700;}
@@ -270,21 +213,6 @@ td{padding:9px 12px;font-size:12px;vertical-align:middle;}
 .score-factor{display:flex;align-items:center;justify-content:space-between;font-size:11px;}
 .score-factor-label{color:var(--secondary);}
 .sfv{font-weight:600;}.sfv.pos{color:var(--success);}.sfv.neg{color:var(--danger);}
-.auction-match-card{background:var(--surface-alt);border:1px solid var(--border);border-radius:var(--rs);overflow:hidden;}
-.amatch-head{padding:8px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);}
-.amatch-house{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;}
-.amatch-house.christies{color:var(--danger);}.amatch-house.sothebys{color:var(--accent);}
-.amatch-sale{font-family:'Epilogue',sans-serif;font-weight:700;font-size:12px;letter-spacing:-.2px;}
-.amatch-body{padding:10px 12px;display:flex;flex-direction:column;gap:8px;}
-.amatch-meta{display:flex;gap:12px;flex-wrap:wrap;}
-.amatch-meta-item{display:flex;flex-direction:column;gap:1px;}
-.amatch-meta-label{font-size:9px;color:var(--secondary);font-weight:600;text-transform:uppercase;letter-spacing:.05em;}
-.amatch-meta-val{font-size:12px;font-weight:600;}
-.lot-rec{background:var(--surface);border:1px solid var(--border);border-radius:var(--rx);padding:9px 11px;display:flex;flex-direction:column;gap:3px;}
-.lot-rec-label{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);}
-.lot-rec-title{font-size:12px;font-weight:600;line-height:1.3;}
-.lot-rec-est{font-size:11px;color:var(--success);font-weight:600;}
-.lot-rec-why{font-size:11px;color:var(--secondary);line-height:1.4;margin-top:2px;}
 .signals-list{display:flex;flex-direction:column;gap:5px;}
 .signal-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--rx);padding:7px 9px;display:flex;flex-direction:column;gap:2px;}
 .signal-type{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;}
@@ -307,7 +235,6 @@ td{padding:9px 12px;font-size:12px;vertical-align:middle;}
 
 <!-- TOPBAR -->
 <header class="topbar">
-  <!-- Hamburger + Prospect — hamburger opens the dropdown panel -->
   <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
     <button class="topbar-hamburger" id="topbar-hamburger" onclick="toggleHbMenu()" title="Settings">
       <span></span><span></span><span></span>
@@ -315,13 +242,12 @@ td{padding:9px 12px;font-size:12px;vertical-align:middle;}
     <span class="topbar-title">Prospect</span>
   </div>
 
-
   <div class="topbar-right">
     <span id="credit-display" class="credit-badge" style="display:none"></span>
   </div>
 </header>
 
-<!-- Hamburger dropdown — top-left, under topbar -->
+<!-- Hamburger dropdown -->
 <div class="hb-dropdown" id="hb-dropdown">
   <div class="hb-section">
     <div class="hb-title">API Keys</div>
@@ -338,19 +264,16 @@ td{padding:9px 12px;font-size:12px;vertical-align:middle;}
       <div class="pipeline-step"><div class="step-num" id="hb-step-1">1</div><div class="step-text">Search companies<small>CompanyDB — filtered search</small></div></div>
       <div class="pipeline-step"><div class="step-num" id="hb-step-2">2</div><div class="step-text">Extract people<small>Company Enrichment — decision makers</small></div></div>
       <div class="pipeline-step"><div class="step-num" id="hb-step-3">3</div><div class="step-text">Enrich + contact<small>Person Enrichment — email</small></div></div>
-      <div class="pipeline-step"><div class="step-num" id="hb-step-4">4</div><div class="step-text">Match to auctions<small>LinkedIn signals + scoring</small></div></div>
     </div>
   </div>
 </div>
 
 <aside class="sidebar">
 
-  <!-- Sidebar header — no pills, just label -->
   <div class="sb-header">
     <span style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--secondary);">Search</span>
   </div>
 
-  <!-- PANE: SEARCH + MANUAL combined -->
   <div class="sb-pane active" id="sbpane-search">
 
     <!-- AI search box -->
@@ -368,6 +291,13 @@ td{padding:9px 12px;font-size:12px;vertical-align:middle;}
       </div>
     </div>
 
+    <!-- Example query chips -->
+    <div class="example-chips">
+      <span class="example-chip" onclick="document.getElementById('ai-query').value=this.textContent">Tech executives in NYC with $10M+ funding</span>
+      <span class="example-chip" onclick="document.getElementById('ai-query').value=this.textContent">Series B+ SaaS founders in USA</span>
+      <span class="example-chip" onclick="document.getElementById('ai-query').value=this.textContent">European luxury brand leaders</span>
+    </div>
+
     <!-- Generated filter chips -->
     <div class="filters-panel" id="filters-panel">
       <div class="filters-panel-head">
@@ -380,27 +310,38 @@ td{padding:9px 12px;font-size:12px;vertical-align:middle;}
 
     <div class="divider"></div>
 
-    <!-- Auction to Match -->
+    <!-- Search Settings -->
     <div>
-      <p class="section-label">Auction to Match</p>
+      <p class="section-label">Search Settings</p>
       <div class="key-group">
-        <label class="key-label">Paste auction URL (Sotheby's or Christie's)</label>
-        <input class="key-input" type="url" id="auction-url" placeholder="https://www.sothebys.com/en/buy/auction/...">
+        <label class="key-label">People per company</label>
+        <select class="key-input" id="people-per-company">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3" selected>3</option>
+          <option value="5">5</option>
+          <option value="99">Max</option>
+        </select>
       </div>
-      <button class="ai-gen-btn" style="margin-top:6px;width:100%;justify-content:center;" id="analyze-auction-btn" onclick="analyzeAuction()">
-        <div class="mini-spin"></div>
-        <span class="btn-label">Analyze Auction</span>
-      </button>
-      <div id="auction-info" style="display:none;margin-top:8px;background:var(--surface-alt);border:1px solid var(--border);border-radius:var(--rx);padding:8px 10px;">
-        <div style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--secondary);margin-bottom:3px;" id="auction-info-house"></div>
-        <div style="font-family:'Epilogue',sans-serif;font-weight:700;font-size:12px;letter-spacing:-.2px;" id="auction-info-name"></div>
-        <div style="font-size:10px;color:var(--secondary);margin-top:3px;" id="auction-info-cats"></div>
+      <div class="key-group" style="margin-top:6px">
+        <label class="key-label">Seniority level</label>
+        <div class="seniority-pills" id="seniority-pills">
+          <button class="seniority-pill" data-level="csuite" onclick="toggleSeniority(this)">C-Suite</button>
+          <button class="seniority-pill" data-level="vp" onclick="toggleSeniority(this)">VP</button>
+          <button class="seniority-pill" data-level="director" onclick="toggleSeniority(this)">Director</button>
+          <button class="seniority-pill" data-level="manager" onclick="toggleSeniority(this)">Manager</button>
+          <button class="seniority-pill active" data-level="all" onclick="toggleSeniority(this)">All</button>
+        </div>
+      </div>
+      <div class="key-group" style="margin-top:6px">
+        <label class="key-label">Target roles</label>
+        <input class="key-input" type="text" id="target-roles" placeholder="e.g. CEO, CTO, Head of Sales">
       </div>
     </div>
 
     <div class="divider"></div>
 
-    <!-- Manual filters — always visible below AI search -->
+    <!-- Manual filters -->
     <div>
       <p class="section-label">Manual Filters</p>
 
@@ -485,7 +426,7 @@ td{padding:9px 12px;font-size:12px;vertical-align:middle;}
   <!-- Stats -->
   <div class="stats-row">
     <div class="stat-card"><span class="stat-label">Prospects found</span><div class="stat-value" id="stat-founders">—</div><span class="stat-sub">from matching companies</span></div>
-    <div class="stat-card"><span class="stat-label">Auction matches</span><div class="stat-value" id="stat-matches">—</div><span class="stat-sub" id="sel-label">analyze an auction</span></div>
+    <div class="stat-card"><span class="stat-label">Companies</span><div class="stat-value" id="stat-companies">—</div><span class="stat-sub">unique companies</span></div>
     <div class="stat-card"><span class="stat-label">Avg. funding</span><div class="stat-value" id="stat-exit">—</div><span class="stat-sub">total investment</span></div>
     <div class="stat-card"><span class="stat-label">High-fit (≥75)</span><div class="stat-value" id="stat-highfit">—</div><span class="stat-sub">top prospects</span></div>
   </div>
@@ -505,7 +446,7 @@ td{padding:9px 12px;font-size:12px;vertical-align:middle;}
       <div class="results-header">
         <div>
           <div class="results-title" id="results-title">Prospects</div>
-          <div class="results-subtitle" id="results-subtitle">Run the pipeline to surface high-value prospects matched to upcoming sales</div>
+          <div class="results-subtitle" id="results-subtitle">Run the pipeline to surface high-value prospects</div>
         </div>
         <div class="results-actions">
           <button class="action-btn" onclick="copyCSV()">Copy CSV</button>
@@ -519,12 +460,11 @@ td{padding:9px 12px;font-size:12px;vertical-align:middle;}
             <th onclick="sortTable('company')">Company</th>
             <th onclick="sortTable('funding')">Funding</th>
             <th>Contact</th>
-            <th>Auction Match + Why</th>
             <th onclick="sortTable('score')">Score</th>
             <th></th>
           </tr></thead>
           <tbody id="results-body">
-            <tr><td colspan="7"><div class="empty-state">
+            <tr><td colspan="6"><div class="empty-state">
               <div class="empty-icon"></div>
               <div class="empty-title">Start with a description</div>
               <div class="empty-sub">Type what you're looking for above — Claude will generate the exact filters. Or click an example.</div>
@@ -567,10 +507,9 @@ td{padding:9px 12px;font-size:12px;vertical-align:middle;}
       <div class="score-track"><div class="score-fill" id="d-score-fill" style="width:0%"></div></div>
       <div class="score-factors" id="d-score-factors"></div>
     </div>
-    <div class="d-section"><div class="d-section-title">Auction Match</div><div id="d-auction-match"></div></div>
     <div class="d-section"><div class="d-section-title">Signals</div><div class="signals-list" id="d-signals"></div></div>
     <div class="d-section"><div class="d-section-title">Profile</div><div class="d-kv" id="d-profile-kv"></div></div>
-    <div class="d-section"><div class="d-section-title">Company & Exit</div><div class="d-kv" id="d-company-kv"></div></div>
+    <div class="d-section"><div class="d-section-title">Company</div><div class="d-kv" id="d-company-kv"></div></div>
     <div class="d-section"><div class="d-section-title">Contact</div><div class="d-kv" id="d-contact-kv"></div></div>
     <div class="d-section"><div class="d-section-title">Pitch Approach</div><div class="pitch-box" id="d-pitch">—</div></div>
   </div>
@@ -590,18 +529,16 @@ var CRUSTDATA_KEY_HARDCODED = typeof __CRUSTDATA_KEY__ !== 'undefined' ? __CRUST
 /* ═══════════════════════════════════════════
    STATE
 ═══════════════════════════════════════════ */
-var auctionContext = null;
 var allResults=[];
 var filteredResults=[];
 var curSort={col:'score',dir:'desc'};
-var generatedFilters=[];  // [{field, operator, value, label}]
+var generatedFilters=[];
 
 /* ═══════════════════════════════════════════
    INIT
 ═══════════════════════════════════════════ */
 function init(){
   updateCode();
-  // Fetch credits on load if key exists
   if(CRUSTDATA_KEY_HARDCODED){
     fetch('https://api.crustdata.com/user/credits',{headers:{'Authorization':'Token '+CRUSTDATA_KEY_HARDCODED}})
     .then(function(r){return r.json();})
@@ -610,60 +547,6 @@ function init(){
       el.textContent=(d.credits||0).toLocaleString()+' credits';
       el.style.display='';
     }).catch(function(){});
-  }
-}
-
-/* ═══════════════════════════════════════════
-   ANALYZE AUCTION
-═══════════════════════════════════════════ */
-async function analyzeAuction(){
-  var url=document.getElementById('auction-url').value.trim();
-  if(!url){ showToast('Paste an auction URL first'); return; }
-  var claudeKey=CLAUDE_KEY_HARDCODED;
-  if(!claudeKey){ showToast('Claude API key required'); return; }
-
-  var btn=document.getElementById('analyze-auction-btn');
-  btn.classList.add('spinning');
-  btn.disabled=true;
-
-  try {
-    // Send URL to Claude to analyze (Claude can understand the URL context)
-    var response=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'x-api-key': claudeKey,
-        'anthropic-version':'2023-06-01',
-        'anthropic-dangerous-direct-browser-access':'true'
-      },
-      body:JSON.stringify({
-        model:'claude-sonnet-4-6',
-        max_tokens:1000,
-        system:'You analyze auction house sale URLs. Given a URL from Sotheby\'s or Christie\'s, extract information about the sale. Respond ONLY with valid JSON, no markdown:\n{"name":"Sale name","house":"sothebys or christies","categories":["category1","category2"],"keywords":["keyword1","keyword2","keyword3",...at least 15 keywords relevant to this sale for matching prospects],"description":"Brief 1-sentence description"}',
-        messages:[{role:'user',content:'Analyze this auction URL and extract sale information, categories, and matching keywords:\n\n'+url}]
-      })
-    });
-
-    if(!response.ok) throw new Error('Claude API error '+response.status);
-    var data=await response.json();
-    var text=data.content[0].text.trim().replace(/^```json\s*/,'').replace(/\s*```$/,'').trim();
-    var parsed=JSON.parse(text);
-    parsed.url=url;
-    auctionContext=parsed;
-
-    // Display auction info
-    var info=document.getElementById('auction-info');
-    info.style.display='block';
-    document.getElementById('auction-info-house').textContent=(parsed.house==='christies'?"Christie's":"Sotheby's")+' — Upcoming Sale';
-    document.getElementById('auction-info-name').textContent=parsed.name;
-    document.getElementById('auction-info-cats').textContent=parsed.categories.join(' · ');
-
-    showToast('Auction analyzed — keywords extracted for matching');
-  } catch(e){
-    showToast('Error analyzing auction: '+e.message);
-  } finally {
-    btn.classList.remove('spinning');
-    btn.disabled=false;
   }
 }
 
@@ -709,9 +592,6 @@ async function claudeFilterGen(query, apiKey){
   var systemPrompt='You are a B2B data expert converting natural language prospect descriptions into Crustdata API filter objects.\n\nCrustdata CompanyDB filter fields (use EXACTLY these names):\n- acquisition_status: "Acquired" or other values (only include if user specifically wants acquired companies)\n- crunchbase_total_investment_usd: numeric, use operators => (gte) or =< (lte)\n- hq_country: ISO 3-alpha codes (USA, GBR, FRA, DEU, ITA, CHN, etc.)\n- linkedin_industries: string, use fuzzy operator (.)\n- employee_metrics.latest_count: numeric headcount\n- last_funding_round_type: "series_a", "series_b", "series_c", "seed", etc.\n- year_founded: numeric\n- largest_headcount_country: ISO 3-alpha\n\nOperators: = (exact), => (gte), =< (lte), (.) (fuzzy text), in (list), !=\n\nIMPORTANT: Generate filters that find the RIGHT people for the description. Do NOT always restrict to acquired companies — only add acquisition_status filter if the user specifically mentions exits, acquisitions, or post-exit wealth. For general prospect searches, focus on industry, location, funding, and company size filters.\n\nAlso return:\n- linkedin_post_keywords: keywords to search in LinkedIn posts for interest signals\n- prospect_reasoning: 2-3 sentences explaining the prospect logic\n\nRespond ONLY with valid JSON, no markdown:\n{\n  "filters": [{"filter_type":"...","type":"...","value":"...","label":"Human readable description"}],\n  "linkedin_post_keywords": ["wine","cellar","bordeaux"],\n  "reasoning": "..."\n}';
 
   var userContent='Convert this prospect description to Crustdata filters:\n\n'+query;
-  if(auctionContext){
-    userContent+='\n\nContext: The user is matching prospects for this auction: '+auctionContext.name+' ('+auctionContext.house+'), categories: '+auctionContext.categories.join(', ')+', keywords: '+auctionContext.keywords.join(', ');
-  }
 
   var response=await fetch('https://api.anthropic.com/v1/messages',{
     method:'POST',
@@ -736,7 +616,6 @@ async function claudeFilterGen(query, apiKey){
 
   var data=await response.json();
   var text=data.content[0].text.trim();
-  // Strip any accidental markdown fences
   text=text.replace(/^```json\s*/,'').replace(/\s*```$/,'').trim();
   var parsed=JSON.parse(text);
 
@@ -750,31 +629,145 @@ function renderFilterChips(filters, reasoning){
   var panel=document.getElementById('filters-panel');
   var chipList=document.getElementById('filter-chip-list');
   var reasonBox=document.getElementById('reasoning-box');
-
   panel.classList.add('visible');
-
   if(reasoning){
     reasonBox.style.display='block';
     reasonBox.textContent=reasoning;
   }
-
   chipList.innerHTML=filters.map(function(f,i){
     var valDisplay=Array.isArray(f.value)?f.value.join(', '):String(f.value);
     return '<div class="filter-chip" id="fc-'+i+'">'+
       '<div class="filter-chip-left">'+
       '<span class="filter-chip-field">'+f.filter_type+'</span>'+
-      '<span class="filter-chip-val">'+(f.label||f.type+' '+valDisplay)+'</span>'+
+      '<span class="filter-chip-val" onclick="startEditChip('+i+')" title="Click to edit">'+(f.label||f.type+' '+valDisplay)+'</span>'+
+      '<input class="filter-chip-edit" style="display:none" value="'+valDisplay.replace(/"/g,'&quot;')+'" onblur="saveEditChip('+i+',this)" onkeydown="handleChipKey(event,'+i+',this)">'+
       '</div>'+
-      '<button class="filter-chip-remove" onclick="removeFilter('+i+')"></button>'+
+      '<button class="filter-chip-remove" onclick="removeFilter('+i+')">×</button>'+
       '</div>';
   }).join('');
-
+  // Add "add filter" button
+  chipList.innerHTML+='<button class="filter-add-btn" onclick="showAddFilter()">+ Add filter</button>';
+  // Add filter form (hidden by default)
+  if(!document.getElementById('add-filter-form')){
+    chipList.innerHTML+='<div id="add-filter-form" style="display:none;flex-direction:column;gap:4px;" class="filter-chip">'+
+      '<select class="key-input" id="new-filter-field" style="font-size:10px;padding:4px 6px;">'+
+      '<option value="hq_country">HQ Country</option>'+
+      '<option value="linkedin_industries">Industry</option>'+
+      '<option value="crunchbase_total_investment_usd">Funding</option>'+
+      '<option value="employee_metrics.latest_count">Employee Count</option>'+
+      '<option value="year_founded">Year Founded</option>'+
+      '</select>'+
+      '<div style="display:flex;gap:4px;">'+
+      '<select class="key-input" id="new-filter-op" style="font-size:10px;padding:4px 6px;width:60px;">'+
+      '<option value="=">=</option><option value="=>">≥</option><option value="=<">≤</option><option value="(.)">contains</option>'+
+      '</select>'+
+      '<input class="key-input" id="new-filter-value" placeholder="Value" style="font-size:10px;padding:4px 6px;">'+
+      '</div>'+
+      '<div style="display:flex;gap:4px;">'+
+      '<button class="ai-gen-btn" style="font-size:10px;padding:3px 8px;" onclick="addNewFilter()">Add</button>'+
+      '<button class="filter-chip-remove" style="font-size:10px;" onclick="hideAddFilter()">Cancel</button>'+
+      '</div>'+
+      '</div>';
+  }
   updateCode();
+}
+
+function startEditChip(i){
+  var chip=document.getElementById('fc-'+i);
+  if(!chip) return;
+  chip.querySelector('.filter-chip-val').style.display='none';
+  var input=chip.querySelector('.filter-chip-edit');
+  input.style.display='block';
+  input.focus();
+  input.select();
+}
+
+function saveEditChip(i,input){
+  var val=input.value.trim();
+  if(val && generatedFilters[i]){
+    var numVal=Number(val);
+    generatedFilters[i].value=isNaN(numVal)?val:numVal;
+    generatedFilters[i].label=generatedFilters[i].filter_type+' '+generatedFilters[i].type+' '+val;
+  }
+  renderFilterChips(generatedFilters,'');
+}
+
+function handleChipKey(e,i,input){
+  if(e.key==='Enter'){e.preventDefault();saveEditChip(i,input);}
+  if(e.key==='Escape'){e.preventDefault();renderFilterChips(generatedFilters,'');}
+}
+
+function showAddFilter(){
+  document.getElementById('add-filter-form').style.display='flex';
+}
+
+function hideAddFilter(){
+  document.getElementById('add-filter-form').style.display='none';
+}
+
+function addNewFilter(){
+  var field=document.getElementById('new-filter-field').value;
+  var op=document.getElementById('new-filter-op').value;
+  var val=document.getElementById('new-filter-value').value.trim();
+  if(!val){showToast('Enter a value');return;}
+  var numVal=Number(val);
+  generatedFilters.push({
+    filter_type:field,
+    type:op,
+    value:isNaN(numVal)?val:numVal,
+    label:field+' '+op+' '+val
+  });
+  renderFilterChips(generatedFilters,'');
+  hideAddFilter();
 }
 
 function removeFilter(i){
   generatedFilters.splice(i,1);
   renderFilterChips(generatedFilters,'');
+}
+
+/* ═══════════════════════════════════════════
+   SENIORITY & TARGET ROLES
+═══════════════════════════════════════════ */
+function toggleSeniority(btn){
+  var level=btn.getAttribute('data-level');
+  if(level==='all'){
+    document.querySelectorAll('.seniority-pill').forEach(function(p){p.classList.remove('active');});
+    btn.classList.add('active');
+  } else {
+    document.querySelector('.seniority-pill[data-level="all"]').classList.remove('active');
+    btn.classList.toggle('active');
+    var anyActive=document.querySelectorAll('.seniority-pill.active').length;
+    if(!anyActive) document.querySelector('.seniority-pill[data-level="all"]').classList.add('active');
+  }
+}
+
+function getActiveSeniorities(){
+  var active=[];
+  document.querySelectorAll('.seniority-pill.active').forEach(function(p){
+    active.push(p.getAttribute('data-level'));
+  });
+  return active;
+}
+
+function matchesSeniority(title){
+  var levels=getActiveSeniorities();
+  if(levels.indexOf('all')!==-1) return true;
+  var t=(title||'').toLowerCase();
+  for(var i=0;i<levels.length;i++){
+    if(levels[i]==='csuite' && /\b(ceo|cfo|cto|coo|cmo|cio|ciso|chief|founder|co-founder|president)\b/.test(t)) return true;
+    if(levels[i]==='vp' && /\b(vp|vice president|svp|evp)\b/.test(t)) return true;
+    if(levels[i]==='director' && /\bdirector\b/.test(t)) return true;
+    if(levels[i]==='manager' && /\bmanager\b/.test(t)) return true;
+  }
+  return false;
+}
+
+function matchesTargetRoles(title){
+  var roles=document.getElementById('target-roles').value.trim();
+  if(!roles) return true;
+  var t=(title||'').toLowerCase();
+  return roles.split(',').some(function(r){return t.indexOf(r.trim().toLowerCase())!==-1;});
 }
 
 /* ═══════════════════════════════════════════
@@ -807,6 +800,8 @@ async function runPipeline(){
 async function liveRun(crustKey){
   var B='https://api.crustdata.com';
   var H={'Authorization':'Token '+crustKey,'Content-Type':'application/json','Accept':'application/json'};
+
+  var maxPerCompany=parseInt(document.getElementById('people-per-company').value)||3;
 
   // Build conditions from AI-generated filters
   setStep(0,'done');
@@ -844,14 +839,12 @@ async function liveRun(crustKey){
   var fUrls=[],fMeta={};
   enriched.forEach(function(co){
     var comp=companies.find(function(c){return c.company_website_domain===co.company_website_domain;});
-    // Collect people from founders and decision_makers
     var people=[];
     if(co.founders&&co.founders.profiles) people=people.concat(co.founders.profiles);
     if(co.decision_makers&&co.decision_makers.profiles) people=people.concat(co.decision_makers.profiles);
-    // Deduplicate by LinkedIn URL and take up to 5 per company
     var seen={};
     people.forEach(function(f){
-      if(f.linkedin_profile_url && !seen[f.linkedin_profile_url] && Object.keys(seen).length<5){
+      if(f.linkedin_profile_url && !seen[f.linkedin_profile_url] && Object.keys(seen).length<maxPerCompany){
         seen[f.linkedin_profile_url]=true;
         fUrls.push(f.linkedin_profile_url);
         fMeta[f.linkedin_profile_url]={co:co,comp:comp};
@@ -872,7 +865,9 @@ async function liveRun(crustKey){
         if(!p||p.error) return;
         var meta=fMeta[batch[pi]]||{};
         var comp=meta.comp||{};
-        var auctionMatches=matchAuction(p,comp);
+        // Filter by seniority and target roles
+        if(!matchesSeniority(p.title)) return;
+        if(!matchesTargetRoles(p.title)) return;
         results.push({
           name:p.name||'—',title:p.title||'—',
           company:comp.company_name||'—',
@@ -888,16 +883,12 @@ async function liveRun(crustKey){
           score:calcScore(p,comp),
           score_factors:buildFactors(p,comp),
           pitch:buildPitch(p,comp),
-          signals:[{type:'activity',text:(comp.company_name||'Company')+(comp.acquisition_status==='Acquired'?' — acquired (liquidity event)':' — '+((comp.linkedin_industries||[])[0]||'company')),date:'Signal'}],
-          auction_match:auctionMatches,
-          primary_auction:auctionContext?auctionContext.name:null,
-          match_why:(comp.linkedin_industries||[])[0]||'' + ' background matched to upcoming sale categories'
+          signals:[{type:'activity',text:(comp.company_name||'Company')+(comp.acquisition_status==='Acquired'?' — acquired (liquidity event)':' — '+((comp.linkedin_industries||[])[0]||'company')),date:'Signal'}]
         });
       });
     }
   }
   setStep(3,'done');
-  setStep(4,'active'); await sleep(250); setStep(4,'done');
   setStatus('done','Found '+results.length+' prospects.');
   allResults=results;
   filterAndRender();
@@ -911,33 +902,18 @@ async function liveRun(crustKey){
 }
 
 /* ═══════════════════════════════════════════
-   MATCHING & SCORING
+   SCORING
 ═══════════════════════════════════════════ */
-function matchAuction(p,comp){
-  if(!auctionContext||!auctionContext.keywords) return false;
-  var txt=[p.title||'',p.headline||'',(comp.linkedin_industries||[]).join(' '),comp.company_name||''].join(' ').toLowerCase();
-  var matchCount=0;
-  auctionContext.keywords.forEach(function(k){
-    if(txt.includes(k.toLowerCase())) matchCount++;
-  });
-  return matchCount>0;
-}
-
 function calcScore(p,comp){
   var s=30,f=comp.crunchbase_total_investment_usd||0;
   if(f>1e8) s+=35; else if(f>5e7) s+=25; else if(f>2e7) s+=18; else s+=10;
   if(comp.hq_country==='USA') s+=15; else if(['GBR','FRA','DEU'].includes(comp.hq_country)) s+=12; else s+=6;
   if((p.num_of_connections||0)>5000) s+=12; else if((p.num_of_connections||0)>1000) s+=6;
-  // Auction keyword match bonus
-  if(auctionContext&&auctionContext.keywords){
-    var txt=[p.title||'',p.headline||'',(comp.linkedin_industries||[]).join(' '),comp.company_name||''].join(' ').toLowerCase();
-    var matchCount=0;
-    auctionContext.keywords.forEach(function(k){
-      if(txt.includes(k.toLowerCase())) matchCount++;
-    });
-    if(matchCount>=3) s+=15;
-    else if(matchCount>=1) s+=8;
-  }
+  // Seniority bonus
+  var t=(p.title||'').toLowerCase();
+  if(/\b(ceo|cfo|cto|coo|cmo|cio|ciso|chief|founder|co-founder|president)\b/.test(t)) s+=15;
+  else if(/\b(vp|vice president|svp|evp)\b/.test(t)) s+=10;
+  else if(/\bdirector\b/.test(t)) s+=5;
   return Math.min(99,s);
 }
 
@@ -947,14 +923,11 @@ function buildFactors(p,comp){
   if(comp.acquisition_status==='Acquired') factors.push({label:'Acquired (liquidity event)',val:'+10',pos:true});
   if(comp.hq_country==='USA') factors.push({label:'US location',val:'+15',pos:true});
   if((p.num_of_connections||0)>5000) factors.push({label:'High LinkedIn visibility',val:'+12',pos:true});
-  if(auctionContext){
-    var txt=[p.title||'',p.headline||'',(comp.linkedin_industries||[]).join(' '),comp.company_name||''].join(' ').toLowerCase();
-    var matchCount=0;
-    auctionContext.keywords.forEach(function(k){
-      if(txt.includes(k.toLowerCase())) matchCount++;
-    });
-    if(matchCount>0) factors.push({label:'Auction keyword matches ('+matchCount+')',val:'+'+Math.min(15,matchCount*5),pos:true});
-  }
+  // Seniority factor
+  var t=(p.title||'').toLowerCase();
+  if(/\b(ceo|cfo|cto|coo|cmo|cio|ciso|chief|founder|co-founder|president)\b/.test(t)) factors.push({label:'C-Suite / Founder',val:'+15',pos:true});
+  else if(/\b(vp|vice president|svp|evp)\b/.test(t)) factors.push({label:'VP-level seniority',val:'+10',pos:true});
+  else if(/\bdirector\b/.test(t)) factors.push({label:'Director-level seniority',val:'+5',pos:true});
   return factors;
 }
 
@@ -985,17 +958,15 @@ function filterAndRender(){
 function renderTable(data){
   var body=document.getElementById('results-body');
   if(!data.length){
-    body.innerHTML='<tr><td colspan="7"><div class="empty-state"><div class="empty-icon"></div><div class="empty-title">No matches</div><div class="empty-sub">Adjust filters or analyze an auction to match.</div></div></td></tr>';
+    body.innerHTML='<tr><td colspan="6"><div class="empty-state"><div class="empty-icon"></div><div class="empty-title">No matches</div><div class="empty-sub">Adjust filters and try again.</div></div></td></tr>';
     return;
   }
   body.innerHTML=data.map(function(r,i){
-    var hasAuction=auctionContext&&r.auction_match;
     return '<tr onclick="openDrawer('+i+')" class="fade-in" style="animation-delay:'+(i*20)+'ms">'+
       '<td><div class="founder-name">'+r.name+'</div><div class="founder-title">'+r.title+'</div></td>'+
       '<td><div class="company-name">'+r.company+'</div><div class="company-acq">'+(r.acquired_by==='Acquired'?' Acquired':(r.industry||''))+'</div></td>'+
       '<td><span class="money-tag '+(r.funding>5e7?'large':'')+'">$'+fmtM(r.funding)+'</span></td>'+
       '<td>'+(r.email?'<div class="email-chip '+(r.email_verified?'verified':'')+'" title="'+r.email+'">'+r.email+'</div>':'<span style="color:var(--secondary);font-size:10px">—</span>')+(r.linkedin_url?'<br><a class="li-link" href="'+r.linkedin_url+'" target="_blank" onclick="event.stopPropagation()">↗ LinkedIn</a>':'')+'</td>'+
-      '<td><div class="match-cell">'+(hasAuction?'<div class="match-auction"><span class="hdot '+(auctionContext.house||'')+'"></span><span>'+auctionContext.name+'</span></div><div class="match-why">'+(r.match_why||'').substring(0,70)+'…</div>':'<span style="color:var(--secondary);font-size:10px">Analyze an auction to match</span>')+'</div></td>'+
       '<td><div class="score-cell"><div class="score-dots">'+[1,2,3,4,5].map(function(n){return '<div class="score-dot '+(r.score>=n*20?'filled':'')+'"></div>';}).join('')+'</div><span class="score-num">'+r.score+'</span></div></td>'+
       '<td style="color:var(--secondary);font-size:14px;text-align:center">›</td></tr>';
   }).join('');
@@ -1003,21 +974,16 @@ function renderTable(data){
 
 function updateStats(data){
   document.getElementById('stat-founders').textContent=allResults.length||'—';
-  var auctionMatchCount=auctionContext?data.filter(function(r){return r.auction_match;}).length:0;
-  document.getElementById('stat-matches').textContent=auctionMatchCount||'—';
-  var selLabel=document.getElementById('sel-label');
-  if(selLabel) selLabel.textContent=auctionContext?auctionContext.name:'analyze an auction';
+  // Unique company count
+  var companySet={};
+  allResults.forEach(function(r){companySet[r.company]=true;});
+  document.getElementById('stat-companies').textContent=Object.keys(companySet).length||'—';
   var avg=allResults.length?allResults.reduce(function(s,r){return s+(r.funding||0);},0)/allResults.length:0;
   document.getElementById('stat-exit').textContent=avg?'$'+fmtM(avg):'—';
   document.getElementById('stat-highfit').textContent=data.filter(function(r){return r.score>=75;}).length||'—';
   var t=document.getElementById('results-title'),s=document.getElementById('results-subtitle');
-  if(auctionContext){
-    t.textContent='Matched to: '+auctionContext.name;
-    s.textContent=data.length+' prospect'+(data.length!==1?'s':'')+' matched via LinkedIn signals and industry fit';
-  } else {
-    t.textContent='Prospects';
-    s.textContent=allResults.length+' prospects across all categories';
-  }
+  t.textContent='Prospects';
+  s.textContent=allResults.length+' prospects across all categories';
 }
 
 /* ═══════════════════════════════════════════
@@ -1032,14 +998,6 @@ function openDrawer(i){
   document.getElementById('d-score-factors').innerHTML=(r.score_factors||[]).map(function(f){
     return '<div class="score-factor"><span class="score-factor-label">'+f.label+'</span><span class="sfv '+(f.pos?'pos':'neg')+'">'+f.val+'</span></div>';
   }).join('');
-  document.getElementById('d-auction-match').innerHTML=auctionContext&&r.auction_match?
-    '<div class="auction-match-card"><div class="amatch-head"><span class="amatch-house '+(auctionContext.house||'')+'">'+(auctionContext.house==='christies'?"Christie's":"Sotheby's")+'</span><span class="amatch-sale">'+auctionContext.name+'</span></div>'+
-    '<div class="amatch-body"><div class="amatch-meta">'+
-    '<div class="amatch-meta-item"><span class="amatch-meta-label">Categories</span><span class="amatch-meta-val">'+auctionContext.categories.join(', ')+'</span></div></div>'+
-    '<p style="font-size:11px;color:var(--secondary);line-height:1.5">'+r.match_why+'</p>'+
-    (auctionContext.description?'<p style="font-size:10px;color:var(--secondary);margin-top:3px;font-style:italic">'+auctionContext.description+'</p>':'')+
-    '</div></div>':
-    '<p style="font-size:12px;color:var(--secondary)">Analyze an auction to see matching info.</p>';
   document.getElementById('d-signals').innerHTML=(r.signals||[]).map(function(s){
     return '<div class="signal-item"><span class="signal-type '+s.type+'">'+s.type.toUpperCase()+'</span><span class="signal-text">'+s.text+'</span><span class="signal-date">'+s.date+'</span></div>';
   }).join('')||'<p style="font-size:11px;color:var(--secondary)">No signals found.</p>';
@@ -1066,9 +1024,8 @@ function updateCode(){
   var conditions=generatedFilters.length?
     generatedFilters.map(function(f){return JSON.stringify({filter_type:f.filter_type,type:f.type,value:f.value});}).join(',\n    '):
     '{"filter_type": "crunchbase_total_investment_usd", "type": "=>", "value": 5000000}';
-  var auctionName=auctionContext?auctionContext.name:'None';
   document.getElementById('code-content').innerHTML=
-    '<span class="comment"># Prospect Pipeline\n# Query: "'+query+'"\n# Auction: '+auctionName+'</span>\n\n'+
+    '<span class="comment"># Prospect Pipeline\n# Query: "'+query+'"</span>\n\n'+
     '<span class="kw">import</span> requests\n'+
     'H = {<span class="str">"Authorization"</span>: <span class="str">"Token YOUR_CRUSTDATA_KEY"</span>}\nB = <span class="str">"https://api.crustdata.com"</span>\n\n'+
     '<span class="comment"># Step 1: Search companies (filters from Claude)</span>\n'+
@@ -1080,19 +1037,19 @@ function updateCode(){
     'enriched = requests.get(f<span class="str">"{B}/screener/company"</span>, headers=H,\n  params={<span class="str">"company_domain"</span>: domains, <span class="str">"fields"</span>: <span class="str">"founders,decision_makers"</span>}).json()\n\n'+
     '<span class="comment"># Step 3: Collect + enrich people profiles</span>\n'+
     'urls = [f[<span class="str">"linkedin_profile_url"</span>] <span class="kw">for</span> co <span class="kw">in</span> enriched\n        <span class="kw">for</span> src <span class="kw">in</span> [<span class="str">"founders"</span>,<span class="str">"decision_makers"</span>]\n        <span class="kw">for</span> f <span class="kw">in</span> co.get(src,{}).get(<span class="str">"profiles"</span>,[])[:5]\n        <span class="kw">if</span> f.get(<span class="str">"linkedin_profile_url"</span>)]\n<span class="kw">for</span> i <span class="kw">in</span> range(<span class="num">0</span>, len(urls), <span class="num">25</span>):\n'+
-    '  people = requests.get(f<span class="str">"{B}/screener/person/enrich"</span>, headers=H,\n    params={<span class="str">"linkedin_profile_url"</span>: <span class="str">","</span>.join(urls[i:i+<span class="num">25</span>]),\n            <span class="str">"fields"</span>: <span class="str">"name,title,location,business_email,current_employers"</span>}).json()\n  <span class="comment"># → filter by auction interest signals here</span>';
+    '  people = requests.get(f<span class="str">"{B}/screener/person/enrich"</span>, headers=H,\n    params={<span class="str">"linkedin_profile_url"</span>: <span class="str">","</span>.join(urls[i:i+<span class="num">25</span>]),\n            <span class="str">"fields"</span>: <span class="str">"name,title,location,business_email,current_employers"</span>}).json()\n  <span class="comment"># → score and filter prospects here</span>';
 }
 
 function copyCode(){navigator.clipboard.writeText(document.getElementById('code-content').textContent).catch(function(){});showToast('Copied!');}
 function copyCSV(){
-  var rows=[['Name','Title','Company','Industry','Country','Funding','Email','Score','Auction Match','Match Reason']];
-  allResults.forEach(function(r){rows.push([r.name,r.title,r.company,r.industry,r.hq_country,r.funding,r.email||'',r.score,auctionContext&&r.auction_match?auctionContext.name:'',r.match_why||'']);});
+  var rows=[['Name','Title','Company','Industry','Country','Funding','Email','Score']];
+  allResults.forEach(function(r){rows.push([r.name,r.title,r.company,r.industry,r.hq_country,r.funding,r.email||'',r.score]);});
   navigator.clipboard.writeText(rows.map(function(r){return r.map(function(v){return '"'+v+'"';}).join(',');}).join('\n')).catch(function(){});
   showToast('CSV copied!');
 }
 function downloadCSV(){
-  var rows=[['Name','Title','Company','Industry','Country','Funding','Email','Score','Auction Match','Match Reason']];
-  allResults.forEach(function(r){rows.push([r.name,r.title,r.company,r.industry,r.hq_country,r.funding,r.email||'',r.score,auctionContext&&r.auction_match?auctionContext.name:'',r.match_why||'']);});
+  var rows=[['Name','Title','Company','Industry','Country','Funding','Email','Score']];
+  allResults.forEach(function(r){rows.push([r.name,r.title,r.company,r.industry,r.hq_country,r.funding,r.email||'',r.score]);});
   var blob=new Blob([rows.map(function(r){return r.map(function(v){return '"'+v+'"';}).join(',');}).join('\n')],{type:'text/csv'});
   var el=document.createElement('a');
   el.href=URL.createObjectURL(blob); el.download='prospects.csv'; el.click();
@@ -1128,7 +1085,7 @@ function setStep(n,s){
   el.className='step-num'+(s?' '+s:'');
   el.textContent=s==='done'?'':(n===0?'AI':String(n));
 }
-function resetSteps(){[0,1,2,3,4].forEach(function(n){setStep(n,'');});}
+function resetSteps(){[0,1,2,3].forEach(function(n){setStep(n,'');});}
 function showToast(msg){
   var t=document.createElement('div'); t.textContent=msg;
   t.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--on-surface);color:white;padding:8px 16px;border-radius:20px;font-size:12px;font-weight:500;z-index:9999;opacity:0;transition:opacity .2s;pointer-events:none;';
@@ -1144,7 +1101,6 @@ function sleep(ms){return new Promise(function(r){setTimeout(r,ms);});}
    HAMBURGER MENU
 ═══════════════════════════════════════════ */
 
-// Manual filter pipeline — merges manual UI values with any AI-generated filters
 function runPipelineManual(){
   var minF = parseInt(document.getElementById('min-funding').value)||5000000;
   var maxF = parseInt(document.getElementById('max-funding').value)||null;
@@ -1152,7 +1108,6 @@ function runPipelineManual(){
   var industry = document.getElementById('industry-filter').value;
   var sortBy = document.getElementById('sort-by').value;
 
-  // Start fresh with funding floor
   var manualFilters = [
     {filter_type:'crunchbase_total_investment_usd',type:'=>',value:minF,label:'Funding >= $'+fmtM(minF)}
   ];
@@ -1160,7 +1115,6 @@ function runPipelineManual(){
   if(country) manualFilters.push({filter_type:'hq_country',type:'=',value:country,label:'Country: '+country});
   if(industry) manualFilters.push({filter_type:'linkedin_industries',type:'(.)',value:industry,label:'Industry: '+industry});
 
-  // Merge with any Claude-generated filters (avoid duplicates by filter_type)
   var existingTypes = manualFilters.map(function(f){return f.filter_type;});
   (generatedFilters||[]).forEach(function(f){
     if(existingTypes.indexOf(f.filter_type)===-1) manualFilters.push(f);
