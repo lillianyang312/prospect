@@ -7,283 +7,225 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f9f9f9;--surface:#fff;--surface-alt:#f3f3f3;--surface-dim:#faf9f5;--border:#e2e2e2;--border-strong:#c8c8c8;--on-surface:#1a1c1c;--secondary:#5e5e5e;--accent:#004ec5;--accent-light:rgba(0,78,197,0.08);--danger:#b10000;--success:#1a6b3c;--tag-bg:#efefef;--shadow-card:0 25px 50px -12px rgba(0,0,0,.10);--shadow-sm:0 2px 8px rgba(0,0,0,.06);--r:16px;--rs:8px;--rx:6px;}
+:root{--bg:#f5f5f5;--surface:#fff;--surface-alt:#f8f8f8;--border:#e5e5e5;--border-strong:#d0d0d0;--on-surface:#1a1c1c;--secondary:#6b7280;--accent:#2563eb;--accent-light:rgba(37,99,235,0.08);--accent-hover:#1d4ed8;--danger:#dc2626;--success:#16a34a;--shadow-sm:0 1px 3px rgba(0,0,0,.08);--shadow-md:0 4px 12px rgba(0,0,0,.08);--r:8px;--rs:6px;}
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--bg);color:var(--on-surface);font-family:'Inter',sans-serif;font-size:14px;line-height:1.5;min-height:100vh;}
-.app{display:grid;grid-template-columns:300px 1fr;grid-template-rows:56px 1fr;height:100vh;overflow:hidden;}
+body{background:var(--bg);color:var(--on-surface);font-family:'Inter',sans-serif;font-size:14px;line-height:1.5;height:100vh;overflow:hidden;}
 
-/* TOPBAR */
-.topbar{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;padding:0 22px;border-bottom:1px solid var(--border);background:var(--surface);gap:14px;}
-.topbar-title{font-family:'Epilogue',sans-serif;font-weight:900;font-size:16px;letter-spacing:-.5px;flex-shrink:0;}
-/* Hamburger next to Prospect */
-.topbar-hamburger{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;gap:4px;padding:5px 4px;flex-shrink:0;border-radius:var(--rx);transition:background .15s;}
-.topbar-hamburger:hover{background:var(--surface-alt);}
-.topbar-hamburger span{display:block;width:16px;height:1.5px;background:var(--on-surface);border-radius:2px;transition:transform .2s,opacity .2s;}
-.topbar-hamburger.open span:nth-child(1){transform:translateY(5.5px) rotate(45deg);}
-.topbar-hamburger.open span:nth-child(2){opacity:0;}
-.topbar-hamburger.open span:nth-child(3){transform:translateY(-5.5px) rotate(-45deg);}
+/* TOP HEADER */
+.top-header{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;background:var(--surface);border-bottom:1px solid var(--border);height:48px;flex-shrink:0;}
+.top-header-title{font-family:'Epilogue',sans-serif;font-weight:900;font-size:16px;letter-spacing:-.5px;}
+.credit-badge{background:var(--surface-alt);border:1px solid var(--border);border-radius:20px;padding:3px 12px;font-size:11px;font-weight:500;color:var(--secondary);}
 
-/* Hamburger dropdown */
-.hb-dropdown{display:none;position:fixed;top:56px;left:0;width:300px;background:var(--surface);border-right:1px solid var(--border);border-bottom:1px solid var(--border);z-index:200;flex-direction:column;box-shadow:6px 6px 24px rgba(0,0,0,.08);}
-.hb-dropdown.open{display:flex;}
-.hb-section{padding:14px 16px;display:flex;flex-direction:column;gap:8px;}
-.hb-section+.hb-section{border-top:1px solid var(--border);}
-.hb-title{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--secondary);}
-.hb-group{display:flex;flex-direction:column;gap:4px;}
-.hb-label{font-size:11px;color:var(--secondary);}
-.hb-input{background:var(--bg);border:1px solid var(--border);border-radius:var(--rx);padding:6px 9px;font-family:'Inter',sans-serif;font-size:11px;color:var(--on-surface);outline:none;width:100%;transition:border-color .15s;}
-.hb-input:focus{border-color:var(--accent);}
-.topbar-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
-.credit-badge{background:var(--surface-alt);border:1px solid var(--border);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:500;}
+/* LAYOUT */
+.app-layout{display:flex;height:calc(100vh - 48px);overflow:hidden;}
 
 /* SIDEBAR */
-.sidebar{border-right:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column;height:100%;overflow:hidden;}
-.sb-header{display:flex;align-items:center;padding:0 14px;border-bottom:1px solid var(--border);height:38px;flex-shrink:0;gap:6px;}
-.sb-pane{display:none;flex-direction:column;gap:13px;padding:16px 14px;overflow-y:auto;flex:1;}
-.sb-pane.active{display:flex;}
-.sb-mode-pills{display:flex;gap:2px;}
-.sb-pill{font-size:10px;font-weight:600;color:var(--secondary);padding:3px 9px;border-radius:10px;cursor:pointer;transition:all .15s;border:none;background:none;letter-spacing:.01em;}
-.sb-pill:hover{color:var(--on-surface);}
-.sb-pill.active{background:var(--on-surface);color:white;}
-.section-label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--secondary);margin-bottom:5px;}
+.sidebar{width:320px;min-width:320px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;height:100%;overflow:hidden;}
+.sidebar-scroll{flex:1;overflow-y:auto;padding:16px;}
+.sidebar-scroll::-webkit-scrollbar{width:4px;}
+.sidebar-scroll::-webkit-scrollbar-thumb{background:#d0d0d0;border-radius:4px;}
 
-/* AI SEARCH BOX */
-.ai-search-box{background:var(--bg);border:1.5px solid var(--border);border-radius:var(--rs);overflow:hidden;transition:border-color .15s,box-shadow .15s;}
-.ai-search-box:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-light);}
-.ai-search-header{display:flex;align-items:center;gap:7px;padding:8px 10px 6px;border-bottom:1px solid var(--border);}
-.ai-badge{background:var(--on-surface);color:white;font-size:9px;font-weight:700;letter-spacing:.05em;padding:2px 6px;border-radius:3px;flex-shrink:0;}
-.ai-search-label{font-size:11px;font-weight:500;color:var(--on-surface);}
-.ai-textarea{width:100%;background:transparent;border:none;outline:none;resize:none;font-family:'Inter',sans-serif;font-size:12px;color:var(--on-surface);padding:8px 10px;line-height:1.5;min-height:70px;}
-.ai-textarea::placeholder{color:#bbb;}
-.ai-search-footer{display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border-top:1px solid var(--border);}
-.ai-gen-btn{background:var(--on-surface);color:white;border:none;border-radius:var(--rx);padding:5px 11px;font-family:'Epilogue',sans-serif;font-weight:700;font-size:11px;cursor:pointer;display:flex;align-items:center;gap:5px;transition:background .15s;flex-shrink:0;}
-.ai-gen-btn:hover{background:#2a2c2c;}
-.ai-gen-btn:disabled{background:#ccc;cursor:not-allowed;}
-.ai-gen-btn .mini-spin{width:10px;height:10px;border:1.5px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .6s linear infinite;display:none;}
+/* AI BOX */
+.ai-box{border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:16px;transition:border-color .15s;}
+.ai-box:focus-within{border-color:var(--accent);}
+.ai-box-header{display:flex;align-items:center;gap:8px;padding:10px 12px 8px;background:var(--surface-alt);}
+.ai-badge{background:var(--on-surface);color:white;font-size:9px;font-weight:700;letter-spacing:.05em;padding:2px 6px;border-radius:3px;}
+.ai-box-label{font-size:12px;font-weight:500;color:var(--secondary);}
+.ai-textarea{width:100%;border:none;outline:none;resize:none;font-family:'Inter',sans-serif;font-size:12px;color:var(--on-surface);padding:10px 12px;min-height:60px;line-height:1.5;background:var(--surface);}
+.ai-textarea::placeholder{color:#b0b0b0;}
+.ai-box-footer{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-top:1px solid var(--border);background:var(--surface-alt);}
+.ai-gen-btn{background:var(--accent);color:white;border:none;border-radius:var(--rs);padding:6px 14px;font-family:'Inter',sans-serif;font-weight:600;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .15s;}
+.ai-gen-btn:hover{background:var(--accent-hover);}
+.ai-gen-btn:disabled{background:#94a3b8;cursor:not-allowed;}
+.ai-gen-btn .mini-spin{width:12px;height:12px;border:2px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .6s linear infinite;display:none;}
 .ai-gen-btn.spinning .mini-spin{display:block;}
-.ai-gen-btn.spinning .btn-label{opacity:.6;}
+.example-chips{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:14px;}
+.example-chip{font-size:10px;color:var(--accent);background:var(--accent-light);border:1px solid rgba(37,99,235,.12);border-radius:12px;padding:3px 10px;cursor:pointer;transition:background .15s;}
+.example-chip:hover{background:rgba(37,99,235,.15);}
 
-/* Example chips */
-.example-chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;}
-.example-chip{font-size:9px;color:var(--accent);background:var(--accent-light);border:1px solid rgba(0,78,197,.15);border-radius:10px;padding:2px 8px;cursor:pointer;transition:all .15s;}
-.example-chip:hover{background:rgba(0,78,197,.15);}
+/* AI CHIP (collapsed state) */
+.ai-chip{display:none;align-items:center;gap:8px;padding:8px 12px;background:var(--accent-light);border:1px solid rgba(37,99,235,.15);border-radius:var(--r);margin-bottom:16px;font-size:12px;color:var(--accent);}
+.ai-chip.visible{display:flex;}
+.ai-chip-text{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500;}
+.ai-chip-clear{background:none;border:none;cursor:pointer;color:var(--secondary);font-size:16px;padding:0 2px;line-height:1;flex-shrink:0;}
+.ai-chip-clear:hover{color:var(--danger);}
 
-/* Generated filters panel */
-.filters-panel{display:none;flex-direction:column;gap:6px;}
-.filters-panel.visible{display:flex;}
-.filters-panel-head{display:flex;align-items:center;justify-content:space-between;}
-.filters-panel-title{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--secondary);}
-.filters-panel-edit{font-size:10px;color:var(--accent);cursor:pointer;text-decoration:none;}
-.filters-panel-edit:hover{text-decoration:underline;}
-.filter-chip-list{display:flex;flex-direction:column;gap:4px;}
-.filter-chip{background:var(--surface-alt);border:1px solid var(--border);border-radius:var(--rx);padding:6px 9px;display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
-.filter-chip-left{display:flex;flex-direction:column;gap:2px;}
-.filter-chip-field{font-size:10px;color:var(--secondary);font-weight:600;letter-spacing:.04em;text-transform:uppercase;}
-.filter-chip-val{font-size:11px;font-weight:500;color:var(--on-surface);cursor:pointer;transition:background .1s;padding:1px 3px;border-radius:3px;}
-.filter-chip-val:hover{background:var(--accent-light);}
-.filter-chip-edit{background:var(--bg);border:1px solid var(--accent);border-radius:3px;padding:2px 5px;font-family:'Inter',sans-serif;font-size:11px;color:var(--on-surface);outline:none;width:100%;}
-.filter-chip-remove{background:none;border:none;cursor:pointer;color:var(--secondary);font-size:13px;line-height:1;padding:0;flex-shrink:0;transition:color .1s;}
-.filter-chip-remove:hover{color:var(--danger);}
-.filter-add-btn{background:none;border:1px dashed var(--border);border-radius:var(--rx);padding:6px 9px;font-size:10px;color:var(--secondary);cursor:pointer;width:100%;text-align:center;transition:all .15s;}
-.filter-add-btn:hover{border-color:var(--accent);color:var(--accent);}
-.reasoning-box{background:rgba(0,78,197,.04);border:1px solid rgba(0,78,197,.15);border-radius:var(--rx);padding:8px 10px;font-size:11px;line-height:1.5;color:var(--secondary);font-style:italic;}
+/* ACCORDION */
+.acc-section{border-bottom:1px solid var(--border);}
+.acc-section:last-of-type{border-bottom:none;}
+.acc-header{display:flex;align-items:center;gap:8px;padding:10px 0;cursor:pointer;user-select:none;position:relative;}
+.acc-header:hover{color:var(--accent);}
+.acc-icon{font-size:13px;width:18px;text-align:center;flex-shrink:0;color:var(--secondary);}
+.acc-label{font-size:13px;font-weight:500;color:var(--on-surface);flex:1;}
+.acc-chevron{font-size:10px;color:var(--secondary);transition:transform .2s;flex-shrink:0;}
+.acc-section.open .acc-chevron{transform:rotate(180deg);}
+.acc-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0;display:none;}
+.acc-dot.active{display:block;}
+.acc-body{display:none;padding:0 0 12px 26px;}
+.acc-section.open .acc-body{display:block;}
+.acc-input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--rs);padding:7px 10px;font-family:'Inter',sans-serif;font-size:12px;color:var(--on-surface);outline:none;transition:border-color .15s;}
+.acc-input:focus{border-color:var(--accent);}
+.acc-input::placeholder{color:#b0b0b0;}
+select.acc-input{cursor:pointer;}
+.acc-row{display:flex;gap:8px;margin-top:6px;}
+.acc-row .acc-input{flex:1;}
+.acc-row-label{font-size:11px;color:var(--secondary);margin-bottom:3px;}
 
-/* Seniority pills */
+/* Seniority pills in accordion */
 .seniority-pills{display:flex;flex-wrap:wrap;gap:4px;}
-.seniority-pill{font-size:10px;font-weight:600;color:var(--secondary);padding:4px 10px;border-radius:12px;cursor:pointer;transition:all .15s;border:1px solid var(--border);background:var(--bg);letter-spacing:.01em;}
+.seniority-pill{font-size:11px;font-weight:500;color:var(--secondary);padding:5px 12px;border-radius:14px;cursor:pointer;transition:all .15s;border:1px solid var(--border);background:var(--bg);}
 .seniority-pill:hover{border-color:var(--border-strong);color:var(--on-surface);}
 .seniority-pill.active{background:var(--accent);color:white;border-color:var(--accent);}
 
-/* API keys */
-.key-group{display:flex;flex-direction:column;gap:4px;}
-.key-label{font-size:10px;font-weight:500;color:var(--secondary);}
-.key-input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--rx);padding:6px 9px;font-family:'Inter',sans-serif;font-size:11px;color:var(--on-surface);outline:none;transition:border-color .15s;}
-.key-input:focus{border-color:var(--accent);}
+/* SIDEBAR STICKY BOTTOM */
+.sidebar-bottom{padding:12px 16px;border-top:1px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0;}
+.clear-all-link{font-size:12px;color:var(--secondary);cursor:pointer;background:none;border:none;font-family:'Inter',sans-serif;transition:color .15s;white-space:nowrap;}
+.clear-all-link:hover{color:var(--danger);}
+.search-btn{flex:1;background:var(--accent);color:white;border:none;border-radius:var(--rs);padding:10px;font-family:'Inter',sans-serif;font-weight:600;font-size:13px;cursor:pointer;transition:background .15s;display:flex;align-items:center;justify-content:center;gap:6px;}
+.search-btn:hover{background:var(--accent-hover);}
+.search-btn:disabled{background:#94a3b8;cursor:not-allowed;}
+.search-btn .spinner{width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;display:none;}
+.search-btn.loading .spinner{display:block;}
 
-.run-btn{width:100%;background:var(--on-surface);color:white;border:none;border-radius:var(--rs);padding:10px;font-family:'Epilogue',sans-serif;font-weight:700;font-size:13px;cursor:pointer;transition:background .15s,transform .1s;display:flex;align-items:center;justify-content:center;gap:6px;}
-.run-btn:hover{background:#2a2c2c;}
-.run-btn:active{transform:scale(.98);}
-.run-btn:disabled{background:#ccc;cursor:not-allowed;}
-.run-btn .spinner{width:12px;height:12px;border:2px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;display:none;}
-.run-btn.loading .spinner{display:block;}
-.run-btn.loading .btn-text{opacity:.7;}
+/* RIGHT PANEL */
+.right-panel{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg);}
 
-.divider{height:1px;background:var(--border);margin:2px 0;}
+/* RESULTS TOP BAR */
+.results-topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:var(--surface);border-bottom:1px solid var(--border);gap:12px;flex-shrink:0;}
+.results-tabs{display:flex;gap:2px;}
+.results-tab{background:none;border:none;padding:6px 14px;font-family:'Inter',sans-serif;font-size:13px;font-weight:500;color:var(--secondary);cursor:pointer;border-radius:var(--rs);transition:all .15s;}
+.results-tab.active{background:var(--accent-light);color:var(--accent);font-weight:600;}
+.results-search{background:var(--bg);border:1px solid var(--border);border-radius:var(--rs);padding:7px 12px 7px 32px;font-family:'Inter',sans-serif;font-size:12px;color:var(--on-surface);outline:none;width:220px;transition:border-color .15s;position:relative;}
+.results-search:focus{border-color:var(--accent);}
+.results-search-wrap{position:relative;}
+.results-search-wrap svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--secondary);pointer-events:none;}
 
-.pipeline{display:flex;flex-direction:column;gap:1px;background:var(--border);border-radius:var(--rx);overflow:hidden;}
-.pipeline-step{background:var(--surface);padding:6px 8px;display:flex;align-items:center;gap:6px;font-size:11px;}
-.step-num{width:16px;height:16px;border-radius:50%;background:var(--surface-alt);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--secondary);flex-shrink:0;transition:all .2s;}
-.step-num.active{background:var(--accent);color:white;border-color:var(--accent);}
-.step-num.done{background:var(--success);color:white;border-color:var(--success);}
-.step-text{color:var(--on-surface);line-height:1.3;}
-.step-text small{color:var(--secondary);display:block;font-size:10px;}
-
-/* MAIN */
-.main{overflow-y:auto;padding:18px 20px;display:flex;flex-direction:column;gap:13px;}
-.thinking-bar{height:3px;background:var(--border);overflow:hidden;opacity:0;transition:opacity .2s;}
-.thinking-bar.active{opacity:1;}
-.thinking-fill{height:100%;background:linear-gradient(90deg,transparent,var(--accent),transparent);width:40%;animation:shimmer 1.4s ease-in-out infinite;}
-@keyframes shimmer{0%{transform:translateX(-200%)}100%{transform:translateX(400%)}}
-
-/* Stats */
-.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
-.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);padding:10px 12px;}
-.stat-label{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--secondary);}
-.stat-value{font-family:'Epilogue',sans-serif;font-weight:900;font-size:22px;line-height:1;letter-spacing:-1px;color:var(--on-surface);margin:3px 0 2px;}
-.stat-sub{font-size:10px;color:var(--secondary);}
-
-/* Status row */
-.status-row{display:flex;align-items:center;justify-content:space-between;}
-.status-msg{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--secondary);}
+/* STATUS BAR */
+.status-bar{display:flex;align-items:center;gap:8px;padding:8px 20px;background:var(--surface);border-bottom:1px solid var(--border);font-size:12px;color:var(--secondary);flex-shrink:0;min-height:36px;}
 .status-dot{width:6px;height:6px;border-radius:50%;background:var(--border-strong);flex-shrink:0;}
 .status-dot.running{background:var(--accent);animation:pulse 1s ease infinite;}
 .status-dot.done{background:var(--success);}
 .status-dot.error{background:var(--danger);}
-.tab-bar{display:flex;gap:2px;background:var(--surface-alt);border-radius:var(--rx);padding:3px;}
-.tab-btn{background:none;border:none;border-radius:4px;padding:4px 9px;font-family:'Inter',sans-serif;font-size:11px;font-weight:500;color:var(--secondary);cursor:pointer;transition:all .1s;}
-.tab-btn.active{background:var(--surface);color:var(--on-surface);box-shadow:var(--shadow-sm);}
 
-/* Results */
-.results-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-card);}
-.results-header{display:flex;align-items:flex-start;justify-content:space-between;padding:11px 16px;border-bottom:1px solid var(--border);}
-.results-title{font-family:'Epilogue',sans-serif;font-weight:900;font-size:14px;letter-spacing:-.3px;}
-.results-subtitle{font-size:10px;color:var(--secondary);margin-top:2px;}
-.results-actions{display:flex;gap:5px;flex-shrink:0;}
-.action-btn{background:var(--surface-alt);border:1px solid var(--border);border-radius:var(--rx);padding:4px 9px;font-family:'Inter',sans-serif;font-size:11px;font-weight:500;color:var(--on-surface);cursor:pointer;transition:background .15s;}
-.action-btn:hover{background:var(--border);}
-.table-wrap{overflow-x:auto;}
-table{width:100%;border-collapse:collapse;}
-thead{background:var(--surface-alt);position:sticky;top:0;z-index:2;}
-th{text-align:left;padding:7px 12px;font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--secondary);border-bottom:1px solid var(--border);white-space:nowrap;cursor:pointer;user-select:none;}
-th:hover{color:var(--on-surface);}
-tbody tr{border-bottom:1px solid var(--border);transition:background .1s;cursor:pointer;}
-tbody tr:last-child{border-bottom:none;}
-tbody tr:hover{background:var(--surface-dim);}
-td{padding:9px 12px;font-size:12px;vertical-align:middle;}
-.founder-name{font-weight:600;font-size:13px;}
-.founder-title{font-size:10px;color:var(--secondary);margin-top:1px;}
+/* TABLE */
+.table-container{flex:1;overflow:auto;}
+table{width:100%;border-collapse:collapse;min-width:700px;}
+thead{background:var(--surface);position:sticky;top:0;z-index:2;}
+th{text-align:left;padding:10px 14px;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--secondary);border-bottom:1px solid var(--border);white-space:nowrap;user-select:none;}
+th.sortable{cursor:pointer;}
+th.sortable:hover{color:var(--on-surface);}
+th.check-col{width:40px;text-align:center;}
+tbody tr{border-bottom:1px solid var(--border);transition:background .1s;}
+tbody tr:hover{background:rgba(37,99,235,.03);}
+td{padding:10px 14px;font-size:13px;vertical-align:middle;}
+td.check-col{text-align:center;width:40px;}
+.person-name{font-weight:600;color:var(--accent);cursor:pointer;}
+.person-name:hover{text-decoration:underline;}
+.person-title{font-size:11px;color:var(--secondary);margin-top:2px;}
 .company-name{font-weight:500;}
-.company-acq{font-size:9px;color:var(--success);font-weight:700;letter-spacing:.04em;margin-top:2px;}
-.money-tag{font-family:'Epilogue',sans-serif;font-weight:700;font-size:12px;letter-spacing:-.3px;}
-.money-tag.large{color:var(--accent);}
-.email-chip{display:inline-flex;align-items:center;gap:3px;background:var(--surface-alt);border:1px solid var(--border);border-radius:4px;padding:2px 6px;font-size:10px;cursor:pointer;}
-.email-chip:hover{background:var(--border);}
-.email-chip.verified::before{content:'';color:var(--success);font-size:9px;font-weight:700;}
-.li-link{color:var(--accent);text-decoration:none;font-size:10px;}
-.li-link:hover{text-decoration:underline;}
-.score-cell{display:flex;align-items:center;gap:5px;}
-.score-dots{display:flex;gap:2px;}
-.score-dot{width:5px;height:5px;border-radius:50%;background:var(--border);}
-.score-dot.filled{background:var(--accent);}
-.score-num{font-family:'Epilogue',sans-serif;font-weight:700;font-size:12px;}
-.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:48px 20px;color:var(--secondary);text-align:center;}
-.empty-icon{width:42px;height:42px;background:var(--surface-alt);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:19px;}
-.empty-title{font-family:'Epilogue',sans-serif;font-weight:900;font-size:15px;color:var(--on-surface);letter-spacing:-.3px;}
-.empty-sub{font-size:11px;max-width:240px;}
-.code-block{background:var(--on-surface);color:#e2e2e2;border-radius:var(--rs);padding:13px 15px;font-family:'SF Mono','Fira Code',monospace;font-size:11px;line-height:1.7;overflow-x:auto;position:relative;white-space:pre;}
-.code-block .kw{color:#79b8ff;}.code-block .str{color:#9ecbff;}.code-block .comment{color:#6a9955;}.code-block .num{color:#f8c555;}
-.code-copy{position:absolute;top:8px;right:8px;background:rgba(255,255,255,.1);border:none;border-radius:4px;color:#aaa;font-size:10px;padding:3px 7px;cursor:pointer;}
-.code-copy:hover{background:rgba(255,255,255,.2);color:white;}
+.company-industry{font-size:10px;color:var(--secondary);margin-top:1px;}
+.location-text{font-size:12px;color:var(--secondary);}
+.email-btn{display:inline-flex;align-items:center;gap:4px;background:var(--accent-light);border:1px solid rgba(37,99,235,.15);color:var(--accent);border-radius:4px;padding:3px 8px;font-size:11px;cursor:pointer;font-family:'Inter',sans-serif;transition:background .15s;}
+.email-btn:hover{background:rgba(37,99,235,.15);}
+.email-text{font-size:11px;color:var(--on-surface);word-break:break-all;}
+
+/* BOTTOM BAR */
+.results-bottombar{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;background:var(--surface);border-top:1px solid var(--border);flex-shrink:0;gap:12px;}
+.selected-count{font-size:12px;color:var(--secondary);}
+.export-btn{background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);padding:6px 14px;font-family:'Inter',sans-serif;font-size:12px;font-weight:500;color:var(--on-surface);cursor:pointer;transition:all .15s;}
+.export-btn:hover{background:var(--bg);border-color:var(--border-strong);}
+.pagination{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--secondary);}
+.page-btn{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:4px 10px;font-size:11px;cursor:pointer;color:var(--secondary);transition:all .15s;}
+.page-btn:hover{border-color:var(--border-strong);color:var(--on-surface);}
+.page-btn:disabled{opacity:.4;cursor:not-allowed;}
+
+/* EMPTY STATE */
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:60px 20px;color:var(--secondary);text-align:center;}
+.empty-icon{width:48px;height:48px;background:var(--surface-alt);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;}
+.empty-title{font-family:'Epilogue',sans-serif;font-weight:900;font-size:16px;color:var(--on-surface);}
+.empty-sub{font-size:12px;max-width:280px;line-height:1.6;}
 
 /* DRAWER */
 .drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;opacity:0;pointer-events:none;transition:opacity .2s;}
 .drawer-overlay.open{opacity:1;pointer-events:all;}
-.drawer{position:fixed;top:0;right:0;width:490px;height:100vh;background:var(--surface);box-shadow:-20px 0 60px rgba(0,0,0,.15);z-index:101;transform:translateX(100%);transition:transform .25s cubic-bezier(.4,0,.2,1);overflow-y:auto;display:flex;flex-direction:column;}
+.drawer{position:fixed;top:0;right:0;width:480px;height:100vh;background:var(--surface);box-shadow:-16px 0 48px rgba(0,0,0,.12);z-index:101;transform:translateX(100%);transition:transform .25s cubic-bezier(.4,0,.2,1);overflow-y:auto;display:flex;flex-direction:column;}
 .drawer.open{transform:translateX(0);}
-.drawer-head{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:10px;position:sticky;top:0;background:var(--surface);z-index:2;}
-.drawer-name{font-family:'Epilogue',sans-serif;font-weight:900;font-size:19px;letter-spacing:-.5px;}
-.drawer-role{font-size:11px;color:var(--secondary);margin-top:2px;}
-.drawer-close{background:var(--surface-alt);border:1px solid var(--border);border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;color:var(--secondary);transition:background .1s;flex-shrink:0;}
+.drawer-head{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:10px;position:sticky;top:0;background:var(--surface);z-index:2;}
+.drawer-name{font-family:'Epilogue',sans-serif;font-weight:900;font-size:18px;letter-spacing:-.5px;}
+.drawer-role{font-size:12px;color:var(--secondary);margin-top:3px;}
+.drawer-close{background:var(--surface-alt);border:1px solid var(--border);border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:var(--secondary);transition:background .1s;flex-shrink:0;}
 .drawer-close:hover{background:var(--border);}
-.drawer-body{padding:16px 20px;display:flex;flex-direction:column;gap:15px;}
-.d-section{display:flex;flex-direction:column;gap:7px;}
+.drawer-body{padding:18px 20px;display:flex;flex-direction:column;gap:16px;}
+.d-section{display:flex;flex-direction:column;gap:8px;}
 .d-section-title{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--secondary);}
-.d-kv{display:grid;grid-template-columns:90px 1fr;gap:5px 10px;align-items:start;}
-.d-k{font-size:11px;color:var(--secondary);padding-top:1px;}
+.d-kv{display:grid;grid-template-columns:100px 1fr;gap:5px 10px;align-items:start;}
+.d-k{font-size:12px;color:var(--secondary);}
 .d-v{font-size:12px;font-weight:500;word-break:break-word;}
 .d-v a{color:var(--accent);text-decoration:none;}
 .d-v a:hover{text-decoration:underline;}
-.score-bar-card{background:var(--surface-alt);border:1px solid var(--border);border-radius:var(--rs);padding:11px 13px;display:flex;flex-direction:column;gap:7px;}
+.score-bar-card{background:var(--surface-alt);border:1px solid var(--border);border-radius:var(--r);padding:14px;display:flex;flex-direction:column;gap:8px;}
 .score-bar-top{display:flex;justify-content:space-between;align-items:center;}
-.score-bar-title{font-size:12px;font-weight:600;}
-.score-bar-num{font-family:'Epilogue',sans-serif;font-weight:900;font-size:17px;letter-spacing:-.5px;color:var(--accent);}
-.score-track{background:var(--border);border-radius:2px;height:3px;overflow:hidden;}
-.score-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .5s ease;}
+.score-bar-title{font-size:13px;font-weight:600;}
+.score-bar-num{font-family:'Epilogue',sans-serif;font-weight:900;font-size:18px;letter-spacing:-.5px;color:var(--accent);}
+.score-track{background:var(--border);border-radius:3px;height:4px;overflow:hidden;}
+.score-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s ease;}
 .score-factors{display:flex;flex-direction:column;gap:4px;}
-.score-factor{display:flex;align-items:center;justify-content:space-between;font-size:11px;}
+.score-factor{display:flex;align-items:center;justify-content:space-between;font-size:12px;}
 .score-factor-label{color:var(--secondary);}
 .sfv{font-weight:600;}.sfv.pos{color:var(--success);}.sfv.neg{color:var(--danger);}
-.signals-list{display:flex;flex-direction:column;gap:5px;}
-.signal-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--rx);padding:7px 9px;display:flex;flex-direction:column;gap:2px;}
+.signals-list{display:flex;flex-direction:column;gap:6px;}
+.signal-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);padding:8px 10px;display:flex;flex-direction:column;gap:3px;}
 .signal-type{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;}
 .signal-type.post{color:var(--accent);}.signal-type.activity{color:var(--success);}.signal-type.travel{color:#7c4dff;}
-.signal-text{font-size:11px;line-height:1.4;}
+.signal-text{font-size:12px;line-height:1.4;}
 .signal-date{font-size:10px;color:var(--secondary);}
-.pitch-box{background:var(--surface-dim);border:1px solid var(--border);border-radius:var(--rs);padding:11px 13px;font-size:12px;line-height:1.6;font-style:italic;}
+.pitch-box{background:var(--surface-alt);border:1px solid var(--border);border-radius:var(--r);padding:14px;font-size:12px;line-height:1.7;font-style:italic;color:var(--secondary);}
 
-/* AI filter response box inside drawer */
-.ai-explain-box{background:rgba(0,78,197,.04);border:1px solid rgba(0,78,197,.15);border-radius:var(--rx);padding:9px 11px;font-size:11px;line-height:1.5;color:var(--secondary);}
+/* THINKING BAR */
+.thinking-bar{height:3px;background:var(--border);overflow:hidden;opacity:0;transition:opacity .2s;flex-shrink:0;}
+.thinking-bar.active{opacity:1;}
+.thinking-fill{height:100%;background:linear-gradient(90deg,transparent,var(--accent),transparent);width:40%;animation:shimmer 1.4s ease-in-out infinite;}
+
+/* CHECKBOX */
+input[type="checkbox"]{width:15px;height:15px;accent-color:var(--accent);cursor:pointer;}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--on-surface);color:white;padding:8px 18px;border-radius:20px;font-size:12px;font-weight:500;z-index:9999;opacity:0;transition:opacity .2s;pointer-events:none;}
 
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
-.fade-in{animation:fadeIn .2s ease forwards;}
+@keyframes shimmer{0%{transform:translateX(-200%)}100%{transform:translateX(400%)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+.fade-in{animation:fadeIn .15s ease forwards;}
 </style>
 </head>
 <body>
-<div class="app">
 
-<!-- TOPBAR -->
-<header class="topbar">
-  <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
-    <button class="topbar-hamburger" id="topbar-hamburger" onclick="toggleHbMenu()" title="Settings">
-      <span></span><span></span><span></span>
-    </button>
-    <span class="topbar-title">Prospect</span>
-  </div>
-
-  <div class="topbar-right">
-    <span id="credit-display" class="credit-badge" style="display:none"></span>
-  </div>
+<!-- TOP HEADER -->
+<header class="top-header">
+  <span class="top-header-title">Prospect</span>
+  <span id="credit-display" class="credit-badge" style="display:none"></span>
 </header>
 
-<!-- Hamburger dropdown -->
-<div class="hb-dropdown" id="hb-dropdown">
-  <div class="hb-section">
-    <div class="hb-title">API Keys</div>
-    <div id="hb-key-status" style="font-size:11px;color:var(--secondary);line-height:1.6;">Set via Vercel environment variables:<br><code style="font-size:10px;background:var(--surface-alt);padding:1px 5px;border-radius:3px;">CLAUDE_KEY</code> &nbsp;<code style="font-size:10px;background:var(--surface-alt);padding:1px 5px;border-radius:3px;">CRUSTDATA_KEY</code></div>
-    <div id="hb-key-indicators" style="display:flex;gap:8px;margin-top:4px;">
-      <span id="hb-claude-status" style="font-size:10px;font-weight:600;"></span>
-      <span id="hb-crustdata-status" style="font-size:10px;font-weight:600;"></span>
-    </div>
-  </div>
-  <div class="hb-section">
-    <div class="hb-title">Pipeline</div>
-    <div class="pipeline">
-      <div class="pipeline-step"><div class="step-num" id="hb-step-0">AI</div><div class="step-text">Semantic filter generation<small>Claude — natural language to filters</small></div></div>
-      <div class="pipeline-step"><div class="step-num" id="hb-step-1">1</div><div class="step-text">Search companies<small>CompanyDB — filtered search</small></div></div>
-      <div class="pipeline-step"><div class="step-num" id="hb-step-2">2</div><div class="step-text">Extract people<small>Company Enrichment — decision makers</small></div></div>
-      <div class="pipeline-step"><div class="step-num" id="hb-step-3">3</div><div class="step-text">Enrich + contact<small>Person Enrichment — email</small></div></div>
-    </div>
-  </div>
-</div>
+<div class="app-layout">
 
+<!-- LEFT SIDEBAR -->
 <aside class="sidebar">
+  <div class="sidebar-scroll">
 
-  <div class="sb-header">
-    <span style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--secondary);">Search</span>
-  </div>
-
-  <div class="sb-pane active" id="sbpane-search">
-
-    <!-- AI search box -->
-    <div class="ai-search-box">
-      <div class="ai-search-header">
-        <span class="ai-badge">CLAUDE</span>
-        <span class="ai-search-label">Describe who you're looking for</span>
+    <!-- AI Description Box -->
+    <div class="ai-box" id="ai-box">
+      <div class="ai-box-header">
+        <span class="ai-badge">AI</span>
+        <span class="ai-box-label">Describe who you're looking for</span>
       </div>
-      <textarea class="ai-textarea" id="ai-query" placeholder="e.g. wine enthusiasts at luxury companies in Europe&#10;&#10;or: NYC tech executives who collect watches or art&#10;&#10;or: consumer brand leaders interested in jewelry"></textarea>
-      <div class="ai-search-footer">
+      <textarea class="ai-textarea" id="ai-query" placeholder="e.g. luxury brand executives in Europe with $10M+ funding"></textarea>
+      <div class="ai-box-footer">
+        <div class="example-chips" style="margin:0;">
+          <span class="example-chip" onclick="setAIQuery(this.textContent)">Tech execs NYC $10M+</span>
+          <span class="example-chip" onclick="setAIQuery(this.textContent)">SaaS founders USA</span>
+          <span class="example-chip" onclick="setAIQuery(this.textContent)">Luxury brand EU</span>
+        </div>
         <button class="ai-gen-btn" id="ai-gen-btn" onclick="generateFilters()">
           <div class="mini-spin"></div>
           <span class="btn-label">Generate Filters</span>
@@ -291,872 +233,997 @@ td{padding:9px 12px;font-size:12px;vertical-align:middle;}
       </div>
     </div>
 
-    <!-- Example query chips -->
-    <div class="example-chips">
-      <span class="example-chip" onclick="document.getElementById('ai-query').value=this.textContent">Tech executives in NYC with $10M+ funding</span>
-      <span class="example-chip" onclick="document.getElementById('ai-query').value=this.textContent">Series B+ SaaS founders in USA</span>
-      <span class="example-chip" onclick="document.getElementById('ai-query').value=this.textContent">European luxury brand leaders</span>
+    <!-- AI Chip (collapsed state after generation) -->
+    <div class="ai-chip" id="ai-chip">
+      <span class="ai-badge">AI</span>
+      <span class="ai-chip-text" id="ai-chip-text"></span>
+      <button class="ai-chip-clear" onclick="clearAIChip()" title="Clear AI filters">&times;</button>
     </div>
 
-    <!-- Generated filter chips -->
-    <div class="filters-panel" id="filters-panel">
-      <div class="filters-panel-head">
-        <span class="filters-panel-title">Generated Filters</span>
-        <span class="filters-panel-edit" onclick="clearFilters()">Clear</span>
-      </div>
-      <div class="reasoning-box" id="reasoning-box" style="display:none"></div>
-      <div class="filter-chip-list" id="filter-chip-list"></div>
-    </div>
+    <!-- ACCORDION FILTERS -->
+    <div id="filter-accordions">
 
-    <div class="divider"></div>
-
-    <!-- Search Settings -->
-    <div>
-      <p class="section-label">Search Settings</p>
-      <div class="key-group">
-        <label class="key-label">People per company</label>
-        <select class="key-input" id="people-per-company">
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3" selected>3</option>
-          <option value="5">5</option>
-          <option value="99">Max</option>
-        </select>
-      </div>
-      <div class="key-group" style="margin-top:6px">
-        <label class="key-label">Seniority level</label>
-        <div class="seniority-pills" id="seniority-pills">
-          <button class="seniority-pill" data-level="csuite" onclick="toggleSeniority(this)">C-Suite</button>
-          <button class="seniority-pill" data-level="vp" onclick="toggleSeniority(this)">VP</button>
-          <button class="seniority-pill" data-level="director" onclick="toggleSeniority(this)">Director</button>
-          <button class="seniority-pill" data-level="manager" onclick="toggleSeniority(this)">Manager</button>
-          <button class="seniority-pill active" data-level="all" onclick="toggleSeniority(this)">All</button>
+      <div class="acc-section" data-filter="person_name">
+        <div class="acc-header" onclick="toggleAccordion(this)">
+          <span class="acc-icon">&#128100;</span>
+          <span class="acc-label">Name</span>
+          <span class="acc-dot" id="dot-person_name"></span>
+          <span class="acc-chevron">&#9660;</span>
         </div>
-      </div>
-      <div class="key-group" style="margin-top:6px">
-        <label class="key-label">Target roles</label>
-        <input class="key-input" type="text" id="target-roles" placeholder="e.g. CEO, CTO, Head of Sales">
-      </div>
-    </div>
-
-    <div class="divider"></div>
-
-    <!-- Manual filters -->
-    <div>
-      <p class="section-label">Manual Filters</p>
-
-      <div class="key-group">
-        <label class="key-label">Search results</label>
-        <div style="position:relative;">
-          <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--secondary);pointer-events:none;" width="12" height="12" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-          <input class="key-input" style="padding-left:30px;" type="text" placeholder="Filter by name or company…" id="local-search" oninput="filterResults()">
+        <div class="acc-body">
+          <input class="acc-input" type="text" id="filter-person_name" placeholder="Search by person name" oninput="updateDot('person_name')">
         </div>
       </div>
 
-      <div class="key-group" style="margin-top:6px">
-        <label class="key-label">Min. funding (USD)</label>
-        <input class="key-input" type="number" id="min-funding" value="5000000" placeholder="5000000">
+      <div class="acc-section" data-filter="job_titles">
+        <div class="acc-header" onclick="toggleAccordion(this)">
+          <span class="acc-icon">&#128188;</span>
+          <span class="acc-label">Job Titles</span>
+          <span class="acc-dot" id="dot-job_titles"></span>
+          <span class="acc-chevron">&#9660;</span>
+        </div>
+        <div class="acc-body">
+          <input class="acc-input" type="text" id="filter-job_titles" placeholder="CEO, VP Marketing, Director..." oninput="updateDot('job_titles')">
+        </div>
       </div>
-      <div class="key-group" style="margin-top:6px">
-        <label class="key-label">Max. funding (USD)</label>
-        <input class="key-input" type="number" id="max-funding" placeholder="No limit">
+
+      <div class="acc-section" data-filter="seniority">
+        <div class="acc-header" onclick="toggleAccordion(this)">
+          <span class="acc-icon">&#11088;</span>
+          <span class="acc-label">Seniority</span>
+          <span class="acc-dot" id="dot-seniority"></span>
+          <span class="acc-chevron">&#9660;</span>
+        </div>
+        <div class="acc-body">
+          <div class="seniority-pills" id="seniority-pills">
+            <button class="seniority-pill" data-level="csuite" onclick="toggleSeniority(this)">C-Suite</button>
+            <button class="seniority-pill" data-level="vp" onclick="toggleSeniority(this)">VP</button>
+            <button class="seniority-pill" data-level="director" onclick="toggleSeniority(this)">Director</button>
+            <button class="seniority-pill" data-level="manager" onclick="toggleSeniority(this)">Manager</button>
+            <button class="seniority-pill active" data-level="all" onclick="toggleSeniority(this)">All</button>
+          </div>
+        </div>
       </div>
+
+      <div class="acc-section" data-filter="people_per_company">
+        <div class="acc-header" onclick="toggleAccordion(this)">
+          <span class="acc-icon">&#128101;</span>
+          <span class="acc-label">People per Company</span>
+          <span class="acc-dot" id="dot-people_per_company"></span>
+          <span class="acc-chevron">&#9660;</span>
+        </div>
+        <div class="acc-body">
+          <select class="acc-input" id="filter-people_per_company" onchange="updateDot('people_per_company')">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3" selected>3</option>
+            <option value="5">5</option>
+            <option value="99">Max</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="acc-section" data-filter="company">
+        <div class="acc-header" onclick="toggleAccordion(this)">
+          <span class="acc-icon">&#127970;</span>
+          <span class="acc-label">Company</span>
+          <span class="acc-dot" id="dot-company"></span>
+          <span class="acc-chevron">&#9660;</span>
+        </div>
+        <div class="acc-body">
+          <input class="acc-input" type="text" id="filter-company" placeholder="Company name" oninput="updateDot('company')">
+        </div>
+      </div>
+
+      <div class="acc-section" data-filter="industry">
+        <div class="acc-header" onclick="toggleAccordion(this)">
+          <span class="acc-icon">&#127981;</span>
+          <span class="acc-label">Industry</span>
+          <span class="acc-dot" id="dot-industry"></span>
+          <span class="acc-chevron">&#9660;</span>
+        </div>
+        <div class="acc-body">
+          <input class="acc-input" type="text" id="filter-industry" placeholder="e.g. Software, Finance, Luxury" oninput="updateDot('industry')">
+        </div>
+      </div>
+
+      <div class="acc-section" data-filter="country">
+        <div class="acc-header" onclick="toggleAccordion(this)">
+          <span class="acc-icon">&#127758;</span>
+          <span class="acc-label">Location / Country</span>
+          <span class="acc-dot" id="dot-country"></span>
+          <span class="acc-chevron">&#9660;</span>
+        </div>
+        <div class="acc-body">
+          <select class="acc-input" id="filter-country" onchange="updateDot('country')">
+            <option value="">All countries</option>
+            <option value="USA">United States</option>
+            <option value="GBR">United Kingdom</option>
+            <option value="FRA">France</option>
+            <option value="DEU">Germany</option>
+            <option value="ITA">Italy</option>
+            <option value="CHE">Switzerland</option>
+            <option value="CAN">Canada</option>
+            <option value="AUS">Australia</option>
+            <option value="SGP">Singapore</option>
+            <option value="HKG">Hong Kong</option>
+            <option value="CHN">China</option>
+            <option value="JPN">Japan</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="acc-section" data-filter="employees">
+        <div class="acc-header" onclick="toggleAccordion(this)">
+          <span class="acc-icon">&#128200;</span>
+          <span class="acc-label"># Employees</span>
+          <span class="acc-dot" id="dot-employees"></span>
+          <span class="acc-chevron">&#9660;</span>
+        </div>
+        <div class="acc-body">
+          <div class="acc-row">
+            <div style="flex:1"><div class="acc-row-label">Min</div><input class="acc-input" type="number" id="filter-min_employees" placeholder="Min" oninput="updateDot('employees')"></div>
+            <div style="flex:1"><div class="acc-row-label">Max</div><input class="acc-input" type="number" id="filter-max_employees" placeholder="Max" oninput="updateDot('employees')"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc-section" data-filter="funding">
+        <div class="acc-header" onclick="toggleAccordion(this)">
+          <span class="acc-icon">&#128176;</span>
+          <span class="acc-label">Funding</span>
+          <span class="acc-dot" id="dot-funding"></span>
+          <span class="acc-chevron">&#9660;</span>
+        </div>
+        <div class="acc-body">
+          <div class="acc-row">
+            <div style="flex:1"><div class="acc-row-label">Min (USD)</div><input class="acc-input" type="number" id="filter-min_funding" placeholder="e.g. 5000000" oninput="updateDot('funding')"></div>
+            <div style="flex:1"><div class="acc-row-label">Max (USD)</div><input class="acc-input" type="number" id="filter-max_funding" placeholder="No limit" oninput="updateDot('funding')"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc-section" data-filter="revenue">
+        <div class="acc-header" onclick="toggleAccordion(this)">
+          <span class="acc-icon">&#128178;</span>
+          <span class="acc-label">Revenue</span>
+          <span class="acc-dot" id="dot-revenue"></span>
+          <span class="acc-chevron">&#9660;</span>
+        </div>
+        <div class="acc-body">
+          <div class="acc-row">
+            <div style="flex:1"><div class="acc-row-label">Min (USD)</div><input class="acc-input" type="number" id="filter-min_revenue" placeholder="Min" oninput="updateDot('revenue')"></div>
+            <div style="flex:1"><div class="acc-row-label">Max (USD)</div><input class="acc-input" type="number" id="filter-max_revenue" placeholder="Max" oninput="updateDot('revenue')"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc-section" data-filter="keywords">
+        <div class="acc-header" onclick="toggleAccordion(this)">
+          <span class="acc-icon">&#128270;</span>
+          <span class="acc-label">Keywords</span>
+          <span class="acc-dot" id="dot-keywords"></span>
+          <span class="acc-chevron">&#9660;</span>
+        </div>
+        <div class="acc-body">
+          <input class="acc-input" type="text" id="filter-keywords" placeholder="keyword1, keyword2..." oninput="updateDot('keywords')">
+        </div>
+      </div>
+
+      <div class="acc-section" data-filter="year_founded">
+        <div class="acc-header" onclick="toggleAccordion(this)">
+          <span class="acc-icon">&#128197;</span>
+          <span class="acc-label">Year Founded</span>
+          <span class="acc-dot" id="dot-year_founded"></span>
+          <span class="acc-chevron">&#9660;</span>
+        </div>
+        <div class="acc-body">
+          <div class="acc-row">
+            <div style="flex:1"><div class="acc-row-label">From</div><input class="acc-input" type="number" id="filter-min_year_founded" placeholder="e.g. 2010" oninput="updateDot('year_founded')"></div>
+            <div style="flex:1"><div class="acc-row-label">To</div><input class="acc-input" type="number" id="filter-max_year_founded" placeholder="e.g. 2024" oninput="updateDot('year_founded')"></div>
+          </div>
+        </div>
+      </div>
+
     </div>
-
-    <div class="key-group">
-      <label class="key-label">HQ Country</label>
-      <select class="key-input" id="country-filter">
-        <option value="">All countries</option>
-        <option value="USA">United States</option>
-        <option value="GBR">United Kingdom</option>
-        <option value="FRA">France</option>
-        <option value="DEU">Germany</option>
-        <option value="ITA">Italy</option>
-        <option value="CHE">Switzerland</option>
-        <option value="CAN">Canada</option>
-        <option value="AUS">Australia</option>
-        <option value="SGP">Singapore</option>
-        <option value="HKG">Hong Kong</option>
-        <option value="CHN">China</option>
-        <option value="JPN">Japan</option>
-      </select>
-    </div>
-
-    <div class="key-group">
-      <label class="key-label">Industry</label>
-      <select class="key-input" id="industry-filter">
-        <option value="">All industries</option>
-        <option value="Software Development">Software Development</option>
-        <option value="Financial Services">Financial Services</option>
-        <option value="Food & Beverages">Food & Beverages</option>
-        <option value="Consumer Goods">Consumer Goods</option>
-        <option value="Health Care">Healthcare</option>
-        <option value="Retail">Retail / Fashion</option>
-        <option value="Media">Media & Entertainment</option>
-        <option value="Real Estate">Real Estate</option>
-        <option value="Hospitality">Hospitality</option>
-      </select>
-    </div>
-
-    <div class="key-group">
-      <label class="key-label">Sort by</label>
-      <select class="key-input" id="sort-by">
-        <option value="score">Fit score</option>
-        <option value="funding">Funding (high to low)</option>
-        <option value="name">Name A–Z</option>
-        <option value="company">Company A–Z</option>
-      </select>
-    </div>
-
-    <div class="divider"></div>
-
-    <button class="run-btn" id="run-btn" onclick="runPipelineManual()">
-      <div class="spinner"></div>
-      <span class="btn-text">Find Prospects</span>
-    </button>
-
   </div>
 
+  <!-- STICKY BOTTOM BAR -->
+  <div class="sidebar-bottom">
+    <button class="clear-all-link" onclick="clearAllFilters()">Clear all</button>
+    <button class="search-btn" id="search-btn" onclick="runSearch()">
+      <div class="spinner"></div>
+      Search
+    </button>
+  </div>
 </aside>
 
-<!-- MAIN -->
-<main class="main">
+<!-- RIGHT PANEL -->
+<div class="right-panel">
   <div class="thinking-bar" id="thinking-bar"><div class="thinking-fill"></div></div>
 
-  <!-- Stats -->
-  <div class="stats-row">
-    <div class="stat-card"><span class="stat-label">Prospects found</span><div class="stat-value" id="stat-founders">—</div><span class="stat-sub">from matching companies</span></div>
-    <div class="stat-card"><span class="stat-label">Companies</span><div class="stat-value" id="stat-companies">—</div><span class="stat-sub">unique companies</span></div>
-    <div class="stat-card"><span class="stat-label">Avg. funding</span><div class="stat-value" id="stat-exit">—</div><span class="stat-sub">total investment</span></div>
-    <div class="stat-card"><span class="stat-label">High-fit (≥75)</span><div class="stat-value" id="stat-highfit">—</div><span class="stat-sub">top prospects</span></div>
+  <!-- Top bar with tabs and search -->
+  <div class="results-topbar">
+    <div class="results-tabs">
+      <button class="results-tab active" id="tab-total" onclick="switchResultsTab('total')">Total: <span id="count-total">0</span></button>
+      <button class="results-tab" id="tab-netnew" onclick="switchResultsTab('netnew')">Net New: <span id="count-netnew">0</span></button>
+    </div>
+    <div class="results-search-wrap">
+      <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <input class="results-search" type="text" id="local-search" placeholder="Search people..." oninput="filterResults()">
+    </div>
   </div>
 
-  <!-- Status + tabs -->
-  <div class="status-row">
-    <div class="status-msg"><div class="status-dot" id="status-dot"></div><span id="status-text">Describe who you're looking for, then run the pipeline.</span></div>
-    <div class="tab-bar">
-      <button class="tab-btn active" onclick="switchTab('table',this)">Prospects</button>
-      <button class="tab-btn" onclick="switchTab('code',this)">API Code</button>
-    </div>
+  <!-- Status bar -->
+  <div class="status-bar" id="status-bar">
+    <div class="status-dot" id="status-dot"></div>
+    <span id="status-text">Use filters or AI to find prospects, then click Search.</span>
   </div>
 
   <!-- Table -->
-  <div id="view-table">
-    <div class="results-wrap">
-      <div class="results-header">
-        <div>
-          <div class="results-title" id="results-title">Prospects</div>
-          <div class="results-subtitle" id="results-subtitle">Run the pipeline to surface high-value prospects</div>
-        </div>
-        <div class="results-actions">
-          <button class="action-btn" onclick="copyCSV()">Copy CSV</button>
-          <button class="action-btn" onclick="downloadCSV()">Export</button>
-        </div>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr>
-            <th onclick="sortTable('name')">Name</th>
-            <th onclick="sortTable('company')">Company</th>
-            <th onclick="sortTable('funding')">Funding</th>
-            <th>Contact</th>
-            <th onclick="sortTable('score')">Score</th>
-            <th></th>
-          </tr></thead>
-          <tbody id="results-body">
-            <tr><td colspan="6"><div class="empty-state">
-              <div class="empty-icon"></div>
-              <div class="empty-title">Start with a description</div>
-              <div class="empty-sub">Type what you're looking for above — Claude will generate the exact filters. Or click an example.</div>
-            </div></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th class="check-col"><input type="checkbox" id="select-all" onchange="toggleSelectAll(this.checked)"></th>
+          <th class="sortable" onclick="sortTable('name')">Name</th>
+          <th class="sortable" onclick="sortTable('title')">Job Title</th>
+          <th class="sortable" onclick="sortTable('company')">Company</th>
+          <th class="sortable" onclick="sortTable('location')">Location</th>
+          <th>Emails</th>
+        </tr>
+      </thead>
+      <tbody id="results-body">
+        <tr><td colspan="6">
+          <div class="empty-state">
+            <div class="empty-icon">&#128269;</div>
+            <div class="empty-title">Find your next prospect</div>
+            <div class="empty-sub">Use the AI description or set filters manually, then click Search to discover people.</div>
+          </div>
+        </td></tr>
+      </tbody>
+    </table>
   </div>
 
-  <!-- Code view -->
-  <div id="view-code" style="display:none;">
-    <div class="results-wrap">
-      <div class="results-header">
-        <div class="results-title">Generated Pipeline Code</div>
-        <div class="results-actions"><button class="action-btn" onclick="copyCode()">Copy</button></div>
-      </div>
-      <div style="padding:14px 16px;display:flex;flex-direction:column;gap:10px;">
-        <p style="font-size:12px;color:var(--secondary);line-height:1.6;">Exact Crustdata API calls this tool runs, generated from your Claude-described filters.</p>
-        <div class="code-block"><button class="code-copy" onclick="copyCode()">copy</button><span id="code-content">Run the pipeline to see generated code.</span></div>
-      </div>
+  <!-- Bottom bar -->
+  <div class="results-bottombar">
+    <span class="selected-count" id="selected-count">Selected: 0</span>
+    <div class="pagination" id="pagination">
+      <button class="page-btn" id="page-prev" onclick="changePage(-1)" disabled>&lsaquo; Prev</button>
+      <span id="page-info">0 results</span>
+      <button class="page-btn" id="page-next" onclick="changePage(1)" disabled>Next &rsaquo;</button>
     </div>
+    <button class="export-btn" onclick="exportCSV()">Export CSV</button>
   </div>
-</main>
 </div>
+
+</div><!-- end app-layout -->
 
 <!-- DRAWER -->
 <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
 <div class="drawer" id="drawer">
   <div class="drawer-head">
     <div>
-      <div class="drawer-name" id="d-name">—</div>
-      <div class="drawer-role" id="d-role">—</div>
+      <div class="drawer-name" id="d-name">--</div>
+      <div class="drawer-role" id="d-role">--</div>
     </div>
-    <button class="drawer-close" onclick="closeDrawer()"></button>
+    <button class="drawer-close" onclick="closeDrawer()">&times;</button>
   </div>
   <div class="drawer-body">
     <div class="score-bar-card">
-      <div class="score-bar-top"><span class="score-bar-title">Prospect Fit Score</span><span class="score-bar-num" id="d-score">—</span></div>
+      <div class="score-bar-top"><span class="score-bar-title">Prospect Fit Score</span><span class="score-bar-num" id="d-score">--</span></div>
       <div class="score-track"><div class="score-fill" id="d-score-fill" style="width:0%"></div></div>
       <div class="score-factors" id="d-score-factors"></div>
     </div>
-    <div class="d-section"><div class="d-section-title">Signals</div><div class="signals-list" id="d-signals"></div></div>
     <div class="d-section"><div class="d-section-title">Profile</div><div class="d-kv" id="d-profile-kv"></div></div>
     <div class="d-section"><div class="d-section-title">Company</div><div class="d-kv" id="d-company-kv"></div></div>
     <div class="d-section"><div class="d-section-title">Contact</div><div class="d-kv" id="d-contact-kv"></div></div>
-    <div class="d-section"><div class="d-section-title">Pitch Approach</div><div class="pitch-box" id="d-pitch">—</div></div>
+    <div class="d-section"><div class="d-section-title">Signals</div><div class="signals-list" id="d-signals"></div></div>
+    <div class="d-section"><div class="d-section-title">Pitch Approach</div><div class="pitch-box" id="d-pitch">--</div></div>
   </div>
 </div>
 
 <script>
-/* ═══════════════════════════════════════════
-   API KEYS — set as Vercel environment variables:
-     CLAUDE_KEY      → your Anthropic API key
-     CRUSTDATA_KEY   → your Crustdata API key
-   These are injected at build time by next.config.js
-   (see /lib/config.js). Never commit real keys here.
-═══════════════════════════════════════════ */
+/* ===== API KEYS ===== */
 var CLAUDE_KEY_HARDCODED    = typeof __CLAUDE_KEY__ !== 'undefined' ? __CLAUDE_KEY__ : '';
 var CRUSTDATA_KEY_HARDCODED = typeof __CRUSTDATA_KEY__ !== 'undefined' ? __CRUSTDATA_KEY__ : '';
 
-/* ═══════════════════════════════════════════
-   STATE
-═══════════════════════════════════════════ */
-var allResults=[];
-var filteredResults=[];
-var curSort={col:'score',dir:'desc'};
-var generatedFilters=[];
+/* ===== STATE ===== */
+var allResults = [];
+var filteredResults = [];
+var selectedSet = {};
+var curSort = { col: 'score', dir: 'desc' };
+var currentPage = 0;
+var pageSize = 25;
+var aiGeneratedFilters = null; // JSON from Claude
 
-/* ═══════════════════════════════════════════
-   INIT
-═══════════════════════════════════════════ */
-function init(){
-  updateCode();
-  if(CRUSTDATA_KEY_HARDCODED){
-    fetch('https://api.crustdata.com/user/credits',{headers:{'Authorization':'Token '+CRUSTDATA_KEY_HARDCODED}})
-    .then(function(r){return r.json();})
-    .then(function(d){
-      var el=document.getElementById('credit-display');
-      el.textContent=(d.credits||0).toLocaleString()+' credits';
-      el.style.display='';
-    }).catch(function(){});
+/* ===== INIT ===== */
+function init() {
+  if (CRUSTDATA_KEY_HARDCODED) {
+    fetch('https://api.crustdata.com/user/credits', { headers: { 'Authorization': 'Token ' + CRUSTDATA_KEY_HARDCODED } })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var el = document.getElementById('credit-display');
+      el.textContent = (d.credits || 0).toLocaleString() + ' credits';
+      el.style.display = '';
+    }).catch(function() {});
   }
 }
 
-/* ═══════════════════════════════════════════
-   AI SEMANTIC FILTER GENERATION
-═══════════════════════════════════════════ */
-
-function clearFilters(){
-  generatedFilters=[];
-  document.getElementById('filters-panel').classList.remove('visible');
-  document.getElementById('filter-chip-list').innerHTML='';
-  document.getElementById('reasoning-box').style.display='none';
+/* ===== AI FILTER GENERATION ===== */
+function setAIQuery(text) {
+  document.getElementById('ai-query').value = text;
 }
 
-async function generateFilters(){
-  var query=document.getElementById('ai-query').value.trim();
-  if(!query){ showToast('Enter a description first'); return; }
+function clearAIChip() {
+  aiGeneratedFilters = null;
+  document.getElementById('ai-chip').classList.remove('visible');
+  document.getElementById('ai-box').style.display = '';
+  clearAllFilterInputs();
+}
 
-  var claudeKey=CLAUDE_KEY_HARDCODED;
-  var btn=document.getElementById('ai-gen-btn');
+async function generateFilters() {
+  var query = document.getElementById('ai-query').value.trim();
+  if (!query) { showToast('Enter a description first'); return; }
+  if (!CLAUDE_KEY_HARDCODED) { showToast('Claude API key required'); return; }
+
+  var btn = document.getElementById('ai-gen-btn');
   btn.classList.add('spinning');
-  btn.disabled=true;
+  btn.disabled = true;
 
   try {
-    if(!claudeKey){
-      showToast('Claude API key required for filter generation');
-      return;
-    }
+    var result = await claudeFilterGen(query, CLAUDE_KEY_HARDCODED);
+    aiGeneratedFilters = result;
+    applyAIFiltersToInputs(result);
 
-    var result=await claudeFilterGen(query, claudeKey);
-    generatedFilters=result.filters;
-    renderFilterChips(result.filters, result.reasoning);
+    // Collapse AI box and show chip
+    document.getElementById('ai-box').style.display = 'none';
+    var chip = document.getElementById('ai-chip');
+    document.getElementById('ai-chip-text').textContent = query;
+    chip.classList.add('visible');
 
   } catch(e) {
-    showToast('Filter generation error: '+e.message);
+    showToast('Filter generation error: ' + e.message);
   } finally {
     btn.classList.remove('spinning');
-    btn.disabled=false;
+    btn.disabled = false;
   }
 }
 
-async function claudeFilterGen(query, apiKey){
-  var systemPrompt='You are a B2B data expert converting natural language prospect descriptions into Crustdata API filter objects.\n\nCrustdata CompanyDB filter fields (use EXACTLY these names):\n- acquisition_status: "Acquired" or other values (only include if user specifically wants acquired companies)\n- crunchbase_total_investment_usd: numeric, use operators => (gte) or =< (lte)\n- hq_country: ISO 3-alpha codes (USA, GBR, FRA, DEU, ITA, CHN, etc.)\n- linkedin_industries: string, use fuzzy operator (.)\n- employee_metrics.latest_count: numeric headcount\n- last_funding_round_type: "series_a", "series_b", "series_c", "seed", etc.\n- year_founded: numeric\n- largest_headcount_country: ISO 3-alpha\n\nOperators: = (exact), => (gte), =< (lte), (.) (fuzzy text), in (list), !=\n\nIMPORTANT: Generate filters that find the RIGHT people for the description. Do NOT always restrict to acquired companies — only add acquisition_status filter if the user specifically mentions exits, acquisitions, or post-exit wealth. For general prospect searches, focus on industry, location, funding, and company size filters.\n\nAlso return:\n- linkedin_post_keywords: keywords to search in LinkedIn posts for interest signals\n- prospect_reasoning: 2-3 sentences explaining the prospect logic\n\nRespond ONLY with valid JSON, no markdown:\n{\n  "filters": [{"filter_type":"...","type":"...","value":"...","label":"Human readable description"}],\n  "linkedin_post_keywords": ["wine","cellar","bordeaux"],\n  "reasoning": "..."\n}';
+async function claudeFilterGen(query, apiKey) {
+  var systemPrompt = 'You are a B2B data expert. Convert natural language prospect descriptions into structured filter JSON.\n\nReturn ONLY valid JSON (no markdown) with these fields:\n{\n  "person_name": "",\n  "job_titles": "CEO, CFO, VP Marketing",\n  "seniority": ["csuite", "vp"],\n  "company": "",\n  "industry": "Luxury, Fashion, Consumer Goods",\n  "country": "FRA",\n  "min_employees": null,\n  "max_employees": null,\n  "min_funding": 10000000,\n  "max_funding": null,\n  "min_revenue": null,\n  "max_revenue": null,\n  "keywords": "luxury, fashion, brand",\n  "min_year_founded": null,\n  "max_year_founded": null,\n  "reasoning": "Brief explanation of filter logic"\n}\n\nRules:\n- country uses ISO 3-alpha codes (USA, GBR, FRA, DEU, ITA, CHE, CHN, JPN, etc.)\n- seniority values: "csuite", "vp", "director", "manager", "all"\n- Use null for fields that should not be filtered\n- Be smart about inferring filters from natural language\n- For "tech executives" set seniority to ["csuite","vp","director"]\n- For "$10M+ funding" set min_funding to 10000000';
 
-  var userContent='Convert this prospect description to Crustdata filters:\n\n'+query;
-
-  var response=await fetch('https://api.anthropic.com/v1/messages',{
-    method:'POST',
-    headers:{
-      'Content-Type':'application/json',
+  var response = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
       'x-api-key': apiKey,
-      'anthropic-version':'2023-06-01',
-      'anthropic-dangerous-direct-browser-access':'true'
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
     },
-    body:JSON.stringify({
-      model:'claude-sonnet-4-6',
-      max_tokens:1000,
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 1000,
       system: systemPrompt,
-      messages:[{role:'user',content:userContent}]
+      messages: [{ role: 'user', content: 'Convert this prospect description to filters:\n\n' + query }]
     })
   });
 
-  if(!response.ok){
-    var err=await response.json().catch(function(){return {};});
-    throw new Error(err.error?.message || 'Claude API error '+response.status);
+  if (!response.ok) {
+    var err = await response.json().catch(function() { return {}; });
+    throw new Error(err.error?.message || 'Claude API error ' + response.status);
   }
 
-  var data=await response.json();
-  var text=data.content[0].text.trim();
-  text=text.replace(/^```json\s*/,'').replace(/\s*```$/,'').trim();
-  var parsed=JSON.parse(text);
-
-  return {
-    filters: parsed.filters || [],
-    reasoning: parsed.reasoning || ''
-  };
+  var data = await response.json();
+  var text = data.content[0].text.trim();
+  text = text.replace(/^```json\s*/, '').replace(/\s*```$/, '').trim();
+  return JSON.parse(text);
 }
 
-function renderFilterChips(filters, reasoning){
-  var panel=document.getElementById('filters-panel');
-  var chipList=document.getElementById('filter-chip-list');
-  var reasonBox=document.getElementById('reasoning-box');
-  panel.classList.add('visible');
-  if(reasoning){
-    reasonBox.style.display='block';
-    reasonBox.textContent=reasoning;
+function applyAIFiltersToInputs(f) {
+  if (f.person_name) setVal('filter-person_name', f.person_name);
+  if (f.job_titles) setVal('filter-job_titles', f.job_titles);
+  if (f.company) setVal('filter-company', f.company);
+  if (f.industry) setVal('filter-industry', f.industry);
+  if (f.country) setVal('filter-country', f.country);
+  if (f.min_employees) setVal('filter-min_employees', f.min_employees);
+  if (f.max_employees) setVal('filter-max_employees', f.max_employees);
+  if (f.min_funding) setVal('filter-min_funding', f.min_funding);
+  if (f.max_funding) setVal('filter-max_funding', f.max_funding);
+  if (f.min_revenue) setVal('filter-min_revenue', f.min_revenue);
+  if (f.max_revenue) setVal('filter-max_revenue', f.max_revenue);
+  if (f.keywords) setVal('filter-keywords', f.keywords);
+  if (f.min_year_founded) setVal('filter-min_year_founded', f.min_year_founded);
+  if (f.max_year_founded) setVal('filter-max_year_founded', f.max_year_founded);
+
+  // Apply seniority
+  if (f.seniority && Array.isArray(f.seniority)) {
+    document.querySelectorAll('.seniority-pill').forEach(function(p) { p.classList.remove('active'); });
+    f.seniority.forEach(function(s) {
+      var pill = document.querySelector('.seniority-pill[data-level="' + s + '"]');
+      if (pill) pill.classList.add('active');
+    });
+    updateDot('seniority');
   }
-  chipList.innerHTML=filters.map(function(f,i){
-    var valDisplay=Array.isArray(f.value)?f.value.join(', '):String(f.value);
-    return '<div class="filter-chip" id="fc-'+i+'">'+
-      '<div class="filter-chip-left">'+
-      '<span class="filter-chip-field">'+f.filter_type+'</span>'+
-      '<span class="filter-chip-val" onclick="startEditChip('+i+')" title="Click to edit">'+(f.label||f.type+' '+valDisplay)+'</span>'+
-      '<input class="filter-chip-edit" style="display:none" value="'+valDisplay.replace(/"/g,'&quot;')+'" onblur="saveEditChip('+i+',this)" onkeydown="handleChipKey(event,'+i+',this)">'+
-      '</div>'+
-      '<button class="filter-chip-remove" onclick="removeFilter('+i+')">×</button>'+
-      '</div>';
-  }).join('');
-  // Add "add filter" button
-  chipList.innerHTML+='<button class="filter-add-btn" onclick="showAddFilter()">+ Add filter</button>';
-  // Add filter form (hidden by default)
-  if(!document.getElementById('add-filter-form')){
-    chipList.innerHTML+='<div id="add-filter-form" style="display:none;flex-direction:column;gap:4px;" class="filter-chip">'+
-      '<select class="key-input" id="new-filter-field" style="font-size:10px;padding:4px 6px;">'+
-      '<option value="hq_country">HQ Country</option>'+
-      '<option value="linkedin_industries">Industry</option>'+
-      '<option value="crunchbase_total_investment_usd">Funding</option>'+
-      '<option value="employee_metrics.latest_count">Employee Count</option>'+
-      '<option value="year_founded">Year Founded</option>'+
-      '</select>'+
-      '<div style="display:flex;gap:4px;">'+
-      '<select class="key-input" id="new-filter-op" style="font-size:10px;padding:4px 6px;width:60px;">'+
-      '<option value="=">=</option><option value="=>">≥</option><option value="=<">≤</option><option value="(.)">contains</option>'+
-      '</select>'+
-      '<input class="key-input" id="new-filter-value" placeholder="Value" style="font-size:10px;padding:4px 6px;">'+
-      '</div>'+
-      '<div style="display:flex;gap:4px;">'+
-      '<button class="ai-gen-btn" style="font-size:10px;padding:3px 8px;" onclick="addNewFilter()">Add</button>'+
-      '<button class="filter-chip-remove" style="font-size:10px;" onclick="hideAddFilter()">Cancel</button>'+
-      '</div>'+
-      '</div>';
-  }
-  updateCode();
-}
 
-function startEditChip(i){
-  var chip=document.getElementById('fc-'+i);
-  if(!chip) return;
-  chip.querySelector('.filter-chip-val').style.display='none';
-  var input=chip.querySelector('.filter-chip-edit');
-  input.style.display='block';
-  input.focus();
-  input.select();
-}
-
-function saveEditChip(i,input){
-  var val=input.value.trim();
-  if(val && generatedFilters[i]){
-    var numVal=Number(val);
-    generatedFilters[i].value=isNaN(numVal)?val:numVal;
-    generatedFilters[i].label=generatedFilters[i].filter_type+' '+generatedFilters[i].type+' '+val;
-  }
-  renderFilterChips(generatedFilters,'');
-}
-
-function handleChipKey(e,i,input){
-  if(e.key==='Enter'){e.preventDefault();saveEditChip(i,input);}
-  if(e.key==='Escape'){e.preventDefault();renderFilterChips(generatedFilters,'');}
-}
-
-function showAddFilter(){
-  document.getElementById('add-filter-form').style.display='flex';
-}
-
-function hideAddFilter(){
-  document.getElementById('add-filter-form').style.display='none';
-}
-
-function addNewFilter(){
-  var field=document.getElementById('new-filter-field').value;
-  var op=document.getElementById('new-filter-op').value;
-  var val=document.getElementById('new-filter-value').value.trim();
-  if(!val){showToast('Enter a value');return;}
-  var numVal=Number(val);
-  generatedFilters.push({
-    filter_type:field,
-    type:op,
-    value:isNaN(numVal)?val:numVal,
-    label:field+' '+op+' '+val
+  // Update all dots
+  ['person_name','job_titles','company','industry','country','employees','funding','revenue','keywords','year_founded'].forEach(function(k) {
+    updateDot(k);
   });
-  renderFilterChips(generatedFilters,'');
-  hideAddFilter();
 }
 
-function removeFilter(i){
-  generatedFilters.splice(i,1);
-  renderFilterChips(generatedFilters,'');
+function setVal(id, val) {
+  var el = document.getElementById(id);
+  if (el) el.value = val;
 }
 
-/* ═══════════════════════════════════════════
-   SENIORITY & TARGET ROLES
-═══════════════════════════════════════════ */
-function toggleSeniority(btn){
-  var level=btn.getAttribute('data-level');
-  if(level==='all'){
-    document.querySelectorAll('.seniority-pill').forEach(function(p){p.classList.remove('active');});
+/* ===== ACCORDION ===== */
+function toggleAccordion(header) {
+  var section = header.parentElement;
+  section.classList.toggle('open');
+}
+
+function updateDot(filterName) {
+  var dot = document.getElementById('dot-' + filterName);
+  if (!dot) return;
+  var hasValue = false;
+
+  if (filterName === 'person_name') hasValue = !!document.getElementById('filter-person_name').value.trim();
+  else if (filterName === 'job_titles') hasValue = !!document.getElementById('filter-job_titles').value.trim();
+  else if (filterName === 'seniority') {
+    var active = getActiveSeniorities();
+    hasValue = active.indexOf('all') === -1 && active.length > 0;
+  }
+  else if (filterName === 'people_per_company') hasValue = document.getElementById('filter-people_per_company').value !== '3';
+  else if (filterName === 'company') hasValue = !!document.getElementById('filter-company').value.trim();
+  else if (filterName === 'industry') hasValue = !!document.getElementById('filter-industry').value.trim();
+  else if (filterName === 'country') hasValue = !!document.getElementById('filter-country').value;
+  else if (filterName === 'employees') hasValue = !!document.getElementById('filter-min_employees').value || !!document.getElementById('filter-max_employees').value;
+  else if (filterName === 'funding') hasValue = !!document.getElementById('filter-min_funding').value || !!document.getElementById('filter-max_funding').value;
+  else if (filterName === 'revenue') hasValue = !!document.getElementById('filter-min_revenue').value || !!document.getElementById('filter-max_revenue').value;
+  else if (filterName === 'keywords') hasValue = !!document.getElementById('filter-keywords').value.trim();
+  else if (filterName === 'year_founded') hasValue = !!document.getElementById('filter-min_year_founded').value || !!document.getElementById('filter-max_year_founded').value;
+
+  dot.classList.toggle('active', hasValue);
+}
+
+/* ===== SENIORITY ===== */
+function toggleSeniority(btn) {
+  var level = btn.getAttribute('data-level');
+  if (level === 'all') {
+    document.querySelectorAll('.seniority-pill').forEach(function(p) { p.classList.remove('active'); });
     btn.classList.add('active');
   } else {
     document.querySelector('.seniority-pill[data-level="all"]').classList.remove('active');
     btn.classList.toggle('active');
-    var anyActive=document.querySelectorAll('.seniority-pill.active').length;
-    if(!anyActive) document.querySelector('.seniority-pill[data-level="all"]').classList.add('active');
+    if (!document.querySelectorAll('.seniority-pill.active').length) {
+      document.querySelector('.seniority-pill[data-level="all"]').classList.add('active');
+    }
   }
+  updateDot('seniority');
 }
 
-function getActiveSeniorities(){
-  var active=[];
-  document.querySelectorAll('.seniority-pill.active').forEach(function(p){
+function getActiveSeniorities() {
+  var active = [];
+  document.querySelectorAll('.seniority-pill.active').forEach(function(p) {
     active.push(p.getAttribute('data-level'));
   });
   return active;
 }
 
-function matchesSeniority(title){
-  var levels=getActiveSeniorities();
-  if(levels.indexOf('all')!==-1) return true;
-  var t=(title||'').toLowerCase();
-  for(var i=0;i<levels.length;i++){
-    if(levels[i]==='csuite' && /\b(ceo|cfo|cto|coo|cmo|cio|ciso|chief|founder|co-founder|president)\b/.test(t)) return true;
-    if(levels[i]==='vp' && /\b(vp|vice president|svp|evp)\b/.test(t)) return true;
-    if(levels[i]==='director' && /\bdirector\b/.test(t)) return true;
-    if(levels[i]==='manager' && /\bmanager\b/.test(t)) return true;
+function matchesSeniority(title) {
+  var levels = getActiveSeniorities();
+  if (levels.indexOf('all') !== -1) return true;
+  var t = (title || '').toLowerCase();
+  for (var i = 0; i < levels.length; i++) {
+    if (levels[i] === 'csuite' && /\b(ceo|cfo|cto|coo|cmo|cio|ciso|chief|founder|co-founder|president)\b/.test(t)) return true;
+    if (levels[i] === 'vp' && /\b(vp|vice president|svp|evp)\b/.test(t)) return true;
+    if (levels[i] === 'director' && /\bdirector\b/.test(t)) return true;
+    if (levels[i] === 'manager' && /\bmanager\b/.test(t)) return true;
   }
   return false;
 }
 
-function matchesTargetRoles(title){
-  var roles=document.getElementById('target-roles').value.trim();
-  if(!roles) return true;
-  var t=(title||'').toLowerCase();
-  return roles.split(',').some(function(r){return t.indexOf(r.trim().toLowerCase())!==-1;});
+function matchesTargetRoles(title) {
+  var roles = document.getElementById('filter-job_titles').value.trim();
+  if (!roles) return true;
+  var t = (title || '').toLowerCase();
+  return roles.split(',').some(function(r) { return t.indexOf(r.trim().toLowerCase()) !== -1; });
 }
 
-/* ═══════════════════════════════════════════
-   MAIN PIPELINE
-═══════════════════════════════════════════ */
-async function runPipeline(){
-  var btn=document.getElementById('run-btn');
-  var bar=document.getElementById('thinking-bar');
-  btn.classList.add('loading'); btn.disabled=true; bar.classList.add('active');
-  setStatus('running','Running pipeline…');
-  resetSteps();
+/* ===== CLEAR ALL ===== */
+function clearAllFilters() {
+  clearAllFilterInputs();
+  clearAIChipSilent();
+  aiGeneratedFilters = null;
+  allResults = [];
+  filteredResults = [];
+  selectedSet = {};
+  currentPage = 0;
+  renderTable([]);
+  updateCounts();
+  setStatus('', 'Use filters or AI to find prospects, then click Search.');
+}
 
-  var crustKey=CRUSTDATA_KEY_HARDCODED;
+function clearAllFilterInputs() {
+  setVal('filter-person_name', '');
+  setVal('filter-job_titles', '');
+  setVal('filter-company', '');
+  setVal('filter-industry', '');
+  setVal('filter-country', '');
+  setVal('filter-min_employees', '');
+  setVal('filter-max_employees', '');
+  setVal('filter-min_funding', '');
+  setVal('filter-max_funding', '');
+  setVal('filter-min_revenue', '');
+  setVal('filter-max_revenue', '');
+  setVal('filter-keywords', '');
+  setVal('filter-min_year_founded', '');
+  setVal('filter-max_year_founded', '');
+  setVal('filter-people_per_company', '3');
+
+  document.querySelectorAll('.seniority-pill').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelector('.seniority-pill[data-level="all"]').classList.add('active');
+
+  ['person_name','job_titles','seniority','people_per_company','company','industry','country','employees','funding','revenue','keywords','year_founded'].forEach(function(k) {
+    updateDot(k);
+  });
+}
+
+function clearAIChipSilent() {
+  document.getElementById('ai-chip').classList.remove('visible');
+  document.getElementById('ai-box').style.display = '';
+  document.getElementById('ai-query').value = '';
+}
+
+/* ===== BUILD API CONDITIONS ===== */
+function buildConditions() {
+  var conditions = [];
+
+  var minFunding = parseInt(document.getElementById('filter-min_funding').value);
+  var maxFunding = parseInt(document.getElementById('filter-max_funding').value);
+  var country = document.getElementById('filter-country').value;
+  var industry = document.getElementById('filter-industry').value.trim();
+  var minEmployees = parseInt(document.getElementById('filter-min_employees').value);
+  var maxEmployees = parseInt(document.getElementById('filter-max_employees').value);
+  var minRevenue = parseInt(document.getElementById('filter-min_revenue').value);
+  var maxRevenue = parseInt(document.getElementById('filter-max_revenue').value);
+  var keywords = document.getElementById('filter-keywords').value.trim();
+  var minYear = parseInt(document.getElementById('filter-min_year_founded').value);
+  var maxYear = parseInt(document.getElementById('filter-max_year_founded').value);
+
+  if (minFunding) conditions.push({ filter_type: 'crunchbase_total_investment_usd', type: '=>', value: minFunding });
+  if (maxFunding) conditions.push({ filter_type: 'crunchbase_total_investment_usd', type: '=<', value: maxFunding });
+  if (country) conditions.push({ filter_type: 'hq_country', type: '=', value: country });
+  if (industry) {
+    industry.split(',').forEach(function(ind) {
+      ind = ind.trim();
+      if (ind) conditions.push({ filter_type: 'linkedin_industries', type: '(.)', value: ind });
+    });
+  }
+  if (minEmployees) conditions.push({ filter_type: 'employee_metrics.latest_count', type: '=>', value: minEmployees });
+  if (maxEmployees) conditions.push({ filter_type: 'employee_metrics.latest_count', type: '=<', value: maxEmployees });
+  if (minYear) conditions.push({ filter_type: 'year_founded', type: '=>', value: minYear });
+  if (maxYear) conditions.push({ filter_type: 'year_founded', type: '=<', value: maxYear });
+
+  // Default: at least some funding filter
+  if (!conditions.length) {
+    conditions.push({ filter_type: 'crunchbase_total_investment_usd', type: '=>', value: 5000000 });
+  }
+
+  return conditions;
+}
+
+/* ===== SEARCH / PIPELINE ===== */
+async function runSearch() {
+  var btn = document.getElementById('search-btn');
+  var bar = document.getElementById('thinking-bar');
+  btn.classList.add('loading');
+  btn.disabled = true;
+  bar.classList.add('active');
+  setStatus('running', 'Searching for matching companies...');
+
+  var crustKey = CRUSTDATA_KEY_HARDCODED;
+  if (!crustKey) {
+    showToast('Crustdata API key required');
+    setStatus('error', 'Crustdata API key not set.');
+    btn.classList.remove('loading');
+    btn.disabled = false;
+    bar.classList.remove('active');
+    return;
+  }
 
   try {
-    if(!crustKey){
-      showToast('Crustdata API key required to run pipeline');
-      setStatus('error','Crustdata API key not set.');
-      return;
-    }
     await liveRun(crustKey);
-  } catch(e){
-    setStatus('error','Error: '+e.message);
+  } catch(e) {
+    setStatus('error', 'Error: ' + e.message);
     console.error(e);
   } finally {
-    btn.classList.remove('loading'); btn.disabled=false; bar.classList.remove('active');
+    btn.classList.remove('loading');
+    btn.disabled = false;
+    bar.classList.remove('active');
   }
 }
 
-async function liveRun(crustKey){
-  var B='https://api.crustdata.com';
-  var H={'Authorization':'Token '+crustKey,'Content-Type':'application/json','Accept':'application/json'};
+async function liveRun(crustKey) {
+  var B = 'https://api.crustdata.com';
+  var H = { 'Authorization': 'Token ' + crustKey, 'Content-Type': 'application/json', 'Accept': 'application/json' };
 
-  var maxPerCompany=parseInt(document.getElementById('people-per-company').value)||3;
+  var maxPerCompany = parseInt(document.getElementById('filter-people_per_company').value) || 3;
+  var conditions = buildConditions();
 
-  // Build conditions from AI-generated filters
-  setStep(0,'done');
-  setStep(1,'active');
-  setStatus('running','Step 1: Searching CompanyDB for matching companies…');
+  setStatus('running', 'Step 1: Searching CompanyDB...');
+  var r1 = await fetch(B + '/screener/companydb/search/', {
+    method: 'POST', headers: H,
+    body: JSON.stringify({
+      filters: { op: 'and', conditions: conditions },
+      limit: 50,
+      sorts: [{ column: 'crunchbase_total_investment_usd', order: 'desc' }]
+    })
+  });
+  if (!r1.ok) throw new Error('CompanyDB: ' + r1.status + ' ' + await r1.text());
+  var d1 = await r1.json();
+  var companies = d1.companies || [];
 
-  var conditions=generatedFilters.length
-    ? generatedFilters.map(function(f){return {filter_type:f.filter_type,type:f.type,value:f.value};})
-    : [{filter_type:'crunchbase_total_investment_usd',type:'=>',value:5000000}];
-
-  var r1=await fetch(B+'/screener/companydb/search/',{method:'POST',headers:H,body:JSON.stringify({
-    filters:{op:'and',conditions:conditions},
-    limit:50,
-    sorts:[{column:'crunchbase_total_investment_usd',order:'desc'}]
-  })});
-  if(!r1.ok) throw new Error('CompanyDB: '+r1.status+' '+await r1.text());
-  var d1=await r1.json();
-  var companies=d1.companies||[];
-  setStep(1,'done');
-
-  if(!companies.length){
-    setStatus('done','No companies matched your filters.');
-    allResults=[]; filterAndRender(); return;
+  if (!companies.length) {
+    setStatus('done', 'No companies matched your filters.');
+    allResults = [];
+    filterAndRender();
+    return;
   }
 
-  setStep(2,'active');
-  setStatus('running','Step 2: Enriching '+companies.length+' companies for people data…');
-  var domains=companies.slice(0,50).map(function(c){return c.company_website_domain;}).filter(Boolean).join(',');
-  var r2=await fetch(B+'/screener/company?company_domain='+encodeURIComponent(domains)+'&fields=founders,decision_makers',{headers:H});
-  var enriched=r2.ok?await r2.json():[];
-  setStep(2,'done');
+  setStatus('running', 'Step 2: Enriching ' + companies.length + ' companies for people...');
+  var domains = companies.slice(0, 50).map(function(c) { return c.company_website_domain; }).filter(Boolean).join(',');
+  var r2 = await fetch(B + '/screener/company?company_domain=' + encodeURIComponent(domains) + '&fields=founders,decision_makers', { headers: H });
+  var enriched = r2.ok ? await r2.json() : [];
 
-  setStep(3,'active');
-  setStatus('running','Step 3: Extracting and enriching people…');
-  var fUrls=[],fMeta={};
-  enriched.forEach(function(co){
-    var comp=companies.find(function(c){return c.company_website_domain===co.company_website_domain;});
-    var people=[];
-    if(co.founders&&co.founders.profiles) people=people.concat(co.founders.profiles);
-    if(co.decision_makers&&co.decision_makers.profiles) people=people.concat(co.decision_makers.profiles);
-    var seen={};
-    people.forEach(function(f){
-      if(f.linkedin_profile_url && !seen[f.linkedin_profile_url] && Object.keys(seen).length<maxPerCompany){
-        seen[f.linkedin_profile_url]=true;
+  setStatus('running', 'Step 3: Extracting and enriching people...');
+  var fUrls = [], fMeta = {};
+  var jobTitlesFilter = document.getElementById('filter-job_titles').value.trim().toLowerCase();
+  var personNameFilter = document.getElementById('filter-person_name').value.trim().toLowerCase();
+
+  enriched.forEach(function(co) {
+    var comp = companies.find(function(c) { return c.company_website_domain === co.company_website_domain; });
+    var companyFilter = document.getElementById('filter-company').value.trim().toLowerCase();
+    if (companyFilter && comp && comp.company_name && comp.company_name.toLowerCase().indexOf(companyFilter) === -1) return;
+
+    var people = [];
+    if (co.founders && co.founders.profiles) people = people.concat(co.founders.profiles);
+    if (co.decision_makers && co.decision_makers.profiles) people = people.concat(co.decision_makers.profiles);
+
+    // For people-per-company = 1 or 2, score and pick best
+    if (maxPerCompany <= 2 && people.length > maxPerCompany) {
+      people = rankPeopleForCompany(people, jobTitlesFilter);
+    }
+
+    var seen = {};
+    people.forEach(function(f) {
+      if (f.linkedin_profile_url && !seen[f.linkedin_profile_url] && Object.keys(seen).length < maxPerCompany) {
+        seen[f.linkedin_profile_url] = true;
         fUrls.push(f.linkedin_profile_url);
-        fMeta[f.linkedin_profile_url]={co:co,comp:comp};
+        fMeta[f.linkedin_profile_url] = { co: co, comp: comp };
       }
     });
   });
 
-  var results=[];
-  var batches=[];
-  for(var i=0;i<fUrls.length;i+=10) batches.push(fUrls.slice(i,i+10));
+  var results = [];
+  var batches = [];
+  for (var i = 0; i < fUrls.length; i += 10) batches.push(fUrls.slice(i, i + 10));
 
-  for(var b=0;b<Math.min(batches.length,5);b++){
-    var batch=batches[b];
-    var r3=await fetch(B+'/screener/person/enrich?linkedin_profile_url='+encodeURIComponent(batch.join(','))+'&fields=name,title,location,current_employers,business_email',{headers:H});
-    if(r3.ok){
-      var pd=await r3.json();
-      (Array.isArray(pd)?pd:[pd]).forEach(function(p,pi){
-        if(!p||p.error) return;
-        var meta=fMeta[batch[pi]]||{};
-        var comp=meta.comp||{};
-        // Filter by seniority and target roles
-        if(!matchesSeniority(p.title)) return;
-        if(!matchesTargetRoles(p.title)) return;
+  for (var b = 0; b < Math.min(batches.length, 5); b++) {
+    var batch = batches[b];
+    setStatus('running', 'Enriching batch ' + (b + 1) + '/' + Math.min(batches.length, 5) + '...');
+    var r3 = await fetch(B + '/screener/person/enrich?linkedin_profile_url=' + encodeURIComponent(batch.join(',')) + '&fields=name,title,location,current_employers,business_email', { headers: H });
+    if (r3.ok) {
+      var pd = await r3.json();
+      (Array.isArray(pd) ? pd : [pd]).forEach(function(p, pi) {
+        if (!p || p.error) return;
+        var meta = fMeta[batch[pi]] || {};
+        var comp = meta.comp || {};
+        if (!matchesSeniority(p.title)) return;
+        if (!matchesTargetRoles(p.title)) return;
+        if (personNameFilter && (p.name || '').toLowerCase().indexOf(personNameFilter) === -1) return;
+
         results.push({
-          name:p.name||'—',title:p.title||'—',
-          company:comp.company_name||'—',
-          industry:(comp.linkedin_industries||[])[0]||'—',
-          hq_country:comp.hq_country||'—',
-          funding:comp.crunchbase_total_investment_usd||0,
-          acquired_by:comp.acquisition_status||'—',
-          linkedin_url:batch[pi],
-          email:(p.business_email||[])[0]||null,
-          email_verified:!!(p.business_email&&p.business_email.length),
-          location:p.location||'—',
-          connections:p.num_of_connections||0,
-          score:calcScore(p,comp),
-          score_factors:buildFactors(p,comp),
-          pitch:buildPitch(p,comp),
-          signals:[{type:'activity',text:(comp.company_name||'Company')+(comp.acquisition_status==='Acquired'?' — acquired (liquidity event)':' — '+((comp.linkedin_industries||[])[0]||'company')),date:'Signal'}]
+          name: p.name || '--',
+          title: p.title || '--',
+          company: comp.company_name || '--',
+          industry: (comp.linkedin_industries || [])[0] || '--',
+          hq_country: comp.hq_country || '--',
+          funding: comp.crunchbase_total_investment_usd || 0,
+          acquired_by: comp.acquisition_status || '--',
+          linkedin_url: batch[pi],
+          email: (p.business_email || [])[0] || null,
+          email_verified: !!(p.business_email && p.business_email.length),
+          location: p.location || '--',
+          connections: p.num_of_connections || 0,
+          score: calcScore(p, comp),
+          score_factors: buildFactors(p, comp),
+          pitch: buildPitch(p, comp),
+          signals: [{ type: 'activity', text: (comp.company_name || 'Company') + (comp.acquisition_status === 'Acquired' ? ' -- acquired (liquidity event)' : ' -- ' + ((comp.linkedin_industries || [])[0] || 'company')), date: 'Signal' }]
         });
       });
     }
   }
-  setStep(3,'done');
-  setStatus('done','Found '+results.length+' prospects.');
-  allResults=results;
+
+  setStatus('done', 'Found ' + results.length + ' prospects.');
+  allResults = results;
+  selectedSet = {};
+  currentPage = 0;
   filterAndRender();
-  updateCode();
 
   // Update credits
   try {
-    var cr=await fetch(B+'/user/credits',{headers:{'Authorization':'Token '+crustKey}});
-    if(cr.ok){var cd=await cr.json(); var el=document.getElementById('credit-display'); el.textContent=(cd.credits||0).toLocaleString()+' credits'; el.style.display='';}
-  } catch(e){}
+    var cr = await fetch(B + '/user/credits', { headers: { 'Authorization': 'Token ' + crustKey } });
+    if (cr.ok) { var cd = await cr.json(); var el = document.getElementById('credit-display'); el.textContent = (cd.credits || 0).toLocaleString() + ' credits'; el.style.display = ''; }
+  } catch(e) {}
 }
 
-/* ═══════════════════════════════════════════
-   SCORING
-═══════════════════════════════════════════ */
-function calcScore(p,comp){
-  var s=30,f=comp.crunchbase_total_investment_usd||0;
-  if(f>1e8) s+=35; else if(f>5e7) s+=25; else if(f>2e7) s+=18; else s+=10;
-  if(comp.hq_country==='USA') s+=15; else if(['GBR','FRA','DEU'].includes(comp.hq_country)) s+=12; else s+=6;
-  if((p.num_of_connections||0)>5000) s+=12; else if((p.num_of_connections||0)>1000) s+=6;
-  // Seniority bonus
-  var t=(p.title||'').toLowerCase();
-  if(/\b(ceo|cfo|cto|coo|cmo|cio|ciso|chief|founder|co-founder|president)\b/.test(t)) s+=15;
-  else if(/\b(vp|vice president|svp|evp)\b/.test(t)) s+=10;
-  else if(/\bdirector\b/.test(t)) s+=5;
-  return Math.min(99,s);
+/* ===== PEOPLE PER COMPANY RANKING ===== */
+function rankPeopleForCompany(people, jobTitlesFilter) {
+  var scored = people.map(function(p) {
+    var s = 0;
+    var t = (p.title || '').toLowerCase();
+
+    // Title match bonus
+    if (jobTitlesFilter) {
+      jobTitlesFilter.split(',').forEach(function(role) {
+        if (t.indexOf(role.trim()) !== -1) s += 30;
+      });
+    }
+
+    // Seniority bonus
+    if (/\b(ceo|cfo|cto|coo|cmo|chief|founder|president)\b/.test(t)) s += 25;
+    else if (/\b(vp|vice president|svp|evp)\b/.test(t)) s += 20;
+    else if (/\bdirector\b/.test(t)) s += 15;
+    else if (/\bmanager\b/.test(t)) s += 10;
+
+    // Connections
+    s += Math.min(20, (p.num_of_connections || 0) / 500);
+
+    return { person: p, rank: s };
+  });
+
+  scored.sort(function(a, b) { return b.rank - a.rank; });
+  return scored.slice(0, Math.max(people.length, 10)).map(function(s) { return s.person; });
 }
 
-function buildFactors(p,comp){
-  var factors=[],f=comp.crunchbase_total_investment_usd||0;
-  factors.push({label:'Funding ($'+fmtM(f)+')',val:f>5e7?'+35':'+15',pos:true});
-  if(comp.acquisition_status==='Acquired') factors.push({label:'Acquired (liquidity event)',val:'+10',pos:true});
-  if(comp.hq_country==='USA') factors.push({label:'US location',val:'+15',pos:true});
-  if((p.num_of_connections||0)>5000) factors.push({label:'High LinkedIn visibility',val:'+12',pos:true});
-  // Seniority factor
-  var t=(p.title||'').toLowerCase();
-  if(/\b(ceo|cfo|cto|coo|cmo|cio|ciso|chief|founder|co-founder|president)\b/.test(t)) factors.push({label:'C-Suite / Founder',val:'+15',pos:true});
-  else if(/\b(vp|vice president|svp|evp)\b/.test(t)) factors.push({label:'VP-level seniority',val:'+10',pos:true});
-  else if(/\bdirector\b/.test(t)) factors.push({label:'Director-level seniority',val:'+5',pos:true});
+/* ===== SCORING ===== */
+function calcScore(p, comp) {
+  var s = 30, f = comp.crunchbase_total_investment_usd || 0;
+  if (f > 1e8) s += 35; else if (f > 5e7) s += 25; else if (f > 2e7) s += 18; else s += 10;
+  if (comp.hq_country === 'USA') s += 15; else if (['GBR', 'FRA', 'DEU'].indexOf(comp.hq_country) !== -1) s += 12; else s += 6;
+  if ((p.num_of_connections || 0) > 5000) s += 12; else if ((p.num_of_connections || 0) > 1000) s += 6;
+  var t = (p.title || '').toLowerCase();
+  if (/\b(ceo|cfo|cto|coo|cmo|cio|ciso|chief|founder|co-founder|president)\b/.test(t)) s += 15;
+  else if (/\b(vp|vice president|svp|evp)\b/.test(t)) s += 10;
+  else if (/\bdirector\b/.test(t)) s += 5;
+  return Math.min(99, s);
+}
+
+function buildFactors(p, comp) {
+  var factors = [], f = comp.crunchbase_total_investment_usd || 0;
+  factors.push({ label: 'Funding ($' + fmtM(f) + ')', val: f > 5e7 ? '+35' : '+15', pos: true });
+  if (comp.acquisition_status === 'Acquired') factors.push({ label: 'Acquired (liquidity event)', val: '+10', pos: true });
+  if (comp.hq_country === 'USA') factors.push({ label: 'US location', val: '+15', pos: true });
+  if ((p.num_of_connections || 0) > 5000) factors.push({ label: 'High LinkedIn visibility', val: '+12', pos: true });
+  var t = (p.title || '').toLowerCase();
+  if (/\b(ceo|cfo|cto|coo|cmo|cio|ciso|chief|founder|co-founder|president)\b/.test(t)) factors.push({ label: 'C-Suite / Founder', val: '+15', pos: true });
+  else if (/\b(vp|vice president|svp|evp)\b/.test(t)) factors.push({ label: 'VP-level seniority', val: '+10', pos: true });
+  else if (/\bdirector\b/.test(t)) factors.push({ label: 'Director-level seniority', val: '+5', pos: true });
   return factors;
 }
 
-function buildPitch(p,comp){
-  var name=p.name||'This prospect';
-  var company=comp.company_name||'their company';
-  var funding=comp.crunchbase_total_investment_usd||0;
-  if(comp.acquisition_status==='Acquired'){
-    return name+"'s exit from "+company+" ($"+fmtM(funding)+" raised) is a significant liquidity event. Consider a specialist-led private viewing as an introduction.";
+function buildPitch(p, comp) {
+  var name = p.name || 'This prospect';
+  var company = comp.company_name || 'their company';
+  var funding = comp.crunchbase_total_investment_usd || 0;
+  if (comp.acquisition_status === 'Acquired') {
+    return name + "'s exit from " + company + " ($" + fmtM(funding) + " raised) is a significant liquidity event. Consider a specialist-led private viewing as an introduction.";
   }
-  return name+" at "+company+" ($"+fmtM(funding)+" in funding) is a high-value prospect. Their "+((comp.linkedin_industries||[])[0]||'industry')+" background and seniority make them an ideal candidate for a specialist introduction.";
+  return name + " at " + company + " ($" + fmtM(funding) + " in funding) is a high-value prospect. Their " + ((comp.linkedin_industries || [])[0] || 'industry') + " background and seniority make them an ideal candidate for a specialist introduction.";
 }
 
-/* ═══════════════════════════════════════════
-   RENDER
-═══════════════════════════════════════════ */
-function filterResults(){filterAndRender();}
-function filterAndRender(){
-  var q=document.getElementById('local-search')?document.getElementById('local-search').value.toLowerCase():'';
-  var res=allResults.filter(function(r){
-    return !q||r.name.toLowerCase().includes(q)||r.company.toLowerCase().includes(q)||(r.email||'').toLowerCase().includes(q);
+/* ===== RENDER ===== */
+function filterResults() { filterAndRender(); }
+
+function filterAndRender() {
+  var q = document.getElementById('local-search') ? document.getElementById('local-search').value.toLowerCase() : '';
+  var res = allResults.filter(function(r) {
+    return !q || r.name.toLowerCase().indexOf(q) !== -1 || r.company.toLowerCase().indexOf(q) !== -1 || (r.title || '').toLowerCase().indexOf(q) !== -1 || (r.email || '').toLowerCase().indexOf(q) !== -1;
   });
-  filteredResults=sortData(res);
-  renderTable(filteredResults);
-  updateStats(res);
+  filteredResults = sortData(res);
+  renderPage();
+  updateCounts();
 }
 
-function renderTable(data){
-  var body=document.getElementById('results-body');
-  if(!data.length){
-    body.innerHTML='<tr><td colspan="6"><div class="empty-state"><div class="empty-icon"></div><div class="empty-title">No matches</div><div class="empty-sub">Adjust filters and try again.</div></div></td></tr>';
+function renderPage() {
+  var start = currentPage * pageSize;
+  var end = Math.min(start + pageSize, filteredResults.length);
+  var pageData = filteredResults.slice(start, end);
+  renderTable(pageData);
+  updatePagination();
+  updateSelectedCount();
+}
+
+function renderTable(data) {
+  var body = document.getElementById('results-body');
+  if (!data.length && !allResults.length) {
+    body.innerHTML = '<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">&#128269;</div><div class="empty-title">Find your next prospect</div><div class="empty-sub">Use the AI description or set filters manually, then click Search to discover people.</div></div></td></tr>';
     return;
   }
-  body.innerHTML=data.map(function(r,i){
-    return '<tr onclick="openDrawer('+i+')" class="fade-in" style="animation-delay:'+(i*20)+'ms">'+
-      '<td><div class="founder-name">'+r.name+'</div><div class="founder-title">'+r.title+'</div></td>'+
-      '<td><div class="company-name">'+r.company+'</div><div class="company-acq">'+(r.acquired_by==='Acquired'?' Acquired':(r.industry||''))+'</div></td>'+
-      '<td><span class="money-tag '+(r.funding>5e7?'large':'')+'">$'+fmtM(r.funding)+'</span></td>'+
-      '<td>'+(r.email?'<div class="email-chip '+(r.email_verified?'verified':'')+'" title="'+r.email+'">'+r.email+'</div>':'<span style="color:var(--secondary);font-size:10px">—</span>')+(r.linkedin_url?'<br><a class="li-link" href="'+r.linkedin_url+'" target="_blank" onclick="event.stopPropagation()">↗ LinkedIn</a>':'')+'</td>'+
-      '<td><div class="score-cell"><div class="score-dots">'+[1,2,3,4,5].map(function(n){return '<div class="score-dot '+(r.score>=n*20?'filled':'')+'"></div>';}).join('')+'</div><span class="score-num">'+r.score+'</span></div></td>'+
-      '<td style="color:var(--secondary);font-size:14px;text-align:center">›</td></tr>';
+  if (!data.length) {
+    body.innerHTML = '<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">&#128269;</div><div class="empty-title">No matches</div><div class="empty-sub">Adjust your search or filters and try again.</div></div></td></tr>';
+    return;
+  }
+
+  var startIdx = currentPage * pageSize;
+  body.innerHTML = data.map(function(r, i) {
+    var globalIdx = startIdx + i;
+    var checked = selectedSet[globalIdx] ? 'checked' : '';
+    return '<tr class="fade-in" style="animation-delay:' + (i * 15) + 'ms">' +
+      '<td class="check-col"><input type="checkbox" ' + checked + ' onchange="toggleSelect(' + globalIdx + ',this.checked)" onclick="event.stopPropagation()"></td>' +
+      '<td><span class="person-name" onclick="openDrawer(' + globalIdx + ')">' + esc(r.name) + '</span><div class="person-title">' + esc(r.title) + '</div></td>' +
+      '<td>' + esc(r.title) + '</td>' +
+      '<td><div class="company-name">' + esc(r.company) + '</div><div class="company-industry">' + esc(r.industry) + '</div></td>' +
+      '<td><span class="location-text">' + esc(r.location) + '</span></td>' +
+      '<td>' + (r.email ? '<span class="email-text">' + esc(r.email) + '</span>' : '<button class="email-btn" onclick="event.stopPropagation();showToast(\'Email not available\')">Access email</button>') + '</td>' +
+      '</tr>';
   }).join('');
 }
 
-function updateStats(data){
-  document.getElementById('stat-founders').textContent=allResults.length||'—';
-  // Unique company count
-  var companySet={};
-  allResults.forEach(function(r){companySet[r.company]=true;});
-  document.getElementById('stat-companies').textContent=Object.keys(companySet).length||'—';
-  var avg=allResults.length?allResults.reduce(function(s,r){return s+(r.funding||0);},0)/allResults.length:0;
-  document.getElementById('stat-exit').textContent=avg?'$'+fmtM(avg):'—';
-  document.getElementById('stat-highfit').textContent=data.filter(function(r){return r.score>=75;}).length||'—';
-  var t=document.getElementById('results-title'),s=document.getElementById('results-subtitle');
-  t.textContent='Prospects';
-  s.textContent=allResults.length+' prospects across all categories';
+function updateCounts() {
+  document.getElementById('count-total').textContent = allResults.length;
+  document.getElementById('count-netnew').textContent = allResults.length;
 }
 
-/* ═══════════════════════════════════════════
-   DRAWER
-═══════════════════════════════════════════ */
-function openDrawer(i){
-  var r=filteredResults[i]; if(!r) return;
-  document.getElementById('d-name').textContent=r.name;
-  document.getElementById('d-role').textContent=r.title+' @ '+r.company;
-  document.getElementById('d-score').textContent=r.score;
-  document.getElementById('d-score-fill').style.width=r.score+'%';
-  document.getElementById('d-score-factors').innerHTML=(r.score_factors||[]).map(function(f){
-    return '<div class="score-factor"><span class="score-factor-label">'+f.label+'</span><span class="sfv '+(f.pos?'pos':'neg')+'">'+f.val+'</span></div>';
+function updatePagination() {
+  var total = filteredResults.length;
+  var start = total ? currentPage * pageSize + 1 : 0;
+  var end = Math.min((currentPage + 1) * pageSize, total);
+  document.getElementById('page-info').textContent = total ? (start + ' - ' + end + ' of ' + total) : '0 results';
+  document.getElementById('page-prev').disabled = currentPage === 0;
+  document.getElementById('page-next').disabled = end >= total;
+  document.getElementById('select-all').checked = false;
+}
+
+function changePage(dir) {
+  var maxPage = Math.ceil(filteredResults.length / pageSize) - 1;
+  currentPage = Math.max(0, Math.min(maxPage, currentPage + dir));
+  renderPage();
+}
+
+function switchResultsTab(tab) {
+  document.getElementById('tab-total').classList.toggle('active', tab === 'total');
+  document.getElementById('tab-netnew').classList.toggle('active', tab === 'netnew');
+}
+
+/* ===== SELECTION ===== */
+function toggleSelect(globalIdx, checked) {
+  if (checked) selectedSet[globalIdx] = true;
+  else delete selectedSet[globalIdx];
+  updateSelectedCount();
+}
+
+function toggleSelectAll(checked) {
+  var start = currentPage * pageSize;
+  var end = Math.min(start + pageSize, filteredResults.length);
+  for (var i = start; i < end; i++) {
+    if (checked) selectedSet[i] = true;
+    else delete selectedSet[i];
+  }
+  renderPage();
+}
+
+function updateSelectedCount() {
+  var count = Object.keys(selectedSet).length;
+  document.getElementById('selected-count').textContent = 'Selected: ' + count;
+}
+
+/* ===== EXPORT ===== */
+function exportCSV() {
+  var indices = Object.keys(selectedSet).map(Number);
+  var data = indices.length ? indices.map(function(i) { return filteredResults[i]; }).filter(Boolean) : allResults;
+  if (!data.length) { showToast('No data to export'); return; }
+
+  var rows = [['Name', 'Title', 'Company', 'Industry', 'Country', 'Location', 'Funding', 'Email', 'LinkedIn', 'Score']];
+  data.forEach(function(r) {
+    rows.push([r.name, r.title, r.company, r.industry, r.hq_country, r.location, r.funding, r.email || '', r.linkedin_url || '', r.score]);
+  });
+  var csv = rows.map(function(r) { return r.map(function(v) { return '"' + String(v).replace(/"/g, '""') + '"'; }).join(','); }).join('\n');
+  var blob = new Blob([csv], { type: 'text/csv' });
+  var el = document.createElement('a');
+  el.href = URL.createObjectURL(blob);
+  el.download = 'prospects.csv';
+  el.click();
+  showToast('Exported ' + data.length + ' contacts');
+}
+
+/* ===== SORT ===== */
+function sortTable(col) {
+  if (curSort.col === col) curSort.dir = curSort.dir === 'asc' ? 'desc' : 'asc';
+  else { curSort.col = col; curSort.dir = col === 'name' || col === 'title' || col === 'company' || col === 'location' ? 'asc' : 'desc'; }
+  filterAndRender();
+}
+
+function sortData(data) {
+  var c = curSort.col, d = curSort.dir;
+  return data.slice().sort(function(a, b) {
+    var av, bv;
+    if (c === 'name') { av = a.name; bv = b.name; }
+    else if (c === 'title') { av = a.title; bv = b.title; }
+    else if (c === 'company') { av = a.company; bv = b.company; }
+    else if (c === 'location') { av = a.location; bv = b.location; }
+    else if (c === 'funding') { av = a.funding; bv = b.funding; }
+    else { av = a.score; bv = b.score; }
+    if (typeof av === 'string') return d === 'asc' ? av.localeCompare(bv) : bv.localeCompare(av);
+    return d === 'asc' ? av - bv : bv - av;
+  });
+}
+
+/* ===== DRAWER ===== */
+function openDrawer(globalIdx) {
+  var r = filteredResults[globalIdx];
+  if (!r) return;
+  document.getElementById('d-name').textContent = r.name;
+  document.getElementById('d-role').textContent = r.title + ' @ ' + r.company;
+  document.getElementById('d-score').textContent = r.score;
+  document.getElementById('d-score-fill').style.width = r.score + '%';
+  document.getElementById('d-score-factors').innerHTML = (r.score_factors || []).map(function(f) {
+    return '<div class="score-factor"><span class="score-factor-label">' + f.label + '</span><span class="sfv ' + (f.pos ? 'pos' : 'neg') + '">' + f.val + '</span></div>';
   }).join('');
-  document.getElementById('d-signals').innerHTML=(r.signals||[]).map(function(s){
-    return '<div class="signal-item"><span class="signal-type '+s.type+'">'+s.type.toUpperCase()+'</span><span class="signal-text">'+s.text+'</span><span class="signal-date">'+s.date+'</span></div>';
-  }).join('')||'<p style="font-size:11px;color:var(--secondary)">No signals found.</p>';
-  document.getElementById('d-profile-kv').innerHTML=kv([['Location',r.location],['Connections',(r.connections||0).toLocaleString()],['LinkedIn',r.linkedin_url?'<a href="'+r.linkedin_url+'" target="_blank">View ↗</a>':'—']]);
-  document.getElementById('d-company-kv').innerHTML=kv([['Company',r.company],['Industry',r.industry],['HQ',r.hq_country],['Funding','$'+fmtFull(r.funding)],['Status',r.acquired_by==='Acquired'?'Acquired':'Active']]);
-  document.getElementById('d-contact-kv').innerHTML=kv([['Email',r.email?'<span class="email-chip '+(r.email_verified?'verified':'')+' ">'+r.email+'</span>':'—'],['Verified',r.email_verified?'<span style="color:var(--success);font-weight:600">Yes</span>':'No']]);
-  document.getElementById('d-pitch').textContent=r.pitch||'—';
+  document.getElementById('d-signals').innerHTML = (r.signals || []).map(function(s) {
+    return '<div class="signal-item"><span class="signal-type ' + s.type + '">' + s.type.toUpperCase() + '</span><span class="signal-text">' + s.text + '</span><span class="signal-date">' + s.date + '</span></div>';
+  }).join('') || '<p style="font-size:12px;color:var(--secondary)">No signals found.</p>';
+  document.getElementById('d-profile-kv').innerHTML = kvPairs([['Location', r.location], ['Connections', (r.connections || 0).toLocaleString()], ['LinkedIn', r.linkedin_url ? '<a href="' + r.linkedin_url + '" target="_blank">View profile</a>' : '--']]);
+  document.getElementById('d-company-kv').innerHTML = kvPairs([['Company', r.company], ['Industry', r.industry], ['HQ', r.hq_country], ['Funding', '$' + fmtFull(r.funding)], ['Status', r.acquired_by === 'Acquired' ? 'Acquired' : 'Active']]);
+  document.getElementById('d-contact-kv').innerHTML = kvPairs([['Email', r.email || '--'], ['Verified', r.email_verified ? '<span style="color:var(--success);font-weight:600">Yes</span>' : 'No']]);
+  document.getElementById('d-pitch').textContent = r.pitch || '--';
   document.getElementById('drawer').classList.add('open');
   document.getElementById('drawer-overlay').classList.add('open');
 }
 
-function closeDrawer(){
+function closeDrawer() {
   document.getElementById('drawer').classList.remove('open');
   document.getElementById('drawer-overlay').classList.remove('open');
 }
 
-function kv(pairs){return pairs.map(function(p){return '<div class="d-k">'+p[0]+'</div><div class="d-v">'+(p[1]||'—')+'</div>';}).join('');}
-
-/* ═══════════════════════════════════════════
-   CODE GENERATION
-═══════════════════════════════════════════ */
-function updateCode(){
-  var query=document.getElementById('ai-query')&&document.getElementById('ai-query').value||'';
-  var conditions=generatedFilters.length?
-    generatedFilters.map(function(f){return JSON.stringify({filter_type:f.filter_type,type:f.type,value:f.value});}).join(',\n    '):
-    '{"filter_type": "crunchbase_total_investment_usd", "type": "=>", "value": 5000000}';
-  document.getElementById('code-content').innerHTML=
-    '<span class="comment"># Prospect Pipeline\n# Query: "'+query+'"</span>\n\n'+
-    '<span class="kw">import</span> requests\n'+
-    'H = {<span class="str">"Authorization"</span>: <span class="str">"Token YOUR_CRUSTDATA_KEY"</span>}\nB = <span class="str">"https://api.crustdata.com"</span>\n\n'+
-    '<span class="comment"># Step 1: Search companies (filters from Claude)</span>\n'+
-    'r = requests.post(f<span class="str">"{B}/screener/companydb/search/"</span>, headers=H, json={\n'+
-    '  <span class="str">"filters"</span>: {<span class="str">"op"</span>: <span class="str">"and"</span>, <span class="str">"conditions"</span>: [\n    '+conditions+'\n  ]},\n'+
-    '  <span class="str">"limit"</span>: <span class="num">50</span>, <span class="str">"sorts"</span>: [{<span class="str">"column"</span>: <span class="str">"crunchbase_total_investment_usd"</span>, <span class="str">"order"</span>: <span class="str">"desc"</span>}]\n})\ncompanies = r.json()[<span class="str">"companies"</span>]\n\n'+
-    '<span class="comment"># Step 2: Enrich for people</span>\n'+
-    'domains = <span class="str">","</span>.join(c[<span class="str">"company_website_domain"</span>] <span class="kw">for</span> c <span class="kw">in</span> companies[:50])\n'+
-    'enriched = requests.get(f<span class="str">"{B}/screener/company"</span>, headers=H,\n  params={<span class="str">"company_domain"</span>: domains, <span class="str">"fields"</span>: <span class="str">"founders,decision_makers"</span>}).json()\n\n'+
-    '<span class="comment"># Step 3: Collect + enrich people profiles</span>\n'+
-    'urls = [f[<span class="str">"linkedin_profile_url"</span>] <span class="kw">for</span> co <span class="kw">in</span> enriched\n        <span class="kw">for</span> src <span class="kw">in</span> [<span class="str">"founders"</span>,<span class="str">"decision_makers"</span>]\n        <span class="kw">for</span> f <span class="kw">in</span> co.get(src,{}).get(<span class="str">"profiles"</span>,[])[:5]\n        <span class="kw">if</span> f.get(<span class="str">"linkedin_profile_url"</span>)]\n<span class="kw">for</span> i <span class="kw">in</span> range(<span class="num">0</span>, len(urls), <span class="num">25</span>):\n'+
-    '  people = requests.get(f<span class="str">"{B}/screener/person/enrich"</span>, headers=H,\n    params={<span class="str">"linkedin_profile_url"</span>: <span class="str">","</span>.join(urls[i:i+<span class="num">25</span>]),\n            <span class="str">"fields"</span>: <span class="str">"name,title,location,business_email,current_employers"</span>}).json()\n  <span class="comment"># → score and filter prospects here</span>';
+function kvPairs(pairs) {
+  return pairs.map(function(p) { return '<div class="d-k">' + p[0] + '</div><div class="d-v">' + (p[1] || '--') + '</div>'; }).join('');
 }
 
-function copyCode(){navigator.clipboard.writeText(document.getElementById('code-content').textContent).catch(function(){});showToast('Copied!');}
-function copyCSV(){
-  var rows=[['Name','Title','Company','Industry','Country','Funding','Email','Score']];
-  allResults.forEach(function(r){rows.push([r.name,r.title,r.company,r.industry,r.hq_country,r.funding,r.email||'',r.score]);});
-  navigator.clipboard.writeText(rows.map(function(r){return r.map(function(v){return '"'+v+'"';}).join(',');}).join('\n')).catch(function(){});
-  showToast('CSV copied!');
-}
-function downloadCSV(){
-  var rows=[['Name','Title','Company','Industry','Country','Funding','Email','Score']];
-  allResults.forEach(function(r){rows.push([r.name,r.title,r.company,r.industry,r.hq_country,r.funding,r.email||'',r.score]);});
-  var blob=new Blob([rows.map(function(r){return r.map(function(v){return '"'+v+'"';}).join(',');}).join('\n')],{type:'text/csv'});
-  var el=document.createElement('a');
-  el.href=URL.createObjectURL(blob); el.download='prospects.csv'; el.click();
+/* ===== UTILITIES ===== */
+function setStatus(s, m) {
+  document.getElementById('status-dot').className = 'status-dot' + (s ? ' ' + s : '');
+  document.getElementById('status-text').textContent = m;
 }
 
-/* ═══════════════════════════════════════════
-   UTILITIES
-═══════════════════════════════════════════ */
-function switchTab(tab,btn){
-  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
-  btn.classList.add('active');
-  document.getElementById('view-table').style.display=tab==='table'?'block':'none';
-  document.getElementById('view-code').style.display=tab==='code'?'block':'none';
-}
-function sortTable(col){
-  if(curSort.col===col) curSort.dir=curSort.dir==='asc'?'desc':'asc';
-  else {curSort.col=col; curSort.dir='desc';}
-  filterAndRender();
-}
-function sortData(data){
-  var c=curSort.col,d=curSort.dir;
-  return data.slice().sort(function(a,b){
-    var av=c==='funding'?a.funding:c==='score'?a.score:c==='name'?a.name:c==='company'?a.company:a.score;
-    var bv=c==='funding'?b.funding:c==='score'?b.score:c==='name'?b.name:c==='company'?b.company:b.score;
-    if(typeof av==='string') return d==='asc'?av.localeCompare(bv):bv.localeCompare(av);
-    return d==='asc'?av-bv:bv-av;
-  });
-}
-function setStatus(s,m){document.getElementById('status-dot').className='status-dot '+s;document.getElementById('status-text').textContent=m;}
-function setStep(n,s){
-  var id=n===0?'step-0':'step-'+n;
-  var el=document.getElementById(id); if(!el) return;
-  el.className='step-num'+(s?' '+s:'');
-  el.textContent=s==='done'?'':(n===0?'AI':String(n));
-}
-function resetSteps(){[0,1,2,3].forEach(function(n){setStep(n,'');});}
-function showToast(msg){
-  var t=document.createElement('div'); t.textContent=msg;
-  t.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--on-surface);color:white;padding:8px 16px;border-radius:20px;font-size:12px;font-weight:500;z-index:9999;opacity:0;transition:opacity .2s;pointer-events:none;';
+function showToast(msg) {
+  var t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
   document.body.appendChild(t);
-  setTimeout(function(){t.style.opacity='1';},10);
-  setTimeout(function(){t.style.opacity='0';setTimeout(function(){t.remove();},200);},2200);
-}
-function fmtM(n){if(!n)return'0';if(n>=1e9)return(n/1e9).toFixed(1)+'B';if(n>=1e6)return(n/1e6).toFixed(0)+'M';if(n>=1e3)return(n/1e3).toFixed(0)+'K';return String(n);}
-function fmtFull(n){return n?n.toLocaleString('en-US'):'0';}
-function sleep(ms){return new Promise(function(r){setTimeout(r,ms);});}
-
-/* ═══════════════════════════════════════════
-   HAMBURGER MENU
-═══════════════════════════════════════════ */
-
-function runPipelineManual(){
-  var minF = parseInt(document.getElementById('min-funding').value)||5000000;
-  var maxF = parseInt(document.getElementById('max-funding').value)||null;
-  var country = document.getElementById('country-filter').value;
-  var industry = document.getElementById('industry-filter').value;
-  var sortBy = document.getElementById('sort-by').value;
-
-  var manualFilters = [
-    {filter_type:'crunchbase_total_investment_usd',type:'=>',value:minF,label:'Funding >= $'+fmtM(minF)}
-  ];
-  if(maxF) manualFilters.push({filter_type:'crunchbase_total_investment_usd',type:'=<',value:maxF,label:'Funding <= $'+fmtM(maxF)});
-  if(country) manualFilters.push({filter_type:'hq_country',type:'=',value:country,label:'Country: '+country});
-  if(industry) manualFilters.push({filter_type:'linkedin_industries',type:'(.)',value:industry,label:'Industry: '+industry});
-
-  var existingTypes = manualFilters.map(function(f){return f.filter_type;});
-  (generatedFilters||[]).forEach(function(f){
-    if(existingTypes.indexOf(f.filter_type)===-1) manualFilters.push(f);
-  });
-
-  generatedFilters = manualFilters;
-  renderFilterChips(manualFilters, '');
-
-  if(sortBy) curSort={col:sortBy==='funding'?'funding':sortBy==='name'?'name':sortBy==='company'?'company':'score',dir:'desc'};
-
-  runPipeline();
+  setTimeout(function() { t.style.opacity = '1'; }, 10);
+  setTimeout(function() { t.style.opacity = '0'; setTimeout(function() { t.remove(); }, 200); }, 2200);
 }
 
-
-function toggleHbMenu(){
-  var dd=document.getElementById('hb-dropdown');
-  var btn=document.getElementById('topbar-hamburger');
-  var isOpen=dd.classList.toggle('open');
-  btn.classList.toggle('open',isOpen);
-  if(isOpen){
-    setTimeout(function(){
-      document.addEventListener('click',function closeHb(e){
-        if(!dd.contains(e.target)&&!btn.contains(e.target)){
-          dd.classList.remove('open');
-          btn.classList.remove('open');
-          document.removeEventListener('click',closeHb);
-        }
-      });
-    },10);
-  }
+function esc(str) {
+  var d = document.createElement('div');
+  d.textContent = str || '';
+  return d.innerHTML;
 }
 
+function fmtM(n) {
+  if (!n) return '0';
+  if (n >= 1e9) return (n / 1e9).toFixed(1) + 'B';
+  if (n >= 1e6) return (n / 1e6).toFixed(0) + 'M';
+  if (n >= 1e3) return (n / 1e3).toFixed(0) + 'K';
+  return String(n);
+}
 
-// Show API key status in hamburger
-(function(){
-  var cs=document.getElementById('hb-claude-status');
-  var ds=document.getElementById('hb-crustdata-status');
-  if(cs) cs.textContent = CLAUDE_KEY_HARDCODED ? 'Claude: connected' : 'Claude: not set';
-  if(cs) cs.style.color = CLAUDE_KEY_HARDCODED ? 'var(--success)' : 'var(--danger)';
-  if(ds) ds.textContent = CRUSTDATA_KEY_HARDCODED ? 'Crustdata: connected' : 'Crustdata: not set';
-  if(ds) ds.style.color = CRUSTDATA_KEY_HARDCODED ? 'var(--success)' : 'var(--danger)';
-})();
+function fmtFull(n) { return n ? n.toLocaleString('en-US') : '0'; }
+
+/* ===== START ===== */
 init();
 </script>
 </body>
