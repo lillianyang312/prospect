@@ -14,9 +14,8 @@ fs.mkdirSync(path.join(__dirname, 'dist'), { recursive: true });
 
 let html = fs.readFileSync(src, 'utf8');
 
-// Replace the placeholder tokens with the real key values
-html = html.replace(/__CLAUDE_KEY__/g,    JSON.stringify(CLAUDE_KEY));
-html = html.replace(/__CRUSTDATA_KEY__/g, JSON.stringify(CRUSTDATA_KEY));
+html = html.replace(/REPLACE_CLAUDE_KEY/g,    CLAUDE_KEY);
+html = html.replace(/REPLACE_CRUSTDATA_KEY/g, CRUSTDATA_KEY);
 
 fs.writeFileSync(dest, html, 'utf8');
 console.log('[build] dist/index.html written (' + html.length + ' bytes)');
