@@ -76,6 +76,12 @@ select.acc-input{cursor:pointer;}
 .seniority-pill.active{background:var(--accent);color:white;border-color:var(--accent);}
 
 /* Headcount pills */
+.tag-container{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:4px;}
+.tag-container:empty{display:none;margin:0;}
+.tag-bubble{display:inline-flex;align-items:center;gap:4px;background:var(--accent-light);border:1px solid rgba(37,99,235,.2);color:var(--accent);font-size:11px;font-weight:500;padding:3px 8px;border-radius:12px;white-space:nowrap;}
+.tag-bubble .tag-x{cursor:pointer;font-size:13px;line-height:1;color:var(--secondary);margin-left:2px;transition:color .1s;}
+.tag-bubble .tag-x:hover{color:var(--danger);}
+.tag-input-row{display:flex;gap:4px;}
 .headcount-pills{display:flex;flex-wrap:wrap;gap:4px;}
 .headcount-pill{font-size:10px;font-weight:500;color:var(--secondary);padding:4px 10px;border-radius:14px;cursor:pointer;transition:all .15s;border:1px solid var(--border);background:var(--bg);}
 .headcount-pill:hover{border-color:var(--border-strong);color:var(--on-surface);}
@@ -224,7 +230,7 @@ input[type="checkbox"]{width:15px;height:15px;accent-color:var(--accent);cursor:
         <span class="ai-badge">AI</span>
         <span class="ai-box-label">Describe who you're looking for</span>
       </div>
-      <textarea class="ai-textarea" id="ai-query" placeholder="e.g. luxury brand executives in Europe with 1000+ employees"></textarea>
+      <textarea class="ai-textarea" id="ai-query" placeholder="e.g. supply chain leaders at large companies who might need data analytics consulting"></textarea>
       <div class="ai-box-footer">
         <button class="ai-gen-btn" id="ai-gen-btn" onclick="generateFilters()">
           <div class="mini-spin"></div>
@@ -265,7 +271,8 @@ input[type="checkbox"]{width:15px;height:15px;accent-color:var(--accent);cursor:
           <span class="acc-chevron">&#9660;</span>
         </div>
         <div class="acc-body">
-          <input class="acc-input" type="text" id="filter-job_titles" placeholder="CEO, VP Marketing, Director..." oninput="updateDot('job_titles')">
+          <div class="tag-container" id="tags-job_titles"></div>
+          <div class="tag-input-row"><input class="acc-input tag-text-input" type="text" id="filter-job_titles" placeholder="Type a title, press Enter" onkeydown="if(event.key==='Enter'){event.preventDefault();addTag('job_titles',this.value);this.value='';}" oninput="updateDot('job_titles')"></div>
         </div>
       </div>
 
@@ -315,7 +322,8 @@ input[type="checkbox"]{width:15px;height:15px;accent-color:var(--accent);cursor:
           <span class="acc-chevron">&#9660;</span>
         </div>
         <div class="acc-body">
-          <input class="acc-input" type="text" id="filter-company" placeholder="Company name (comma-separated)" oninput="updateDot('company')">
+          <div class="tag-container" id="tags-company"></div>
+          <div class="tag-input-row"><input class="acc-input tag-text-input" type="text" id="filter-company" placeholder="Type company, press Enter" onkeydown="if(event.key==='Enter'){event.preventDefault();addTag('company',this.value);this.value='';}" oninput="updateDot('company')"></div>
         </div>
       </div>
 
@@ -327,7 +335,27 @@ input[type="checkbox"]{width:15px;height:15px;accent-color:var(--accent);cursor:
           <span class="acc-chevron">&#9660;</span>
         </div>
         <div class="acc-body">
-          <input class="acc-input" type="text" id="filter-industry" placeholder="e.g. Financial Services, Technology" oninput="updateDot('industry')">
+          <div class="tag-container" id="tags-industry"></div>
+          <select class="acc-input" id="filter-industry-select" onchange="if(this.value){addTag('industry',this.value);this.value='';}" style="margin-top:4px;">
+            <option value="">+ Add industry...</option>
+            <option>Accounting</option><option>Automotive</option><option>Aviation & Aerospace</option><option>Banking</option>
+            <option>Biotechnology</option><option>Capital Markets</option><option>Civil Engineering</option><option>Construction</option>
+            <option>Consumer Goods</option><option>Cosmetics</option><option>Defense & Space</option><option>E-Learning</option>
+            <option>Education Management</option><option>Entertainment</option><option>Farming</option><option>Fashion</option>
+            <option>Financial Services</option><option>Food Production</option><option>Government Administration</option>
+            <option>Higher Education</option><option>Hospital & Health Care</option><option>Hospitality</option>
+            <option>Human Resources</option><option>Information Technology and Services</option><option>Insurance</option>
+            <option>Investment Banking</option><option>Law Practice</option><option>Legal Services</option>
+            <option>Leisure, Travel & Tourism</option><option>Luxury Goods & Jewelry</option><option>Management Consulting</option>
+            <option>Marketing and Advertising</option><option>Media Production</option><option>Medical Devices</option>
+            <option>Military</option><option>Mining & Metals</option><option>Non-Profit Organization Management</option>
+            <option>Oil & Energy</option><option>Online Media</option><option>Pharmaceuticals</option>
+            <option>Primary/Secondary Education</option><option>Publishing</option><option>Real Estate</option>
+            <option>Restaurants</option><option>Retail</option><option>Semiconductors</option>
+            <option>Staffing and Recruiting</option><option>Telecommunications</option>
+            <option>Venture Capital & Private Equity</option><option>Wine and Spirits</option>
+          </select>
+          <input class="acc-input" type="hidden" id="filter-industry" value="">
         </div>
       </div>
 
@@ -339,7 +367,8 @@ input[type="checkbox"]{width:15px;height:15px;accent-color:var(--accent);cursor:
           <span class="acc-chevron">&#9660;</span>
         </div>
         <div class="acc-body">
-          <input class="acc-input" type="text" id="filter-region" placeholder="e.g. United States, United Kingdom" oninput="updateDot('region')">
+          <div class="tag-container" id="tags-region_text"></div>
+          <input class="acc-input" type="hidden" id="filter-region" value="">
           <div style="margin-top:4px;display:flex;flex-wrap:wrap;gap:3px;">
             <span class="example-chip" onclick="addRegion('United States')" style="font-size:9px;padding:2px 7px;">US</span>
             <span class="example-chip" onclick="addRegion('United Kingdom')" style="font-size:9px;padding:2px 7px;">UK</span>
@@ -383,7 +412,20 @@ input[type="checkbox"]{width:15px;height:15px;accent-color:var(--accent);cursor:
           <span class="acc-chevron">&#9660;</span>
         </div>
         <div class="acc-body">
-          <input class="acc-input" type="text" id="filter-function" placeholder="e.g. Engineering, Sales, Marketing" oninput="updateDot('function')">
+          <div class="tag-container" id="tags-function"></div>
+          <select class="acc-input" id="filter-function-select" onchange="if(this.value){addTag('function',this.value);this.value='';}" style="margin-top:4px;">
+            <option value="">+ Add function...</option>
+            <option>Accounting</option><option>Administrative</option><option>Arts and Design</option>
+            <option>Business Development</option><option>Community and Social Services</option><option>Consulting</option>
+            <option>Customer Success and Support</option><option>Education</option><option>Engineering</option>
+            <option>Entrepreneurship</option><option>Finance</option><option>Healthcare Services</option>
+            <option>Human Resources</option><option>Information Technology</option><option>Legal</option>
+            <option>Marketing</option><option>Media and Communication</option><option>Military and Protective Services</option>
+            <option>Operations</option><option>Product Management</option><option>Program and Project Management</option>
+            <option>Purchasing</option><option>Quality Assurance</option><option>Real Estate</option>
+            <option>Research</option><option>Sales</option>
+          </select>
+          <input class="acc-input" type="hidden" id="filter-function" value="">
         </div>
       </div>
 
@@ -595,11 +637,11 @@ function applyAIFiltersToInputs(result) {
 
   if (sb.first_name) setVal('filter-first_name', sb.first_name);
   if (sb.last_name) setVal('filter-last_name', sb.last_name);
-  if (sb.job_titles) setVal('filter-job_titles', sb.job_titles);
-  if (sb.company) setVal('filter-company', sb.company);
-  if (sb.industry) setVal('filter-industry', sb.industry);
-  if (sb.region) setVal('filter-region', sb.region);
-  if (sb.function) setVal('filter-function', sb.function);
+  if (sb.job_titles) { sb.job_titles.split(',').forEach(function(t){ addTag('job_titles', t); }); }
+  if (sb.company) { sb.company.split(',').forEach(function(c){ addTag('company', c); }); }
+  if (sb.industry) { sb.industry.split(',').forEach(function(i){ addTag('industry', i); }); }
+  if (sb.region) { sb.region.split(',').forEach(function(r){ addTag('region_text', r); }); }
+  if (sb.function) { sb.function.split(',').forEach(function(f){ addTag('function', f); }); }
   if (sb.keywords) setVal('filter-keywords', sb.keywords);
 
   // Apply seniority pills
@@ -632,11 +674,61 @@ function setVal(id, val) {
 
 /* ===== REGION HELPER ===== */
 function addRegion(name) {
-  var el = document.getElementById('filter-region');
-  var current = el.value.trim();
-  if (current && current.indexOf(name) !== -1) return;
-  el.value = current ? current + ', ' + name : name;
-  updateDot('region');
+  addTag('region_text', name);
+}
+
+/* ===== TAG MANAGEMENT ===== */
+var tagData = { job_titles: [], company: [], industry: [], function: [], region_text: [] };
+
+function addTag(field, val) {
+  val = val.trim();
+  if (!val) return;
+  // Split by comma if multiple
+  var vals = val.split(',').map(function(v){ return v.trim(); }).filter(Boolean);
+  vals.forEach(function(v) {
+    if (tagData[field].indexOf(v) === -1) tagData[field].push(v);
+  });
+  renderTags(field);
+  // Sync hidden inputs
+  syncTagsToInput(field);
+  updateDotForTags(field);
+}
+
+function removeTag(field, idx) {
+  tagData[field].splice(idx, 1);
+  renderTags(field);
+  syncTagsToInput(field);
+  updateDotForTags(field);
+}
+
+function renderTags(field) {
+  var container = document.getElementById('tags-' + field);
+  if (!container) {
+    // For region, render into region tag area
+    if (field === 'region_text') container = document.getElementById('tags-region_text');
+    if (!container) return;
+  }
+  container.innerHTML = tagData[field].map(function(v, i) {
+    return '<span class="tag-bubble">' + v + '<span class="tag-x" onclick="removeTag(\'' + field + '\',' + i + ')">&times;</span></span>';
+  }).join('');
+}
+
+function syncTagsToInput(field) {
+  var inputId = field === 'region_text' ? 'filter-region' : 'filter-' + field;
+  var el = document.getElementById(inputId);
+  if (el) el.value = tagData[field].join(', ');
+  // Map filter name to dot name
+  var dotMap = { job_titles: 'job_titles', company: 'company', industry: 'industry', 'function': 'function', region_text: 'region' };
+  updateDot(dotMap[field] || field);
+}
+
+function updateDotForTags(field) {
+  var dotMap = { job_titles: 'job_titles', company: 'company', industry: 'industry', 'function': 'function', region_text: 'region' };
+  updateDot(dotMap[field] || field);
+}
+
+function clearAllTags() {
+  Object.keys(tagData).forEach(function(k) { tagData[k] = []; renderTags(k); syncTagsToInput(k); });
 }
 
 /* ===== ACCORDION ===== */
@@ -721,6 +813,9 @@ function clearAllFilterInputs() {
   setVal('filter-function', '');
   setVal('filter-keywords', '');
   setVal('filter-people_per_company', '3');
+
+  // Clear all tags
+  clearAllTags();
 
   document.querySelectorAll('.seniority-pill').forEach(function(p) { p.classList.remove('active'); });
   document.querySelectorAll('.headcount-pill').forEach(function(p) { p.classList.remove('active'); });
@@ -953,25 +1048,36 @@ async function fetchPeoplePage(crustKey, page) {
 
 /* ===== EMAIL ENRICHMENT ===== */
 async function enrichEmails(crustKey, results) {
+  // Mark all as loading
+  results.forEach(function(r) { if (!r.email && r.linkedin_url) r.email_loading = true; });
+  filterAndRender();
+
   for (var i = 0; i < results.length; i++) {
     var r = results[i];
-    if (!r.linkedin_url || r.email) continue;
+    if (!r.linkedin_url || (r.email && r.email !== null)) { r.email_loading = false; continue; }
     try {
       var resp = await fetch('https://api.crustdata.com/screener/person/enrich?linkedin_profile_url=' + encodeURIComponent(r.linkedin_url) + '&fields=business_email', {
         headers: { 'Authorization': 'Bearer ' + crustKey, 'Accept': 'application/json' }
       });
       if (resp.ok) {
         var pd = await resp.json();
+        r.email_loading = false;
         if (pd && pd.business_email && pd.business_email.length) {
           r.email = pd.business_email[0];
-          // Re-render if still on the page showing this result
-          filterAndRender();
+        } else {
+          r.email = '--';
         }
+        filterAndRender();
+      } else {
+        r.email_loading = false;
+        r.email = '--';
       }
     } catch(e) {
-      // silently continue
+      r.email_loading = false;
+      r.email = '--';
     }
   }
+  filterAndRender();
 }
 
 /* ===== PAGINATION (API-level) ===== */
@@ -1081,8 +1187,12 @@ function renderTable(data) {
   body.innerHTML = data.map(function(r, i) {
     var checked = selectedSet[i] ? 'checked' : '';
     var emailCell = '';
-    if (r.email) {
+    if (r.email && r.email !== '--') {
       emailCell = '<span class="email-text">' + esc(r.email) + '</span>';
+    } else if (r.email_loading) {
+      emailCell = '<span style="font-size:10px;color:var(--secondary);">Loading...</span>';
+    } else if (r.email === '--') {
+      emailCell = '<span style="font-size:10px;color:var(--secondary);">Not found</span>';
     } else {
       emailCell = '<button class="email-btn" onclick="event.stopPropagation();enrichSingleEmail(' + i + ',this)">Get email</button>';
     }
